@@ -1,59 +1,50 @@
 # strava-hex-turf
 
-Strava API と H3 インデックス（Resolution 7）を利用したランナー向けの陣取り Web アプリケーション。要件定義は [docs/srd.md](docs/srd.md) を参照。
+**Strava と H3 インデックスでつくる、ランナー向けの陣取り Web アプリ**
 
-## ディレクトリ構成
+走ったルートを六角タイル（H3 Resolution 7）の「陣地」として可視化し、仲間と奪い合うゲームでランニングのモチベーションを高めます。
+
+---
+
+## このアプリでできること
+
+- **Strava 連携** … 走行データを連携し、通過したエリアのタイルを自動で獲得
+- **陣取りマップ** … 全体マップ（仲間の陣地）とパーソナルマップの切り替え
+- **Activity Log** … 「誰がどこを奪取したか」などの履歴表示
+- **プライバシーゾーン** … 自宅周辺などを指定し、陣取り対象から除外
+
+詳細な仕様は [docs/srd.md](docs/srd.md)（プロダクト要件定義書）を参照。
+
+---
+
+## スクリーンショット・デモ
+
+<!-- アプリの見た目（マップ画面・ログイン画面など）の画像をここに追加 -->
+
+---
+
+## 何から始めればいいか
+
+| 目的                               | 参照先                                         |
+| ---------------------------------- | ---------------------------------------------- |
+| フロントエンドを動かす             | [client/README.md](client/README.md)           |
+| データベース（Supabase）を用意する | [supabase/README.md](supabase/README.md)       |
+| バックエンド API の開発・テスト    | [backend-api/README.md](backend-api/README.md) |
+| 定期実行バッチ                     | [batch/README.md](batch/README.md)             |
+| インフラ（Terraform）              | [infra/README.md](infra/README.md)             |
+| 仕様・要件の確認                   | [docs/README.md](docs/README.md)               |
+
+**共通:** Node.js 18 以上を推奨。各ディレクトリで `npm install` を実行してから開発を開始してください。
+
+---
+
+## リポジトリ構成（モノレポ）
 
 | ディレクトリ  | 内容                                                      |
 | ------------- | --------------------------------------------------------- |
 | `client`      | フロントエンド（Next.js App Router, React, Tailwind CSS） |
 | `backend-api` | バックエンド API（Node.js, TypeScript）                   |
 | `batch`       | 定期実行処理                                              |
-| `db`          | Supabase マイグレーション（SQL）                          |
-| `infra`       | Terraform（インフラ）                                     |
+| `supabase`    | Supabase マイグレーション（SQL）                          |
+| `infra`       | Terraform（Vercel / Supabase 等）                         |
 | `docs`        | 仕様書（srd.md 等）                                       |
-
-## 環境構築
-
-### 共通
-
-- Node.js 18 以上を推奨。
-- リポジトリルートで必要なディレクトリごとに `npm install` を実行する。
-
-### クライアント（`client`）
-
-1. **依存関係のインストール**
-
-   ```bash
-   cd client && npm install
-   ```
-
-2. **環境変数**
-   - `client/.env.example` をコピーして `client/.env.local` を作成する。
-   - 以下を設定する。
-     - `SESSION_SECRET` … セッション Cookie の署名用（32 文字以上のランダム文字列）。本番では必ず推測困難な値を設定すること。
-     - `NEXT_PUBLIC_STRAVA_CLIENT_ID` … [Strava API](https://developers.strava.com/) でアプリ登録して取得した Client ID。
-     - `STRAVA_CLIENT_SECRET` … 同上の Client Secret。
-     - `NEXT_PUBLIC_APP_URL` … アプリのベース URL（ローカルは `http://localhost:3000`、末尾スラッシュなし）。
-     - `NEXT_PUBLIC_SUPABASE_URL` … Supabase ダッシュボードの **Settings → API** にある Project URL。
-     - `NEXT_PUBLIC_SUPABASE_ANON_KEY` … 同上の **Project API keys** の `anon` (public)。
-     - `SUPABASE_SERVICE_ROLE_KEY` … 同上の **Project API keys** の `service_role`（「Reveal」で表示する secret）。RLS をバイパスするため **サーバー側（API Route 等）でのみ** 使用し、クライアントやリポジトリに載せないこと。
-   - Strava アプリ設定の「Authorization Callback Domain」に、コールバックのホスト（例: `localhost`）を登録する。
-
-3. **開発サーバー**
-
-   ```bash
-   npm run dev
-   ```
-
-   - ブラウザで `http://localhost:3000` を開く。
-
-4. **Storybook（UI 確認用）**
-   ```bash
-   npm run storybook
-   ```
-
-### データベース（Supabase）
-
-- `db/migrations/` の SQL を Supabase プロジェクトに適用する（例: Supabase CLI の `supabase db push` またはダッシュボードから実行）。
-- クライアントの Strava OAuth ログインでは `users` テーブルを使用するため、[20260228000000_initial_schema.sql](db/migrations/20260228000000_initial_schema.sql) を適用した状態にしておく。
