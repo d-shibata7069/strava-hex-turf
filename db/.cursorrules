@@ -1,0 +1,5 @@
+# Database Architecture Rules
+- 対象: Supabase (PostgreSQL)
+- マイグレーション: すべてのスキーマ変更は [Supabase CLI](https://supabase.com/docs/reference/cli/supabase-migration) の仕様に従い、`supabase/migrations/` 配下にSQLファイルとして出力すること。
+- セキュリティ (RLS): テーブルを作成する際は、必ず Row Level Security (RLS) を有効化（`ALTER TABLE ... ENABLE ROW LEVEL SECURITY;`）し、適切なポリシー（Policy）を定義すること。
+- パフォーマンス: 検索条件や結合条件として使用されるカラム（外部キーやH3インデックスなど）には、適切なインデックス（Index）を付与すること。
