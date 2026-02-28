@@ -1,0 +1,24 @@
+# Project Context
+Strava APIとH3インデックス（Resolution 7）を利用したランナー向けの陣取りWebアプリケーション。
+システムの完全な要件定義は `docs/srd.md` に記載されている。コードの生成やアーキテクチャの変更を行う前に、必ず `docs/srd.md` を参照し、仕様を逸脱しないことを確認すること。
+
+# Development Policy & Git Workflow (Strict)
+開発は必ず以下のフローに従うこと。AIが勝手に `develop` ブランチにコミットすることは固く禁ずる。
+1. 作業を開始する前に、必ず `develop` ブランチ(場合によっては他のブランチ)から新しいフィーチャーブランチ（例: `feature/xxx`）を切ること。
+2. コードの修正が完了したら、`git add` および `git commit` を行う。コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/) の仕様に従うこと（例: `feat: add H3 index calculation`）。
+3. AIは直接Pull Request（PR）をマージしてはならない。コミットとリモートリポジトリへのPushまでを実行し、PRの作成とコードレビュー（査読）は人間が行うため、そこで処理を停止し人間に報告すること。
+
+# Directory Architecture & Tech Stack
+- `/docs`: ドキュメント。`srd.md` などの仕様書を配置。
+- `/client`: フロントエンド。Next.js (App Router), React, Tailwind CSS。
+- `/backend-api`: バックエンドAPI。Node.js, TypeScript。
+- `/batch`: 定期実行処理。Node.js, TypeScript。
+- `/batch_analysis`: データ分析用。
+- `/db`: データベース管理。Supabase CLIを用いたマイグレーションファイル（SQL）を配置。
+- `/infra`: インフラ管理。Terraform（`.tf`ファイル）を配置。
+
+# Communication & Output Rules (Strict Requirements)
+- 用語は正確に使うこと。技術用語の造語や、不正確な言い換えは一切禁止。
+- 例えのために話題と関係ない単語を使うことは禁止。技術的・論理的な説明のみを行うこと。
+- 参照したWebページや公式ドキュメントがある場合は、必ずURLリンクを提示すること。
+- コードを出力する際は、ルートディレクトリからの正確な相対ファイルパスを必ず明記すること。

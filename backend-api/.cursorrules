@@ -1,0 +1,6 @@
+# Backend API Architecture Rules
+- ランタイム: Node.js, TypeScript
+- 責務: Strava Webhookの受信、H3インデックスの計算、Supabaseを通じたDBへの書き込み。
+- フロントエンド（UI）に関するコードは一切含めないこと。
+- H3の計算ロジック（`h3-js`）は、ビジネスロジックとして純粋な関数として分離し、テスト可能（Testable）な状態を維持すること。
+- エラーハンドリングを徹底し、APIのレスポンスには必ず適切なHTTPステータスコードを含めること。

@@ -1,0 +1,5 @@
+# Client Architecture Rules
+- フレームワーク: Next.js (App Router), React, TypeScript, Tailwind CSS
+- Next.js App Routerの規約に厳密に従うこと。Server Componentsをデフォルトとし、状態管理やブラウザAPIへのアクセスが必要な場合のみファイルの先頭に `'use client'` を宣言すること。
+- 型定義（TypeScript）を厳格に行う。`any`型は使用禁止。
+- 状態管理が複雑化する場合は、コンポーネント内にロジックを直接書かず、カスタムフック（Custom Hooks）に分離すること。
