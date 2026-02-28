@@ -39,6 +39,16 @@ npm run dev
 npm run storybook
 ```
 
+「App/Map」で地図コンポーネントと H3 六角形レイヤーの表示を確認できる。
+
+### 5. 地図表示（MapLibre）
+
+地図は [MapLibre GL JS](https://maplibre.org/) と [@vis.gl/react-maplibre](https://visgl.github.io/react-maplibre/) を使用している（Mapbox に依存しないオープンソース構成）。
+
+- **タイルの取得:** 開発時は `https://demotiles.maplibre.org/style.json` を参照しており、追加の API キーや環境変数は不要。
+- **H3 の可視化:** `h3-js` で Resolution 7 の H3 インデックスを GeoJSON ポリゴンに変換し、地図上に六角形レイヤーとして描画している。モックデータは新宿付近のセルを表示。
+- 本番で別のタイルサーバー（例: 自前のスタイル JSON）を使う場合は、`app/components/Map.tsx` の `mapStyle` を変更するか、環境変数で差し替え可能にできる。
+
 ## データベース
 
 Strava OAuth ログインでは `users` テーブルを使用するため、[supabase/README.md](../supabase/README.md) に従い、初期マイグレーションを適用した状態にしておく。
