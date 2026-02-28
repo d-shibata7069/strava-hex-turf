@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StravaConnectButton } from "@/components/atoms";
 
 export interface LoginViewProps {
   /** Strava 認可画面への URL（Storybook ではモック URL を渡す） */
@@ -19,13 +20,13 @@ export function LoginView({ authUrl }: LoginViewProps) {
         <p className="mb-6 text-center text-sm text-zinc-600">
           以下のボタンから Strava の認可画面に進み、陣取りで利用する権限を許可してください。
         </p>
-        <Link
-          href={authUrl}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-          data-testid="connect-strava"
-        >
-          <span>Connect with Strava</span>
-        </Link>
+        <div className="flex flex-col items-stretch">
+          <StravaConnectButton
+            href={authUrl}
+            variant="compact"
+            className="w-full justify-center rounded-lg px-4 py-3 text-sm"
+          />
+        </div>
         <Link
           href="/"
           className="mt-4 flex w-full items-center justify-center text-sm text-zinc-500 hover:text-zinc-700"

@@ -1,4 +1,4 @@
-import { LoginView } from "@/components/LoginView";
+import { LoginView } from "@/components/organisms/LoginView";
 
 const STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize";
 

@@ -3,7 +3,7 @@ import { Map } from "./Map";
 
 const meta: Meta<typeof Map> = {
   component: Map,
-  title: "App/Map",
+  title: "Organisms/Map",
   parameters: {
     layout: "fullscreen",
   },

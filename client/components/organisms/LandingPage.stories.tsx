@@ -3,7 +3,7 @@ import { LandingPage } from "./LandingPage";
 
 const meta: Meta<typeof LandingPage> = {
   component: LandingPage,
-  title: "App/LandingPage",
+  title: "Organisms/LandingPage",
   parameters: {
     layout: "fullscreen",
   },

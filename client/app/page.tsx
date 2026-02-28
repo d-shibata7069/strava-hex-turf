@@ -1,6 +1,5 @@
 import { getSessionUserId } from "@/lib/session";
-import { LandingPage } from "./components/LandingPage";
-import { Map } from "./components/Map";
+import { LandingPage, Map } from "@/components/organisms";
 
 export default async function HomePage() {
   const userId = await getSessionUserId();

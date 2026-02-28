@@ -3,7 +3,7 @@ import { HeaderView } from "./Header";
 
 const meta: Meta<typeof HeaderView> = {
   component: HeaderView,
-  title: "App/Header",
+  title: "Organisms/Header",
 };
 export default meta;
 

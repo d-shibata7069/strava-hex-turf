@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { StravaConnectButton } from "@/components/atoms";
+import { ArrowRightIcon } from "@/components/ui";
 
 /**
  * 未ログイン時に表示するランディングページ。
@@ -37,16 +38,14 @@ export function LandingPage() {
             Strava のランニングで通過したエリアを「陣地」として獲得。
             仲間と奪い合い、防衛し、減衰する色とゴーストで競う。
           </p>
-          <Link
+          <StravaConnectButton
             href="/login"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-orange-500/25 transition hover:bg-orange-600 hover:shadow-orange-500/30 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-zinc-950"
-            data-testid="connect-strava"
+            variant="default"
+            className="focus:ring-offset-zinc-950"
+            rightIcon={<ArrowRightIcon className="h-5 w-5" />}
           >
-            <span>Strava ではじめる</span>
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </Link>
+            Strava ではじめる
+          </StravaConnectButton>
         </div>
       </section>
 
@@ -109,15 +108,12 @@ export function LandingPage() {
           <p className="mb-8 text-zinc-400">
             走行データは Strava から読み取るだけ。陣取りは自動で更新される。
           </p>
-          <Link
+          <StravaConnectButton
             href="/login"
-            className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-8 py-4 text-base font-semibold text-white transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-zinc-950"
-          >
-            <span>Connect with Strava</span>
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </Link>
+            variant="default"
+            className="focus:ring-offset-zinc-950"
+            rightIcon={<ArrowRightIcon className="h-5 w-5" />}
+          />
         </div>
       </section>
     </div>
