@@ -13,6 +13,33 @@ const INITIAL_VIEW_STATE = {
   zoom: 12,
 } as const;
 
+/**
+ * ベース地図用スタイル（ラスタータイルのみ）。
+ * 外部ベクトルタイルに依存せず、OSM ラスターで確実に地図を表示する。
+ * @see https://operations.osmfoundation.org/policies/tiles/
+ */
+const BASE_MAP_STYLE = {
+  version: 8 as const,
+  name: "OSM Raster",
+  sources: {
+    "osm-raster": {
+      type: "raster" as const,
+      tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      tileSize: 256,
+      attribution: "© <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+    },
+  },
+  layers: [
+    {
+      id: "osm-raster-layer",
+      type: "raster" as const,
+      source: "osm-raster",
+      minzoom: 0,
+      maxzoom: 19,
+    },
+  ],
+};
+
 /** モック用 H3 インデックス（Resolution 7）：新宿付近のセル数個 */
 function getMockH3Indexes(): string[] {
   const center = latLngToCell(35.6896, 139.6917, 7);
@@ -26,11 +53,11 @@ export function Map() {
   }, []);
 
   return (
-    <div className="relative h-full w-full min-h-[400px]">
+    <div className="absolute inset-0">
       <MapLibreMap
         initialViewState={INITIAL_VIEW_STATE}
-        mapStyle="https://demotiles.maplibre.org/style.json"
-        style={{ width: "100%", height: "100%", position: "absolute" }}
+        mapStyle={BASE_MAP_STYLE}
+        style={{ width: "100%", height: "100%" }}
       >
         <Source
           id="h3-hex-source"

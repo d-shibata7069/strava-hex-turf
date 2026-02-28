@@ -10,8 +10,8 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col bg-gray-50">
-      <div className="flex-1 relative min-h-[calc(100vh-3.5rem)]">
+    <main className="relative bg-gray-50">
+      <div className="relative h-[calc(100vh-3.5rem)] w-full">
         <Map />
       </div>
     </main>
