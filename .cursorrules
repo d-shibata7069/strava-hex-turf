@@ -14,7 +14,7 @@ Strava APIとH3インデックス（Resolution 7）を利用したランナー�
 - `/backend-api`: バックエンドAPI。Node.js, TypeScript。
 - `/batch`: 定期実行処理。Node.js, TypeScript。
 - `/batch_analysis`: データ分析用。
-- `/db`: データベース管理。Supabase CLIを用いたマイグレーションファイル（SQL）を配置。
+- `/supabase`: Supabaseローカル開発。マイグレーションは `supabase/migrations/` に配置。設定は `config.toml`。
 - `/infra`: インフラ管理。Terraform（`.tf`ファイル）を配置。
 
 # Communication & Output Rules (Strict Requirements)
