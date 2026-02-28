@@ -1,0 +1,6 @@
+# Infrastructure Architecture Rules
+- ツール: Terraform
+- 対象プロバイダー: Vercel Provider, Supabase Provider
+- ハードコードの禁止: APIキー、プロジェクトID、環境に依存する値は`.tf`ファイル内に直接記述せず、必ず変数（`variable` ブロック）として定義し、外部（`.tfvars` や環境変数）から注入する設計にすること。
+- モジュール化: 肥大化を防ぐため、論理的なリソースのまとまりごとにファイル（例: `vercel.tf`, `supabase.tf`, `variables.tf`）を分割すること。
+- 参照: [Terraform 公式ドキュメント](https://developer.hashicorp.com/terraform/docs)
