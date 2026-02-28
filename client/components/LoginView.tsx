@@ -6,18 +6,18 @@ export interface LoginViewProps {
 }
 
 /**
- * ログイン画面のプレゼンテーション。
- * ページは authUrl を組み立てて渡し、Storybook ではモック URL で表示する。
+ * ログイン画面（Strava OAuth 認可へ進む専用ページ）。
+ * LP はトップで見せるため、ここは認可アクションに特化したミニマルなUI。
  */
 export function LoginView({ authUrl }: LoginViewProps) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-        <h1 className="mb-2 text-center text-xl font-semibold text-gray-900">
-          Strava陣取り
+    <main className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center bg-zinc-50 px-4">
+      <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
+        <h1 className="mb-2 text-center text-xl font-semibold text-zinc-900">
+          Strava と連携
         </h1>
-        <p className="mb-6 text-center text-sm text-gray-600">
-          Stravaと連携してログインしてください
+        <p className="mb-6 text-center text-sm text-zinc-600">
+          以下のボタンから Strava の認可画面に進み、陣取りで利用する権限を許可してください。
         </p>
         <Link
           href={authUrl}
@@ -25,6 +25,12 @@ export function LoginView({ authUrl }: LoginViewProps) {
           data-testid="connect-strava"
         >
           <span>Connect with Strava</span>
+        </Link>
+        <Link
+          href="/"
+          className="mt-4 flex w-full items-center justify-center text-sm text-zinc-500 hover:text-zinc-700"
+        >
+          トップへ戻る
         </Link>
       </div>
     </main>
