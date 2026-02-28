@@ -5,7 +5,7 @@ Strava APIとH3インデックス（Resolution 7）を利用したランナー�
 # Development Policy & Git Workflow (Strict)
 開発は必ず以下のフローに従うこと。AIが勝手に `develop` ブランチにコミットすることは固く禁ずる。
 1. 作業を開始する前に、必ず `develop` ブランチ(場合によっては他のブランチ)から新しいフィーチャーブランチ（例: `feature/xxx`）を切ること。
-2. コードの修正が完了したら、`git add` および `git commit` を行う。コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/) の仕様に従うこと（例: `feat: add H3 index calculation`）。
+2. コードの修正が完了したら変更内容を適切に分割して、`git add` および `git commit` を行う。コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/) の仕様に従うこと（例: `feat: add H3 index calculation`）。
 3. AIは直接Pull Request（PR）をマージしてはならない。コミットとリモートリポジトリへのPushまでを実行し、PRの作成とコードレビュー（査読）は人間が行うため、そこで処理を停止し人間に報告すること。
 
 # Directory Architecture & Tech Stack

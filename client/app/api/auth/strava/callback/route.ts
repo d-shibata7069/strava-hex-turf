@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
+import {
+  createSessionToken,
+  getSessionCookieOptions,
+  SESSION_COOKIE_NAME,
+} from "@/lib/session";
 
 const STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
 
@@ -75,7 +80,7 @@ export async function GET(request: NextRequest) {
   const iconUrl = athlete.profile ?? athlete.profile_medium ?? null;
 
   const supabase = getSupabaseServer();
-  const { error: upsertError } = await supabase
+  const { data: user, error: upsertError } = await supabase
     .from("users")
     .upsert(
       {
@@ -84,15 +89,18 @@ export async function GET(request: NextRequest) {
         icon_url: iconUrl,
         updated_at: new Date().toISOString(),
       },
-      {
-        onConflict: "strava_id",
-      }
-    );
+      { onConflict: "strava_id" }
+    )
+    .select("id")
+    .single();
 
-  if (upsertError) {
+  if (upsertError || !user?.id) {
     console.error("Supabase users upsert error:", upsertError);
     return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
   }
 
-  return NextResponse.redirect(baseRedirect);
+  const token = await createSessionToken(user.id);
+  const response = NextResponse.redirect(baseRedirect);
+  response.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
+  return response;
 }

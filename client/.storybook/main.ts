@@ -2,7 +2,10 @@ import path from "path";
 
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const config = {
-  stories: ["../components/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: [
+    "../components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../app/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+  ],
   addons: ["@storybook/addon-essentials"],
   framework: "@storybook/react-webpack5",
   webpackFinal: (config) => {
