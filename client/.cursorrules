@@ -3,4 +3,11 @@
 - Next.js App Routerの規約に厳密に従うこと。Server Componentsをデフォルトとし、状態管理やブラウザAPIへのアクセスが必要な場合のみファイルの先頭に `'use client'` を宣言すること。
 - 型定義（TypeScript）を厳格に行う。`any`型は使用禁止。
 - 状態管理が複雑化する場合は、コンポーネント内にロジックを直接書かず、カスタムフック（Custom Hooks）に分離すること。
-- atomic design に従ってコンポーネントを分割すること。
+
+# Component Architecture (Atomic Design for App Router)
+フロントエンドのコンポーネントは、App Routerに最適化されたAtomic Designの原則に従い、`client/src/components/`（または `client/components/`）配下を以下の階層に厳密に分割すること。
+- `ui`: lucide-reactのアイコンラッパーや、shadcn/uiのような外部依存の最小UIパーツ。
+- `atoms`: ボタン、テキストリンク、アバター画像など、それ以上分割できない最小の自作コンポーネント。
+- `molecules`: 複数のatomを組み合わせた要素（例：アイコン付きボタン、ユーザー名＋アバターのバッジ）。
+- `organisms`: ヘッダー、ログインフォーム、地図コンテナなど、独立して機能を持つ大きなブロック。
+※ 注意: Next.jsのネイティブな機能と重複するため、`templates` と `pages` 階層はコンポーネント配下には作成せず、`app/` ディレクトリ配下の `layout.tsx` および `page.tsx` をそのまま該当レイヤーとして扱うこと。
