@@ -5,6 +5,7 @@ import {
   getSessionCookieOptions,
   SESSION_COOKIE_NAME,
 } from "@/lib/session";
+import { encryptStravaToken } from "@/lib/strava-token-crypto";
 
 const STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
 
@@ -78,6 +79,12 @@ export async function GET(request: NextRequest) {
 
   const displayName = [athlete.firstname, athlete.lastname].filter(Boolean).join(" ") || `User ${athlete.id}`;
   const iconUrl = athlete.profile ?? athlete.profile_medium ?? null;
+  const expiresAt = tokenData.expires_at != null ? new Date(tokenData.expires_at * 1000).toISOString() : null;
+
+  const encryptedAccess = encryptStravaToken(tokenData.access_token);
+  const encryptedRefresh = encryptStravaToken(tokenData.refresh_token);
+  const strava_access_token = encryptedAccess ?? tokenData.access_token;
+  const strava_refresh_token = encryptedRefresh ?? tokenData.refresh_token;
 
   const supabase = getSupabaseServer();
   const { data: user, error: upsertError } = await supabase
@@ -87,6 +94,9 @@ export async function GET(request: NextRequest) {
         strava_id: athlete.id,
         display_name: displayName,
         icon_url: iconUrl,
+        strava_access_token,
+        strava_refresh_token,
+        strava_token_expires_at: expiresAt,
         updated_at: new Date().toISOString(),
       },
       { onConflict: "strava_id" }
