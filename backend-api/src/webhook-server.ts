@@ -1,13 +1,40 @@
 /**
  * Webhook 用 HTTP サーバ（POST /webhook/activity で processActivityEvent を実行）
  * クライアント（Next.js API Route）から呼び出される。
+ * 起動前に backend-api 直下の .env.local または .env を読み込み、Supabase の環境変数を使用する。
  */
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { readFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import {
   processActivityEvent,
   createDefaultDeps,
 } from "./services/strava-webhook.js";
+import { decryptStravaToken } from "./utils/token-crypto.js";
+
+function loadEnvFromCwd(): void {
+  const cwd = process.cwd();
+  for (const name of [".env.local", ".env"]) {
+    const path = join(cwd, name);
+    if (!existsSync(path)) continue;
+    const raw = readFileSync(path, "utf8");
+    for (const line of raw.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eq = trimmed.indexOf("=");
+      if (eq === -1) continue;
+      const key = trimmed.slice(0, eq).trim();
+      let value = trimmed.slice(eq + 1).trim();
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      if (!(key in process.env)) process.env[key] = value;
+    }
+    break;
+  }
+}
+loadEnvFromCwd();
 
 const PORT = Number(process.env.PORT) || 3001;
 const PATH = "/webhook/activity";
@@ -57,8 +84,11 @@ async function handlePost(
     res.end(JSON.stringify({ error: "Missing or invalid object_id, owner_id" }));
     return;
   }
+  console.log("[webhook-server] received activity event", { object_id: body.object_id, owner_id: body.owner_id });
+
   const supabase = getSupabase();
   const deps = createDefaultDeps(supabase);
+  deps.decryptStravaToken = (enc) => decryptStravaToken(enc) ?? enc;
   const result = await processActivityEvent(
     body.object_id,
     body.owner_id,
@@ -70,6 +100,7 @@ async function handlePost(
     res.end(JSON.stringify({ error: result.reason }));
     return;
   }
+  console.log("[webhook-server] processActivityEvent ok", { object_id: body.object_id });
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ ok: true }));
 }

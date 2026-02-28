@@ -46,6 +46,8 @@ export interface StravaWebhookDeps {
   getH3IndexesFromPoints: (
     points: ReadonlyArray<[number, number]>
   ) => string[];
+  /** DB に暗号化して保存されたトークンを復号する。未設定なら平文として扱う */
+  decryptStravaToken?: (encrypted: string) => string | null;
 }
 
 /** users テーブルから取得する行（strava_id で検索） */
@@ -96,14 +98,22 @@ export async function processActivityEvent(
   if (!userRow?.id) {
     return { ok: false, reason: "user not found" };
   }
-  const accessToken = userRow.strava_access_token;
+  let accessToken = userRow.strava_access_token;
   if (!accessToken || typeof accessToken !== "string") {
     return { ok: false, reason: "user has no strava_access_token" };
   }
+  if (deps.decryptStravaToken) {
+    const dec = deps.decryptStravaToken(accessToken);
+    if (dec) accessToken = dec;
+  }
 
-  const activity = await fetchStravaActivity(objectId, accessToken);
-  const summaryPolyline =
-    activity?.map?.summary_polyline ?? null;
+  let activity = await fetchStravaActivity(objectId, accessToken);
+  let summaryPolyline = activity?.map?.summary_polyline ?? null;
+  if (!summaryPolyline || typeof summaryPolyline !== "string") {
+    await new Promise((r) => setTimeout(r, 5000));
+    activity = await fetchStravaActivity(objectId, accessToken);
+    summaryPolyline = activity?.map?.summary_polyline ?? null;
+  }
   if (!summaryPolyline || typeof summaryPolyline !== "string") {
     return { ok: false, reason: "activity has no map.summary_polyline" };
   }
