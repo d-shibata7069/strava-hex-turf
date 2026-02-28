@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getH3IndexesFromPoints, H3_RESOLUTION } from "./h3-utils";
+import { getH3IndexesFromPoints, H3_RESOLUTION } from "./h3-utils.js";
 
 describe("getH3IndexesFromPoints", () => {
   it("空配列の場合は空配列を返す", () => {
