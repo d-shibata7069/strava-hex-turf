@@ -31,6 +31,7 @@ Strava API と H3 インデックス（Resolution 7）を利用したランナ�
 2. **環境変数**
    - `client/.env.example` をコピーして `client/.env.local` を作成する。
    - 以下を設定する。
+     - `SESSION_SECRET` … セッション Cookie の署名用（32 文字以上のランダム文字列）。本番では必ず推測困難な値を設定すること。
      - `NEXT_PUBLIC_STRAVA_CLIENT_ID` … [Strava API](https://developers.strava.com/) でアプリ登録して取得した Client ID。
      - `STRAVA_CLIENT_SECRET` … 同上の Client Secret。
      - `NEXT_PUBLIC_APP_URL` … アプリのベース URL（ローカルは `http://localhost:3000`、末尾スラッシュなし）。
