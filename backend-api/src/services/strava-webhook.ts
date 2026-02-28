@@ -3,8 +3,11 @@
  * - GET: 購読確認（hub.challenge をそのまま返す）
  * - POST: アクティビティイベント受信 → Polyline 取得 → H3 計算 → tiles Upsert
  */
-import polyline from "@mapbox/polyline";
+import { createRequire } from "node:module";
 import type { SupabaseClient } from "@supabase/supabase-js";
+
+const require = createRequire(import.meta.url);
+const polyline = require("@mapbox/polyline") as { decode: (str: string, precision?: number) => [number, number][] };
 import { getH3IndexesFromPoints } from "../utils/h3-utils.js";
 
 /** Strava Webhook GET のクエリ（購読確認） */
