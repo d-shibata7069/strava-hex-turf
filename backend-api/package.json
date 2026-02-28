@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "webhook-server": "node dist/webhook-server.js"
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",

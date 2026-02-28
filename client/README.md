@@ -23,6 +23,9 @@ Node.js 18 以上を推奨。
   - **NEXT_PUBLIC_SUPABASE_URL** … Supabase ダッシュボードの **Settings → API** にある Project URL。
   - **NEXT_PUBLIC_SUPABASE_ANON_KEY** … 同上の **Project API keys** の `anon` (public)。
   - **SUPABASE_SERVICE_ROLE_KEY** … 同上の **Project API keys** の `service_role`（「Reveal」で表示する secret）。RLS をバイパスするため **サーバー側（API Route 等）でのみ** 使用し、クライアントやリポジトリに載せないこと。
+  - **STRAVA_TOKEN_ENCRYPTION_KEY** … Strava のアクセス／リフレッシュトークンを DB に保存する前に暗号化するための鍵（32 バイトの base64）。本番では必ず設定すること。生成例: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`。backend-api の Webhook サーバーでも同じ値を設定する。
+  - **STRAVA_WEBHOOK_VERIFY_TOKEN** … Strava Webhook 購読確認用。Strava の Webhook 設定で設定する「Verify Token」と同一の文字列にすること。
+  - **BACKEND_API_URL** … アクティビティ処理を行う backend-api の Webhook サーバー URL（例: ローカル `http://localhost:3001`、末尾スラッシュなし）。[backend-api/README.md](../backend-api/README.md) の「Webhook サーバー」を参照。
 - Strava アプリ設定の「Authorization Callback Domain」に、コールバックのホスト（例: `localhost`）を登録する。
 
 ### 3. 開発サーバー
@@ -41,7 +44,41 @@ npm run storybook
 
 「App/Map」で地図コンポーネントと H3 六角形レイヤーの表示を確認できる。
 
-### 5. 地図表示（MapLibre）
+### 5. Strava Webhook のローカル確認（ngrok 等）
+
+Strava は Webhook のコールバックに **公的な URL** を要求するため、ローカルで受信するには [ngrok](https://ngrok.com/) 等でトンネルを張る。
+
+**注意:** Strava の設定画面には Webhook 用の UI はない。購読の作成は **API** で行う（[公式ドキュメント](https://developers.strava.com/docs/webhooks/)）。トークン類はすべて **環境変数**（`.env.local`）で指定し、`client/scripts/strava-webhook-subscription.mjs` が読み込んで利用する。
+
+#### 手順
+
+1. **backend-api** で `npm run build && npm run webhook-server` を起動し、`http://localhost:3001` で Webhook 処理サーバーを待ち受けさせる。
+2. **client** で `npm run dev` を起動する。
+3. **ngrok** でクライアントを公開する（例: `ngrok http 3000`）。表示された HTTPS URL（例: `https://xxxx.ngrok.io`）を控える。
+4. **`.env.local`** に次を設定する（トークン類はすべてここに記載し、スクリプト・アプリ両方で参照する）。
+   - `NEXT_PUBLIC_APP_URL=https://xxxx.ngrok.io`（ngrok の URL、末尾スラッシュなし）
+   - `BACKEND_API_URL=http://localhost:3001`
+   - `STRAVA_WEBHOOK_VERIFY_TOKEN=<任意の文字列>`（購読作成時の verify_token として Strava API に送る値）
+   - 既存の `NEXT_PUBLIC_STRAVA_CLIENT_ID` と `STRAVA_CLIENT_SECRET` も [Strava API 設定](https://www.strava.com/settings/api) の値になっていること。
+   - 設定後、**client を再起動**して環境変数を読み込ませる。
+5. **購読の作成:** `client` ディレクトリで次を実行する。`.env.local` の値を使って Strava API に購読作成リクエストを送る。
+   ```bash
+   npm run webhook:subscribe
+   ```
+   成功すると `{"id":12345}` のような JSON が表示される。Strava が直後に GET で検証に来るため、その時点で client が起動しており、`STRAVA_WEBHOOK_VERIFY_TOKEN` が一致していれば購読が有効になる。
+6. **本番:** `.env.local`（または本番用環境変数）の `NEXT_PUBLIC_APP_URL` を Vercel の URL（例: `https://your-app.vercel.app`）にし、同じく `npm run webhook:subscribe` で購読を作成する。
+
+#### Webhook 購読用 npm スクリプト（環境変数でトークン指定）
+
+| コマンド                                      | 説明                                                                                                                                      |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run webhook:subscribe`                   | 購読を作成。`NEXT_PUBLIC_APP_URL` + `/api/strava/webhook` が callback_url、`STRAVA_WEBHOOK_VERIFY_TOKEN` が verify_token として使われる。 |
+| `npm run webhook:subscription:view`           | 現在の購読を表示（client_id / client_secret は .env.local から読み込み）。                                                                |
+| `npm run webhook:subscription:delete -- <id>` | 指定した ID の購読を削除。ID は `webhook:subscription:view` の結果か、環境変数 `STRAVA_WEBHOOK_SUBSCRIPTION_ID` で指定可能。              |
+
+スクリプト本体は `client/scripts/strava-webhook-subscription.mjs`。未設定の必須環境変数があるとエラーメッセージで案内する。
+
+### 6. 地図表示（MapLibre）
 
 地図は [MapLibre GL JS](https://maplibre.org/) と [@vis.gl/react-maplibre](https://visgl.github.io/react-maplibre/) を使用している（Mapbox に依存しないオープンソース構成）。
 
