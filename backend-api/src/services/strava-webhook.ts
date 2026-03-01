@@ -54,6 +54,7 @@ export interface StravaWebhookDeps {
 interface UserRow {
   id: string;
   strava_access_token: string | null;
+  display_name: string | null;
 }
 
 /** group_members から取得する group_id */
@@ -87,7 +88,7 @@ export async function processActivityEvent(
 
   const { data: user, error: userError } = await supabase
     .from("users")
-    .select("id, strava_access_token")
+    .select("id, strava_access_token, display_name")
     .eq("strava_id", ownerId)
     .maybeSingle();
 
@@ -176,6 +177,27 @@ export async function processActivityEvent(
   if (activityTilesError) {
     console.error("[processActivityEvent] activity_tiles upsert error:", activityTilesError);
     return { ok: false, reason: `activity_tiles upsert error: ${activityTilesError.message}` };
+  }
+
+  const tileCount = h3Indexes.length;
+  const displayName = userRow.display_name?.trim() || "ランナー";
+  const message = `${displayName} が ${tileCount}個の陣地を奪取・防衛しました！`;
+
+  const activityLogRows = groupIds.map((group_id) => ({
+    group_id,
+    user_id: userRow.id,
+    action: "capture" as const,
+    h3_index: null as string | null,
+    message,
+  }));
+
+  const { error: logsError } = await supabase
+    .from("activity_logs")
+    .insert(activityLogRows);
+
+  if (logsError) {
+    console.error("[processActivityEvent] activity_logs insert error:", logsError);
+    return { ok: false, reason: `activity_logs insert error: ${logsError.message}` };
   }
 
   console.log("[processActivityEvent] tiles upserted", { rows: rows.length, groups: groupIds.length, h3Count: h3Indexes.length });
