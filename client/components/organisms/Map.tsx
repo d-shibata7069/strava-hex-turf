@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Map as MapLibreMap, Source, Layer, useMap } from "@vis.gl/react-maplibre";
+import { Map as MapLibreMap, Source, Layer, useMap, Popup } from "@vis.gl/react-maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { DataDrivenPropertyValueSpecification, FilterSpecification } from "maplibre-gl";
+import type { MapLayerMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import {
   tilesToGeoJSONFeatureCollection,
   tilesToIconPointFeatureCollection,
@@ -12,6 +13,7 @@ import {
   type H3GeoJSONFeatureCollection,
   type TileIconPointFeatureCollection,
 } from "@/lib/h3-geojson";
+import { Avatar } from "@/components/atoms/Avatar";
 
 const TILES_POLL_INTERVAL_MS = 15_000;
 
@@ -60,6 +62,53 @@ const INITIAL_VIEW_STATE = {
 
 /** アイコン表示サイズ（ピクセル）。丸にクリップした画像の一辺。 */
 const ICON_PX = 48;
+
+/** ツールチップの対象レイヤー（ホバー/クリックで Feature を検知するレイヤーID） */
+const HOVERABLE_LAYER_IDS = ["h3-hex-fill", "h3-hex-user-icon"] as const;
+
+/** ホバー/タップ時に表示する陣地情報 */
+interface HoverInfo {
+  /** Popup を表示する固定位置（タイル中心。カーソルは追わない） */
+  lngLat: { lng: number; lat: number };
+  display_name: string | null;
+  last_updated_at: string | null;
+  icon_url: string | null;
+  score: number | null;
+}
+
+/** last_updated_at（ISO 文字列）を「取得/防衛: YYYY/MM/DD HH:mm」形式にフォーマット */
+function formatCaptureDate(isoString: string | null | undefined): string {
+  if (!isoString) return "—";
+  try {
+    const d = new Date(isoString);
+    if (Number.isNaN(d.getTime())) return "—";
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const h = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    return `${y}/${m}/${day} ${h}:${min}`;
+  } catch {
+    return "—";
+  }
+}
+
+/** Feature から Popup の固定表示位置（タイル中心）を取得。カーソル位置は使わない。 */
+function getPopupLngLat(
+  feature: MapGeoJSONFeature,
+  properties: Record<string, unknown>
+): { lng: number; lat: number } | null {
+  if (feature.layer?.id === "h3-hex-fill") {
+    const lng = properties.longitude;
+    const lat = properties.latitude;
+    if (typeof lng === "number" && typeof lat === "number") return { lng, lat };
+  }
+  if (feature.layer?.id === "h3-hex-user-icon" && feature.geometry?.type === "Point") {
+    const coords = feature.geometry.coordinates;
+    if (Array.isArray(coords) && coords.length >= 2) return { lng: coords[0], lat: coords[1] };
+  }
+  return null;
+}
 
 /** 縁のグラデーション：上（明るいオレンジ赤）→ 下（濃い赤） */
 const BORDER_TOP = { r: 255, g: 100, b: 60 };
@@ -345,6 +394,65 @@ export interface MapProps {
 export function Map({ groupId, initialTiles }: MapProps = {}) {
   const [tiles, setTiles] = useState<TileRecord[]>(initialTiles ?? []);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  /** ホバー/タップ中のタイル情報（Popup 表示用）。null のときは非表示 */
+  const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
+
+  /** マウス移動: 対象レイヤー上の Feature なら hoverInfo を更新しカーソルを pointer に */
+  const handleMapMouseMove = useCallback((e: MapLayerMouseEvent) => {
+    const map = "getMap" in e.target && typeof e.target.getMap === "function" ? e.target.getMap() : e.target;
+    const features = map.queryRenderedFeatures(e.point);
+    const hit = features.find(
+      (f: MapGeoJSONFeature) =>
+        f.layer?.id && (HOVERABLE_LAYER_IDS as readonly string[]).includes(f.layer.id)
+    );
+    if (hit?.properties) {
+      const p = hit.properties as Record<string, unknown>;
+      const fixedLngLat = getPopupLngLat(hit, p);
+      if (fixedLngLat) {
+        setHoverInfo({
+          lngLat: fixedLngLat,
+          display_name: (p.display_name as string | null) ?? null,
+          last_updated_at: (p.last_updated_at as string | null) ?? null,
+          icon_url: (p.icon_url as string | null) ?? null,
+          score: typeof p.score === "number" ? p.score : (p.score != null ? Number(p.score) : null),
+        });
+      }
+      map.getCanvas().style.cursor = "pointer";
+    } else {
+      setHoverInfo(null);
+      map.getCanvas().style.cursor = "";
+    }
+  }, []);
+
+  /** クリック/タップ: 対象レイヤー上なら Popup 表示（スマホでタップ時に表示するため） */
+  const handleMapClick = useCallback((e: MapLayerMouseEvent) => {
+    const map = "getMap" in e.target && typeof e.target.getMap === "function" ? e.target.getMap() : e.target;
+    const features = map.queryRenderedFeatures(e.point);
+    const hit = features.find(
+      (f: MapGeoJSONFeature) =>
+        f.layer?.id && (HOVERABLE_LAYER_IDS as readonly string[]).includes(f.layer.id)
+    );
+    if (hit?.properties) {
+      const p = hit.properties as Record<string, unknown>;
+      const fixedLngLat = getPopupLngLat(hit, p);
+      if (fixedLngLat) {
+        setHoverInfo({
+          lngLat: fixedLngLat,
+          display_name: (p.display_name as string | null) ?? null,
+          last_updated_at: (p.last_updated_at as string | null) ?? null,
+          icon_url: (p.icon_url as string | null) ?? null,
+          score: typeof p.score === "number" ? p.score : (p.score != null ? Number(p.score) : null),
+        });
+      }
+    }
+  }, []);
+
+  /** マウスが地図外に出たとき: hoverInfo をクリアしカーソルを戻す */
+  const handleMapMouseLeave = useCallback((e: MapLayerMouseEvent) => {
+    setHoverInfo(null);
+    const map = "getMap" in e.target && typeof e.target.getMap === "function" ? e.target.getMap() : e.target;
+    map.getCanvas().style.cursor = "";
+  }, []);
 
   const refetchTiles = useCallback(async () => {
     if (groupId == null && initialTiles === undefined) {
@@ -459,6 +567,9 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
         initialViewState={INITIAL_VIEW_STATE}
         mapStyle={BASE_MAP_STYLE}
         style={{ width: "100%", height: "100%" }}
+        onMouseMove={handleMapMouseMove}
+        onMouseLeave={handleMapMouseLeave}
+        onClick={handleMapClick}
       >
         <Source
           id="h3-hex-source"
@@ -488,22 +599,40 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
             "line-width": 1.5,
           }}
         />
-        <Layer
-          id="h3-hex-score-label"
-          type="symbol"
-          source="h3-hex-source"
-          layout={{
-            "text-field": ["to-string", ["get", "score"]],
-            "text-size": 11,
-            "text-anchor": "center",
-          }}
-          paint={{
-            "text-color": "#052e16",
-            "text-halo-color": "#ffffff",
-            "text-halo-width": 1.5,
-          }}
-        />
         <TileIconLayer tiles={tiles} />
+        {hoverInfo && (
+          <Popup
+            longitude={hoverInfo.lngLat.lng}
+            latitude={hoverInfo.lngLat.lat}
+            anchor="bottom"
+            closeButton={false}
+            closeOnClick={false}
+            className="min-w-[180px] rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-lg"
+          >
+            <div className="flex items-center gap-3">
+              <Avatar
+                src={
+                  hoverInfo.icon_url && hoverInfo.icon_url !== DEFAULT_ICON_ID
+                    ? hoverInfo.icon_url
+                    : "/default-avatar.svg"
+                }
+                alt=""
+                size="md"
+              />
+              <div className="flex flex-col gap-0.5">
+                <span className="font-medium text-gray-900">
+                  {hoverInfo.display_name ?? "—"}
+                </span>
+                <span className="text-xs text-gray-500">
+                  取得/防衛: {formatCaptureDate(hoverInfo.last_updated_at)}
+                </span>
+                <span className="text-xs text-gray-500">
+                  スコア: {hoverInfo.score != null ? hoverInfo.score : "—"}
+                </span>
+              </div>
+            </div>
+          </Popup>
+        )}
       </MapLibreMap>
     </div>
   );
