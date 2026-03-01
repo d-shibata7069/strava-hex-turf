@@ -111,12 +111,11 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false }: 
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="absolute right-0 top-1/2 z-10 flex -translate-y-1/2 items-center gap-1 rounded-l-lg border border-r-0 border-gray-200 bg-white/95 pl-2 pr-2 py-4 shadow-md backdrop-blur transition hover:bg-gray-50"
+        className="absolute right-0 top-20 z-10 flex items-center justify-center rounded-l-lg border border-r-0 border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-50"
         aria-label="Activity Log を開く"
         title="Activity Log を開く"
       >
-        <List className="h-5 w-5 shrink-0 text-gray-600" aria-hidden />
-        <span className="hidden text-xs font-medium text-gray-600 sm:inline">Activity Log</span>
+        <List className="h-5 w-5 text-gray-600" aria-hidden />
       </button>
     );
   }
