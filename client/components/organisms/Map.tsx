@@ -1,18 +1,37 @@
 "use client";
 
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Map as MapLibreMap, Source, Layer } from "@vis.gl/react-maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { h3IndexesToGeoJSONFeatureCollection } from "@/lib/h3-geojson";
+import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+import {
+  tilesToGeoJSONFeatureCollection,
+  type TileRecord,
+  type H3GeoJSONFeatureCollection,
+} from "@/lib/h3-geojson";
 
 const TILES_POLL_INTERVAL_MS = 15_000;
 
-async function fetchTiles(): Promise<string[]> {
-  const res = await fetch("/api/tiles");
-  if (!res.ok) return [];
-  const data = (await res.json()) as { h3Indexes?: string[] };
-  return Array.isArray(data.h3Indexes) ? data.h3Indexes : [];
-}
+/** 空の GeoJSON（タイル未取得時・未ログイン時） */
+const EMPTY_GEOJSON: H3GeoJSONFeatureCollection = {
+  type: "FeatureCollection",
+  features: [],
+};
+
+/**
+ * スコア（0–100）に応じた fill-opacity の式。
+ * score 100 → 0.8、score 0 → 0.2 で線形補間（防衛の濃さを表現）。
+ * @see https://maplibre.org/maplibre-style-spec/expressions/#interpolate
+ */
+const FILL_OPACITY_BY_SCORE: DataDrivenPropertyValueSpecification<number> = [
+  "interpolate",
+  ["linear"],
+  ["get", "score"],
+  0,
+  0.2,
+  100,
+  0.8,
+];
 
 /** 東京都新宿区周辺の初期表示（経度・緯度・ズーム） */
 const INITIAL_VIEW_STATE = {
@@ -48,35 +67,106 @@ const BASE_MAP_STYLE = {
   ],
 };
 
-export function Map({ initialH3Indexes }: { initialH3Indexes?: string[] }) {
-  const [h3Indexes, setH3Indexes] = useState<string[]>(initialH3Indexes ?? []);
+export interface MapProps {
+  /**
+   * 省略時は /api/tiles から取得。Storybook などでモックデータを渡す場合に使用。
+   */
+  initialTiles?: TileRecord[] | null;
+}
 
-  useEffect(() => {
-    setH3Indexes(initialH3Indexes ?? []);
-  }, [initialH3Indexes]);
+export function Map({ initialTiles }: MapProps = {}) {
+  const [tiles, setTiles] = useState<TileRecord[]>(initialTiles ?? []);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   const refetchTiles = useCallback(async () => {
-    const next = await fetchTiles();
-    setH3Indexes(next);
+    setFetchError(null);
+    try {
+      const res = await fetch("/api/tiles", { credentials: "include" });
+      if (!res.ok) {
+        if (res.status === 401) {
+          setTiles([]);
+          return;
+        }
+        const data = (await res.json()) as { message?: string; detail?: string };
+        setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
+        setTiles([]);
+        return;
+      }
+      const data = (await res.json()) as TileRecord[];
+      setTiles(Array.isArray(data) ? data : []);
+    } catch {
+      setFetchError("タイルの取得に失敗しました");
+      setTiles([]);
+    }
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(refetchTiles, TILES_POLL_INTERVAL_MS);
-    return () => clearInterval(interval);
-  }, [refetchTiles]);
+    if (initialTiles !== undefined) {
+      setTiles(initialTiles ?? []);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadTiles() {
+      setFetchError(null);
+      try {
+        const res = await fetch("/api/tiles", { credentials: "include" });
+        if (!res.ok) {
+          if (res.status === 401) {
+            if (!cancelled) setTiles([]);
+            return;
+          }
+          const data = (await res.json()) as { message?: string; detail?: string };
+          if (!cancelled) {
+            setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
+            setTiles([]);
+          }
+          return;
+        }
+        const data = (await res.json()) as TileRecord[];
+        if (!cancelled) setTiles(Array.isArray(data) ? data : []);
+      } catch {
+        if (!cancelled) {
+          setFetchError("タイルの取得に失敗しました");
+          setTiles([]);
+        }
+      }
+    }
+
+    loadTiles();
+    return () => {
+      cancelled = true;
+    };
+  }, [initialTiles]);
 
   useEffect(() => {
+    if (initialTiles !== undefined) return;
+
+    const interval = setInterval(refetchTiles, TILES_POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [initialTiles, refetchTiles]);
+
+  useEffect(() => {
+    if (initialTiles !== undefined) return;
+
     const onFocus = () => void refetchTiles();
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
-  }, [refetchTiles]);
+  }, [initialTiles, refetchTiles]);
 
   const geojsonData = useMemo(() => {
-    return h3IndexesToGeoJSONFeatureCollection(h3Indexes);
-  }, [h3Indexes]);
+    if (tiles.length === 0) return EMPTY_GEOJSON;
+    return tilesToGeoJSONFeatureCollection(tiles);
+  }, [tiles]);
 
   return (
     <div className="absolute inset-0">
+      {fetchError && (
+        <div className="absolute top-2 left-2 right-2 z-10 rounded bg-amber-100 px-3 py-2 text-sm text-amber-800">
+          {fetchError}
+        </div>
+      )}
       <MapLibreMap
         initialViewState={INITIAL_VIEW_STATE}
         mapStyle={BASE_MAP_STYLE}
@@ -93,7 +183,7 @@ export function Map({ initialH3Indexes }: { initialH3Indexes?: string[] }) {
           source="h3-hex-source"
           paint={{
             "fill-color": "#22c55e",
-            "fill-opacity": 0.35,
+            "fill-opacity": FILL_OPACITY_BY_SCORE,
           }}
         />
         <Layer
