@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Map } from "./Map";
 import { Leaderboard } from "./Leaderboard";
@@ -25,7 +26,11 @@ export function GroupMapView({ memberships }: GroupMapViewProps) {
     return (
       <div className="flex flex-1 items-center justify-center bg-gray-50">
         <p className="text-center text-gray-600">
-          グループに参加すると地図が表示されます
+          グループに
+          <Link href="/groups" className="font-medium text-green-600 underline hover:text-green-700">
+            参加
+          </Link>
+          すると地図が表示されます
         </p>
       </div>
     );
