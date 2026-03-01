@@ -18,7 +18,8 @@ function getKey(): Buffer | null {
 
 /**
  * トークンを暗号化し、base64(iv + ciphertext + authTag) を返す。
- * STRAVA_TOKEN_ENCRYPTION_KEY が未設定の場合は null を返す（平文保存にフォールバックする想定）。
+ * STRAVA_TOKEN_ENCRYPTION_KEY が未設定の場合は null を返す。
+ * 平文での DB 保存は禁止のため、null の場合はトークンを保存してはならない。
  */
 export function encryptStravaToken(plaintext: string): string | null {
   const key = getKey();
@@ -35,7 +36,8 @@ export function encryptStravaToken(plaintext: string): string | null {
 
 /**
  * 暗号化済みトークンを復号する（client では通常不要。backend で利用）。
- * 復号に失敗した場合は null を返す。
+ * 復号に失敗した場合やキー未設定の場合は null を返す。
+ * 平文が DB に保存されている場合は復号できないため null となる。平文保存は禁止。
  */
 export function decryptStravaToken(encrypted: string): string | null {
   const key = getKey();

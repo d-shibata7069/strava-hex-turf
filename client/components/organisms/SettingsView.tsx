@@ -17,13 +17,13 @@ export function SettingsView({ displayName, iconUrl }: SettingsViewProps) {
     );
     if (!ok) return;
 
-    const res = await fetch("/api/me", { method: "DELETE" });
+    const res = await fetch("/api/me", { method: "DELETE", credentials: "include" });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       alert(body?.message ?? "削除に失敗しました。");
       return;
     }
-    window.location.href = "/";
+    window.location.replace("/");
   }
 
   return (

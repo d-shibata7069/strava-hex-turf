@@ -83,8 +83,10 @@ export async function GET(request: NextRequest) {
 
   const encryptedAccess = encryptStravaToken(tokenData.access_token);
   const encryptedRefresh = encryptStravaToken(tokenData.refresh_token);
-  const strava_access_token = encryptedAccess ?? tokenData.access_token;
-  const strava_refresh_token = encryptedRefresh ?? tokenData.refresh_token;
+  if (!encryptedAccess || !encryptedRefresh) {
+    console.error("Strava token encryption failed: STRAVA_TOKEN_ENCRYPTION_KEY is required");
+    return NextResponse.redirect(`${baseRedirect}/login?error=token_encryption`);
+  }
 
   const supabase = getSupabaseServer();
   const { data: user, error: upsertError } = await supabase
@@ -94,8 +96,8 @@ export async function GET(request: NextRequest) {
         strava_id: athlete.id,
         display_name: displayName,
         icon_url: iconUrl,
-        strava_access_token,
-        strava_refresh_token,
+        strava_access_token: encryptedAccess,
+        strava_refresh_token: encryptedRefresh,
         strava_token_expires_at: expiresAt,
         updated_at: new Date().toISOString(),
       },

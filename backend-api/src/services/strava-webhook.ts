@@ -48,8 +48,8 @@ export interface StravaWebhookDeps {
   getH3IndexesFromPoints: (
     points: ReadonlyArray<[number, number]>
   ) => string[];
-  /** DB に暗号化して保存されたトークンを復号する。未設定なら平文として扱う */
-  decryptStravaToken?: (encrypted: string) => string | null;
+  /** DB に暗号化して保存されたトークンを復号する。必須。復号失敗時は null を返す。平文は使用禁止。 */
+  decryptStravaToken: (encrypted: string) => string | null;
 }
 
 /** users テーブルから取得する行（strava_id で検索） */
@@ -105,10 +105,11 @@ export async function processActivityEvent(
   if (!accessToken || typeof accessToken !== "string") {
     return { ok: false, reason: "user has no strava_access_token" };
   }
-  if (deps.decryptStravaToken) {
-    const dec = deps.decryptStravaToken(accessToken);
-    if (dec) accessToken = dec;
+  const decrypted = deps.decryptStravaToken(accessToken);
+  if (!decrypted) {
+    return { ok: false, reason: "strava_access_token decryption failed" };
   }
+  accessToken = decrypted;
 
   let activity = await fetchStravaActivity(objectId, accessToken);
   let summaryPolyline = activity?.map?.summary_polyline ?? null;
@@ -231,11 +232,15 @@ export function createDefaultStravaFetcher(): StravaWebhookDeps["fetchStravaActi
 /**
  * デフォルト依存で processActivityEvent を実行する際に使う deps を組み立てる
  */
-export function createDefaultDeps(supabase: SupabaseClient): StravaWebhookDeps {
+export function createDefaultDeps(
+  supabase: SupabaseClient,
+  decryptStravaToken: (encrypted: string) => string | null
+): StravaWebhookDeps {
   return {
     supabase,
     fetchStravaActivity: createDefaultStravaFetcher(),
     getH3IndexesFromPoints,
+    decryptStravaToken,
   };
 }
 

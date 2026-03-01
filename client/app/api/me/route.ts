@@ -8,6 +8,7 @@ import {
 import { decryptStravaToken } from "@/lib/strava-token-crypto";
 
 const STRAVA_DEAUTHORIZE_URL = "https://www.strava.com/oauth/deauthorize";
+const STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
 
 /**
  * DELETE /api/me
@@ -31,23 +32,55 @@ export async function DELETE() {
   // 削除前に Strava 認可解除を試行（成功・失敗にかかわらず退会処理は続行）
   const { data: userRow } = await supabase
     .from("users")
-    .select("strava_access_token")
+    .select("strava_access_token, strava_refresh_token, strava_token_expires_at")
     .eq("id", userId)
     .single();
 
-  const encryptedToken = userRow?.strava_access_token;
-  if (encryptedToken) {
-    const accessToken = decryptStravaToken(encryptedToken);
-    if (accessToken) {
+  let accessToken: string | null = null;
+  if (userRow?.strava_access_token) {
+    accessToken = decryptStravaToken(userRow.strava_access_token);
+  }
+
+  // Strava の認可解除は有効なアクセストークンが必要。期限切れの場合はリフレッシュしてから実行
+  const expiresAt = userRow?.strava_token_expires_at
+    ? new Date(userRow.strava_token_expires_at).getTime()
+    : 0;
+  const isExpired = expiresAt < Date.now() + 60_000; // 1分の余裕
+  if (accessToken && isExpired && userRow?.strava_refresh_token) {
+    const refreshToken = decryptStravaToken(userRow.strava_refresh_token);
+    const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
+    const clientSecret = process.env.STRAVA_CLIENT_SECRET;
+    if (refreshToken && clientId && clientSecret) {
       try {
-        await fetch(STRAVA_DEAUTHORIZE_URL, {
+        const tokenRes = await fetch(STRAVA_TOKEN_URL, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({ access_token: accessToken }).toString(),
+          body: new URLSearchParams({
+            client_id: clientId,
+            client_secret: clientSecret,
+            refresh_token: refreshToken,
+            grant_type: "refresh_token",
+          }).toString(),
         });
+        if (tokenRes.ok) {
+          const data = (await tokenRes.json()) as { access_token?: string };
+          if (data.access_token) accessToken = data.access_token;
+        }
       } catch (e) {
-        console.error("Strava deauthorize request failed:", e);
+        console.error("Strava token refresh failed:", e);
       }
+    }
+  }
+
+  if (accessToken) {
+    try {
+      await fetch(STRAVA_DEAUTHORIZE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ access_token: accessToken }).toString(),
+      });
+    } catch (e) {
+      console.error("Strava deauthorize request failed:", e);
     }
   }
 
