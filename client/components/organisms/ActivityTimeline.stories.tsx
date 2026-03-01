@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ActivityTimeline } from "./ActivityTimeline";
-import type { ActivityLogEntry } from "@/app/api/groups/[groupId]/logs/route";
+import type { ActivityLogEntry } from "@/app/api/groups/[id]/logs/route";
 
 const meta: Meta<typeof ActivityTimeline> = {
   component: ActivityTimeline,

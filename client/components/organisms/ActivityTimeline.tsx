@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { ActivityLogEntry } from "@/app/api/groups/[groupId]/logs/route";
+import type { ActivityLogEntry } from "@/app/api/groups/[id]/logs/route";
 
 const LOGS_POLL_INTERVAL_MS = 20_000;
 const MAX_LOGS = 50;

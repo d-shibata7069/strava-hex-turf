@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 
-type RouteParams = { params: Promise<{ groupId: string }> };
+type RouteParams = { params: Promise<{ id: string }> };
 
 /** GET レスポンスの1件の型 */
 export interface ActivityLogEntry {
@@ -20,7 +20,7 @@ export interface ActivityLogEntry {
 }
 
 /**
- * GET /api/groups/[groupId]/logs
+ * GET /api/groups/[id]/logs
  * 指定グループに紐づく activity_logs を新しい順で取得する。ユーザー情報（表示名・アイコン）を結合して返す。
  * 呼び出し元がそのグループのメンバーである場合のみ実行可能。
  */
@@ -33,7 +33,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
     );
   }
 
-  const { groupId } = await params;
+  const { id: groupId } = await params;
   if (!groupId) {
     return NextResponse.json(
       { error: "Bad Request", message: "グループ ID がありません" },
@@ -90,8 +90,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
       h3_index: string | null;
       message: string;
       created_at: string;
-      users: { display_name: string | null; icon_url: string | null } | null;
+      users: { display_name: string | null; icon_url: string | null } | { display_name: string | null; icon_url: string | null }[] | null;
     };
+    const userRow = Array.isArray(row.users) ? row.users[0] ?? null : row.users;
     return {
       id: row.id,
       group_id: row.group_id,
@@ -100,7 +101,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
       h3_index: row.h3_index,
       message: row.message,
       created_at: row.created_at,
-      user: row.users ?? null,
+      user: userRow ?? null,
     };
   });
 
