@@ -100,9 +100,10 @@ describe("processActivityEvent", () => {
     expect(result).toEqual({ ok: false, reason: "activity has no map.summary_polyline" });
   }, 10000);
 
-  it("Polyline をデコードして H3 を計算し、tiles に Upsert を呼ぶ", async () => {
+  it("Polyline をデコードして H3 を計算し、tiles に Upsert を呼び、activity_logs に Insert する", async () => {
     const mockGetH3 = vi.fn((_points: ReadonlyArray<[number, number]>) => ["87283472bffffff", "87283472cffffff"]);
     const mockUpsert = vi.fn().mockResolvedValue({ error: null });
+    const mockLogsInsert = vi.fn().mockResolvedValue({ error: null });
     const mockFrom = vi.fn((table: string) => {
       if (table === "users")
         return {
@@ -110,7 +111,7 @@ describe("processActivityEvent", () => {
             eq: () => ({
               maybeSingle: () =>
                 Promise.resolve({
-                  data: { id: "user-uuid-1", strava_access_token: "strava-token" },
+                  data: { id: "user-uuid-1", strava_access_token: "strava-token", display_name: "テストユーザー" },
                   error: null,
                 }),
             }),
@@ -128,6 +129,7 @@ describe("processActivityEvent", () => {
         };
       if (table === "tiles") return { upsert: mockUpsert };
       if (table === "activity_tiles") return { upsert: vi.fn().mockResolvedValue({ error: null }) };
+      if (table === "activity_logs") return { insert: mockLogsInsert };
       return {};
     });
     const deps: StravaWebhookDeps = {
@@ -166,11 +168,23 @@ describe("processActivityEvent", () => {
       owner_id: "user-uuid-1",
       score: 100,
     });
+
+    expect(mockLogsInsert).toHaveBeenCalledTimes(1);
+    const [logRows] = mockLogsInsert.mock.calls[0];
+    expect(logRows).toHaveLength(1);
+    expect(logRows[0]).toMatchObject({
+      group_id: "group-uuid-1",
+      user_id: "user-uuid-1",
+      action: "capture",
+      message: "テストユーザー が 2個の陣地を奪取・防衛しました！",
+    });
+    expect(logRows[0].h3_index).toBeNull();
   });
 
-  it("複数グループの場合は全グループ分のタイルを Upsert する", async () => {
+  it("複数グループの場合は全グループ分のタイルを Upsert し、グループごとに activity_logs を 1 件ずつ Insert する", async () => {
     const mockGetH3 = vi.fn(() => ["h3-one"]);
     const mockUpsert = vi.fn().mockResolvedValue({ error: null });
+    const mockLogsInsert = vi.fn().mockResolvedValue({ error: null });
     const mockFrom = vi.fn((table: string) => {
       if (table === "users")
         return {
@@ -178,7 +192,7 @@ describe("processActivityEvent", () => {
             eq: () => ({
               maybeSingle: () =>
                 Promise.resolve({
-                  data: { id: "u1", strava_access_token: "t" },
+                  data: { id: "u1", strava_access_token: "t", display_name: "ランナーA" },
                   error: null,
                 }),
             }),
@@ -196,6 +210,7 @@ describe("processActivityEvent", () => {
         };
       if (table === "tiles") return { upsert: mockUpsert };
       if (table === "activity_tiles") return { upsert: vi.fn().mockResolvedValue({ error: null }) };
+      if (table === "activity_logs") return { insert: mockLogsInsert };
       return {};
     });
     const deps: StravaWebhookDeps = {
@@ -211,6 +226,50 @@ describe("processActivityEvent", () => {
     expect(rows).toHaveLength(2);
     const groupIds = rows.map((r: { group_id: string }) => r.group_id).sort();
     expect(groupIds).toEqual(["g1", "g2"]);
+
+    const logRows = mockLogsInsert.mock.calls[0][0];
+    expect(logRows).toHaveLength(2);
+    expect(logRows.map((r: { group_id: string }) => r.group_id).sort()).toEqual(["g1", "g2"]);
+    expect(logRows[0].message).toBe("ランナーA が 1個の陣地を奪取・防衛しました！");
+  });
+
+  it("display_name が空の場合は「ランナー」として activity_logs に記録する", async () => {
+    const mockGetH3 = vi.fn(() => ["h3-one"]);
+    const mockLogsInsert = vi.fn().mockResolvedValue({ error: null });
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "users")
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () =>
+                Promise.resolve({
+                  data: { id: "u1", strava_access_token: "t", display_name: "" },
+                  error: null,
+                }),
+            }),
+          }),
+        };
+      if (table === "group_members")
+        return {
+          select: () => ({
+            eq: () => Promise.resolve({ data: [{ group_id: "g1" }], error: null }),
+          }),
+        };
+      if (table === "tiles") return { upsert: vi.fn().mockResolvedValue({ error: null }) };
+      if (table === "activity_tiles") return { upsert: vi.fn().mockResolvedValue({ error: null }) };
+      if (table === "activity_logs") return { insert: mockLogsInsert };
+      return {};
+    });
+    const deps: StravaWebhookDeps = {
+      supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
+      fetchStravaActivity: vi.fn().mockResolvedValue({
+        map: { summary_polyline: DUMMY_POLYLINE },
+      }),
+      getH3IndexesFromPoints: mockGetH3,
+    };
+    const result = await processActivityEvent(1, 2, deps);
+    expect(result).toEqual({ ok: true });
+    expect(mockLogsInsert.mock.calls[0][0][0].message).toBe("ランナー が 1個の陣地を奪取・防衛しました！");
   });
 });
 
