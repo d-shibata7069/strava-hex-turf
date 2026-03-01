@@ -42,20 +42,6 @@ const FILL_OPACITY_BY_SCORE: DataDrivenPropertyValueSpecification<number> = [
   0.4,
 ];
 
-/**
- * スコア（0–100）に応じた fill-color。
- * 0→薄い緑、100→濃い緑を均等に傾斜。最大は #15803d で抑える。
- */
-const FILL_COLOR_BY_SCORE: DataDrivenPropertyValueSpecification<string> = [
-  "interpolate",
-  ["linear"],
-  SCORE_AS_NUMBER,
-  0,
-  "#bbf7d0",   // 薄い緑
-  100,
-  "#15803d",    // 濃い緑（最大）
-];
-
 /** 東京都新宿区周辺の初期表示（経度・緯度・ズーム） */
 const INITIAL_VIEW_STATE = {
   longitude: 139.6917,
@@ -225,7 +211,7 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           type="fill"
           source="h3-hex-source"
           paint={{
-            "fill-color": FILL_COLOR_BY_SCORE,
+            "fill-color": ["get", "color"],
             "fill-opacity": FILL_OPACITY_BY_SCORE,
           }}
         />
@@ -234,7 +220,7 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           type="line"
           source="h3-hex-source"
           paint={{
-            "line-color": "#15803d",
+            "line-color": ["get", "color"],
             "line-width": 1.5,
           }}
         />

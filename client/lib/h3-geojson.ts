@@ -5,6 +5,7 @@
  * @see https://h3geo.org/docs/api/indexing
  */
 import { cellsToMultiPolygon, isValidCell } from "h3-js";
+import { stringToColor } from "./color-utils";
 
 /** GeoJSON Feature（Geometry は MultiPolygon） */
 export interface H3GeoJSONFeature {
@@ -73,11 +74,13 @@ export interface TileRecord {
   group_id: string;
 }
 
-/** タイル用 GeoJSON Feature の properties（地図の fill-opacity などで参照） */
+/** タイル用 GeoJSON Feature の properties（地図の fill-opacity / fill-color などで参照） */
 export interface TileFeatureProperties {
   score: number;
   owner_id: string;
   group_id: string;
+  /** ユーザー（owner_id）識別用の固有HEXカラー */
+  color: string;
 }
 
 /**
@@ -135,6 +138,7 @@ export function tilesToGeoJSONFeatureCollection(
             score: tile.score,
             owner_id: tile.owner_id,
             group_id: tile.group_id,
+            color: stringToColor(tile.owner_id),
           } as TileFeatureProperties & Record<string, unknown>,
         };
       })
