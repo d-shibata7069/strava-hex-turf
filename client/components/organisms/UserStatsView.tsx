@@ -12,12 +12,14 @@ import {
 } from "recharts";
 import { Avatar } from "@/components/atoms/Avatar";
 import type { UserGroupDailyStat } from "@/app/api/groups/[id]/users/[userId]/stats/route";
+import { Users } from "lucide-react";
 
 export interface UserStatsViewProps {
   groupId: string;
   userId: string;
   displayName: string;
   iconUrl: string | null;
+  groupName?: string | null;
 }
 
 type RangeKey = "1W" | "1M" | "1Y";
@@ -33,7 +35,7 @@ function formatDateLabel(dateStr: string): string {
   return `${d.getMonth() + 1}/${d.getDate()}`;
 }
 
-export function UserStatsView({ groupId, userId, displayName, iconUrl }: UserStatsViewProps) {
+export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName }: UserStatsViewProps) {
   const [range, setRange] = useState<RangeKey>("1M");
   const [stats, setStats] = useState<UserGroupDailyStat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,9 +81,17 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl }: UserSta
     <div className="space-y-6">
       <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
         <Avatar src={iconUrl} alt="" size="md" className="shrink-0" />
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">{displayName}</h1>
-          <p className="text-sm text-gray-500">成績推移</p>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <h1 className="text-xl font-semibold text-gray-900">{displayName}</h1>
+            {groupName ? (
+              <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                <Users className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                {groupName}
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-0.5 text-sm text-gray-500">成績推移</p>
         </div>
       </div>
 

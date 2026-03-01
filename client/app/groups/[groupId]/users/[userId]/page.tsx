@@ -50,6 +50,12 @@ export default async function GroupUserPage({ params }: PageProps) {
     notFound();
   }
 
+  const { data: group } = await supabase
+    .from("groups")
+    .select("name")
+    .eq("id", groupId)
+    .maybeSingle();
+
   const { data: user, error } = await supabase
     .from("users")
     .select("id, display_name, icon_url")
@@ -75,6 +81,7 @@ export default async function GroupUserPage({ params }: PageProps) {
           userId={user.id}
           displayName={user.display_name ?? "名前なし"}
           iconUrl={user.icon_url ?? null}
+          groupName={group?.name ?? null}
         />
       </div>
     </main>
