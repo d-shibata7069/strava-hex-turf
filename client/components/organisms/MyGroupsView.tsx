@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Copy } from "lucide-react";
 
 interface Membership {
   group_id: string;
@@ -87,6 +88,19 @@ export function MyGroupsView() {
     }
   }
 
+  async function handleCopyInviteCode(code: string) {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = code;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+  }
+
   if (loading) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-8">
@@ -154,7 +168,18 @@ export function MyGroupsView() {
                   {m.group_name || "（名前なし）"}
                 </p>
                 <p className="text-sm text-zinc-500">
-                  招待コード: <code className="rounded bg-zinc-100 px-1">{m.invite_code ?? "—"}</code>
+                  招待コード:{" "}
+                  <code className="rounded bg-zinc-100 px-1">{m.invite_code ?? "—"}</code>
+                  {m.invite_code && (
+                    <button
+                      type="button"
+                      onClick={() => handleCopyInviteCode(m.invite_code!)}
+                      className="ml-1.5 inline-flex items-center gap-1 rounded p-1 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700"
+                      title="招待コードをコピー"
+                    >
+                      <Copy className="h-3.5 w-3.5" aria-hidden />
+                    </button>
+                  )}
                 </p>
               </div>
               <div className="flex gap-2">

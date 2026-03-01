@@ -14,6 +14,7 @@
     "webhook:subscription:delete": "node scripts/strava-webhook-subscription.mjs delete"
   },
   "dependencies": {
+    "lucide-react": "^0.460.0",
     "@supabase/supabase-js": "^2.45.0",
     "@vis.gl/react-maplibre": "^8.1.0",
     "h3-js": "^4.4.0",
