@@ -4,7 +4,7 @@
  * @see https://www.npmjs.com/package/h3-js
  * @see https://h3geo.org/docs/api/indexing
  */
-import { cellsToMultiPolygon, isValidCell } from "h3-js";
+import { cellsToMultiPolygon, cellToLatLng, isValidCell } from "h3-js";
 import { stringToColor } from "./color-utils";
 
 /** GeoJSON Feature（Geometry は MultiPolygon） */
@@ -66,12 +66,13 @@ export function h3IndexesToGeoJSONFeatureCollection(
   }
 }
 
-/** API から取得するタイル1件の型（h3_index, owner_id, score, group_id） */
+/** API から取得するタイル1件の型（h3_index, owner_id, score, group_id, icon_url） */
 export interface TileRecord {
   h3_index: string;
   owner_id: string;
   score: number;
   group_id: string;
+  icon_url?: string | null;
 }
 
 /** タイル用 GeoJSON Feature の properties（地図の fill-opacity / fill-color などで参照） */
@@ -81,6 +82,8 @@ export interface TileFeatureProperties {
   group_id: string;
   /** ユーザー（owner_id）識別用の固有HEXカラー */
   color: string;
+  /** 所有者のアバター画像URL（ズーム時シンボル表示用） */
+  icon_url?: string | null;
 }
 
 /**
@@ -139,6 +142,7 @@ export function tilesToGeoJSONFeatureCollection(
             owner_id: tile.owner_id,
             group_id: tile.group_id,
             color: stringToColor(tile.owner_id),
+            icon_url: tile.icon_url ?? null,
           } as TileFeatureProperties & Record<string, unknown>,
         };
       })
@@ -151,4 +155,58 @@ export function tilesToGeoJSONFeatureCollection(
   } catch {
     return { type: "FeatureCollection", features: [] };
   }
+}
+
+/** アイコン表示用の Point Feature の properties（icon_url は URL またはデフォルトアイコンID） */
+export interface TileIconPointProperties {
+  icon_url: string;
+}
+
+/** デフォルトアイコン（プロフィール未設定時）の MapLibre 画像ID */
+export const DEFAULT_ICON_ID = "default-avatar";
+
+/** GeoJSON Point FeatureCollection（タイル中心のポイント。全タイルを含め、icon_url がない場合は DEFAULT_ICON_ID を使用） */
+export interface TileIconPointFeatureCollection {
+  type: "FeatureCollection";
+  features: Array<{
+    type: "Feature";
+    geometry: GeoJSON.Point;
+    properties: TileIconPointProperties;
+  }>;
+}
+
+/**
+ * タイルの中心座標を Point FeatureCollection で返す。
+ * 全タイルを含め、icon_url が無い場合は DEFAULT_ICON_ID を指定してデフォルトアイコンを表示する。
+ * cellToLatLng は [lat, lng] を返すため、GeoJSON の [lng, lat] に変換する。
+ */
+export function tilesToIconPointFeatureCollection(
+  tiles: TileRecord[]
+): TileIconPointFeatureCollection {
+  const features: Array<{
+    type: "Feature";
+    geometry: GeoJSON.Point;
+    properties: TileIconPointProperties;
+  }> = [];
+  for (const t of tiles) {
+    if (!t || typeof t.h3_index !== "string" || !t.h3_index || !isValidCell(t.h3_index)) continue;
+    const iconUrl =
+      t.icon_url && typeof t.icon_url === "string" && t.icon_url.trim()
+        ? t.icon_url.trim()
+        : DEFAULT_ICON_ID;
+    try {
+      const [lat, lng] = cellToLatLng(t.h3_index);
+      features.push({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [lng, lat],
+        },
+        properties: { icon_url: iconUrl },
+      });
+    } catch {
+      // 無効なセルはスキップ
+    }
+  }
+  return { type: "FeatureCollection", features };
 }

@@ -36,9 +36,9 @@ export async function GET() {
     return NextResponse.json([]);
   }
 
-  const { data: tiles, error: tilesError } = await supabase
+  const { data: tilesRaw, error: tilesError } = await supabase
     .from("tiles")
-    .select("h3_index, owner_id, score, group_id")
+    .select("h3_index, owner_id, score, group_id, users!owner_id(icon_url)")
     .in("group_id", groupIds);
 
   if (tilesError) {
@@ -53,5 +53,30 @@ export async function GET() {
     );
   }
 
-  return NextResponse.json(tiles ?? []);
+  const tiles = (tilesRaw ?? []).map(
+    (row: {
+      h3_index: string;
+      owner_id: string;
+      score: number;
+      group_id: string;
+      users?: { icon_url: string | null } | { icon_url: string | null }[] | null;
+    }) => {
+      const users = row.users;
+      const iconUrl =
+        users == null
+          ? null
+          : Array.isArray(users)
+            ? users[0]?.icon_url ?? null
+            : users.icon_url ?? null;
+      return {
+        h3_index: row.h3_index,
+        owner_id: row.owner_id,
+        score: row.score,
+        group_id: row.group_id,
+        icon_url: iconUrl,
+      };
+    }
+  );
+
+  return NextResponse.json(tiles);
 }
