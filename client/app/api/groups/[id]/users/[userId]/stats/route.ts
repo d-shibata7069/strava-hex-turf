@@ -11,39 +11,9 @@ export interface UserGroupDailyStat {
 }
 
 /**
- * 直近 days 日分のダミーデータを生成（UIテスト用フォールバック）。
- * サイン波とランダムウォークでタイル数・スコアを増減させる。
- */
-function generateFallbackStats(days: number): UserGroupDailyStat[] {
-  const now = new Date();
-  const result: UserGroupDailyStat[] = [];
-  let tileBase = 5 + Math.floor(Math.random() * 10);
-  let scoreBase = tileBase * 30 + Math.floor(Math.random() * 200);
-
-  for (let i = days - 1; i >= 0; i--) {
-    const d = new Date(now);
-    d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().slice(0, 10);
-
-    const wave = Math.sin((i / 7) * Math.PI * 2) * 2;
-    const rand = (Math.random() - 0.5) * 3;
-    tileBase = Math.max(0, Math.round(tileBase + wave + rand));
-    scoreBase = Math.max(0, Math.round(scoreBase + wave * 15 + (Math.random() - 0.5) * 50));
-
-    result.push({
-      record_date: dateStr,
-      tile_count: tileBase,
-      total_score: scoreBase,
-    });
-  }
-
-  return result;
-}
-
-/**
  * GET /api/groups/[id]/users/[userId]/stats
  * 指定ユーザーの user_group_daily_stats を日付昇順で返す。
- * グループメンバーのみ実行可能。データが空または少ない場合は直近30日分のダミーデータを返す（UIテスト用）。
+ * グループメンバーのみ実行可能。実データのみ返し、データが無い場合は空配列。
  */
 export async function GET(_request: Request, { params }: RouteParams) {
   const currentUserId = await getSessionUserId();
@@ -102,12 +72,6 @@ export async function GET(_request: Request, { params }: RouteParams) {
   }
 
   const list = Array.isArray(rows) ? rows : [];
-  const fallbackThreshold = 7;
-
-  if (list.length < fallbackThreshold) {
-    const fallback = generateFallbackStats(30);
-    return NextResponse.json(fallback as UserGroupDailyStat[]);
-  }
 
   const normalized: UserGroupDailyStat[] = list.map((r) => ({
     record_date: typeof r.record_date === "string" ? r.record_date : (r.record_date as unknown as Date)?.toISOString?.()?.slice(0, 10) ?? "",
