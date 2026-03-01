@@ -16,6 +16,10 @@ export interface ActivityTimelineProps {
   defaultOpen?: boolean;
   /** true の場合は親の aside 内に埋め込み表示（外側の aside を描画しない） */
   embedded?: boolean;
+  /** 制御用。指定時は open で開閉を制御し、onOpenChange で通知する */
+  open?: boolean;
+  /** 開閉状態が変わったときに呼ばれる（制御用） */
+  onOpenChange?: (open: boolean) => void;
 }
 
 function formatRelativeTime(isoString: string): string {
@@ -34,8 +38,11 @@ function formatRelativeTime(isoString: string): string {
   return date.toLocaleDateString("ja-JP", { month: "short", day: "numeric", year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined });
 }
 
-export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, embedded = false }: ActivityTimelineProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, embedded = false, open: controlledOpen, onOpenChange }: ActivityTimelineProps) {
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? (value: boolean) => onOpenChange(value) : setInternalOpen;
   const [logs, setLogs] = useState<ActivityLogEntry[]>(initialLogs ?? []);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(initialLogs === undefined);
@@ -124,7 +131,7 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
     const button = (
       <button
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={() => setOpen(true)}
         className="absolute right-0 top-20 z-10 flex items-center justify-center rounded-l-lg border border-r-0 border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-50"
         aria-label="Activity Log を開く"
         title="Activity Log を開く"
@@ -134,12 +141,12 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
     );
     if (embedded) {
       return (
-        <div className="flex flex-1 flex-col min-h-0" aria-label="Activity Log">
-          <div className="flex flex-1 items-center justify-end">
+        <div className="flex shrink-0 flex-col overflow-hidden rounded-bl-lg border-b border-gray-200 py-1" aria-label="Activity Log">
+          <div className="flex justify-end">
             <button
               type="button"
-              onClick={() => setIsOpen(true)}
-              className="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-50"
+              onClick={() => setOpen(true)}
+              className="flex items-center justify-center rounded-bl-lg border-r border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-100 focus:outline-none"
               aria-label="Activity Log を開く"
               title="Activity Log を開く"
             >
@@ -158,7 +165,7 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
         <h2 className="text-sm font-semibold text-gray-800">Activity Log</h2>
         <button
           type="button"
-          onClick={() => setIsOpen(false)}
+          onClick={() => setOpen(false)}
           className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           aria-label="Activity Log を閉じる"
           title="閉じる"

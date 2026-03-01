@@ -10,6 +10,12 @@ export interface LeaderboardProps {
   groupId: string | null;
   /** Storybook 等で視覚確認するためのダミーデータ。指定時は API フェッチを行わない */
   initialEntries?: LeaderboardEntry[] | null;
+  /** 初期表示でパネルを開くか。デフォルトは true（開く） */
+  defaultOpen?: boolean;
+  /** 制御用。指定時は open で開閉を制御し、onOpenChange で通知する */
+  open?: boolean;
+  /** 開閉状態が変わったときに呼ばれる（制御用） */
+  onOpenChange?: (open: boolean) => void;
 }
 
 function RankCrown({ rank }: { rank: number }) {
@@ -37,7 +43,11 @@ function RankCrown({ rank }: { rank: number }) {
   return null;
 }
 
-export function Leaderboard({ groupId, initialEntries }: LeaderboardProps) {
+export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open: controlledOpen, onOpenChange }: LeaderboardProps) {
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? (value: boolean) => onOpenChange(value) : setInternalOpen;
   const [entries, setEntries] = useState<LeaderboardEntry[]>(initialEntries ?? []);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(initialEntries === undefined);
@@ -90,7 +100,7 @@ export function Leaderboard({ groupId, initialEntries }: LeaderboardProps) {
 
   if (groupId == null) {
     return (
-      <div className="border-b border-gray-200 px-4 py-3" aria-label="リーダーボード">
+      <div className="shrink-0 border-b border-gray-200 px-4 py-3" aria-label="リーダーボード">
         <h2 className="text-sm font-semibold text-gray-800">ランキング</h2>
         <div className="mt-2 text-center text-sm text-gray-500">
           グループに参加するとランキングが表示されます
@@ -99,12 +109,39 @@ export function Leaderboard({ groupId, initialEntries }: LeaderboardProps) {
     );
   }
 
+  if (!isOpen) {
+    return (
+      <div className="flex shrink-0 justify-end overflow-hidden rounded-tl-lg border-b border-gray-200 py-1" aria-label="リーダーボード">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="flex items-center justify-center rounded-tl-lg border-r border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-100 focus:outline-none"
+          aria-label="ランキングを開く"
+          title="ランキングを開く"
+        >
+          <Trophy className="h-5 w-5 text-amber-500" aria-hidden />
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="border-b border-gray-200 px-4 py-3" aria-label="リーダーボード">
-      <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
-        <Trophy className="h-4 w-4 text-amber-500" aria-hidden />
-        ランキング
-      </h2>
+    <div className="shrink-0 border-b border-gray-200 px-4 py-3" aria-label="リーダーボード">
+      <div className="flex items-center justify-between">
+        <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+          <Trophy className="h-4 w-4 text-amber-500" aria-hidden />
+          ランキング
+        </h2>
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          aria-label="ランキングを閉じる"
+          title="閉じる"
+        >
+          <span className="text-lg leading-none" aria-hidden>×</span>
+        </button>
+      </div>
       <div className="mt-2 max-h-64 overflow-y-auto">
         {loading && entries.length === 0 ? (
           <div className="flex items-center justify-center py-6 text-sm text-gray-500">
