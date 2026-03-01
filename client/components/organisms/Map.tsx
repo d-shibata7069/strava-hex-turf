@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Map as MapLibreMap, Source, Layer } from "@vis.gl/react-maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
@@ -9,6 +9,29 @@ import {
   type TileRecord,
   type H3GeoJSONFeatureCollection,
 } from "@/lib/h3-geojson";
+
+const TILES_POLL_INTERVAL_MS = 15_000;
+
+/** 空の GeoJSON（タイル未取得時・未ログイン時） */
+const EMPTY_GEOJSON: H3GeoJSONFeatureCollection = {
+  type: "FeatureCollection",
+  features: [],
+};
+
+/**
+ * スコア（0–100）に応じた fill-opacity の式。
+ * score 100 → 0.8、score 0 → 0.2 で線形補間（防衛の濃さを表現）。
+ * @see https://maplibre.org/maplibre-style-spec/expressions/#interpolate
+ */
+const FILL_OPACITY_BY_SCORE: DataDrivenPropertyValueSpecification<number> = [
+  "interpolate",
+  ["linear"],
+  ["get", "score"],
+  0,
+  0.2,
+  100,
+  0.8,
+];
 
 /** 東京都新宿区周辺の初期表示（経度・緯度・ズーム） */
 const INITIAL_VIEW_STATE = {
@@ -44,27 +67,6 @@ const BASE_MAP_STYLE = {
   ],
 };
 
-/** 空の GeoJSON（タイル未取得時・未ログイン時） */
-const EMPTY_GEOJSON: H3GeoJSONFeatureCollection = {
-  type: "FeatureCollection",
-  features: [],
-};
-
-/**
- * スコア（0–100）に応じた fill-opacity の式。
- * score 100 → 0.8、score 0 → 0.2 で線形補間（防衛の濃さを表現）。
- * @see https://maplibre.org/maplibre-style-spec/expressions/#interpolate
- */
-const FILL_OPACITY_BY_SCORE: DataDrivenPropertyValueSpecification<number> = [
-  "interpolate",
-  ["linear"],
-  ["get", "score"],
-  0,
-  0.2,
-  100,
-  0.8,
-];
-
 export interface MapProps {
   /**
    * 省略時は /api/tiles から取得。Storybook などでモックデータを渡す場合に使用。
@@ -75,6 +77,28 @@ export interface MapProps {
 export function Map({ initialTiles }: MapProps = {}) {
   const [tiles, setTiles] = useState<TileRecord[]>(initialTiles ?? []);
   const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const refetchTiles = useCallback(async () => {
+    setFetchError(null);
+    try {
+      const res = await fetch("/api/tiles", { credentials: "include" });
+      if (!res.ok) {
+        if (res.status === 401) {
+          setTiles([]);
+          return;
+        }
+        const data = (await res.json()) as { message?: string; detail?: string };
+        setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
+        setTiles([]);
+        return;
+      }
+      const data = (await res.json()) as TileRecord[];
+      setTiles(Array.isArray(data) ? data : []);
+    } catch {
+      setFetchError("タイルの取得に失敗しました");
+      setTiles([]);
+    }
+  }, []);
 
   useEffect(() => {
     if (initialTiles !== undefined) {
@@ -90,17 +114,19 @@ export function Map({ initialTiles }: MapProps = {}) {
         const res = await fetch("/api/tiles", { credentials: "include" });
         if (!res.ok) {
           if (res.status === 401) {
-            setTiles([]);
+            if (!cancelled) setTiles([]);
             return;
           }
           const data = (await res.json()) as { message?: string; detail?: string };
-          setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
-          setTiles([]);
+          if (!cancelled) {
+            setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
+            setTiles([]);
+          }
           return;
         }
         const data = (await res.json()) as TileRecord[];
         if (!cancelled) setTiles(Array.isArray(data) ? data : []);
-      } catch (e) {
+      } catch {
         if (!cancelled) {
           setFetchError("タイルの取得に失敗しました");
           setTiles([]);
@@ -113,6 +139,21 @@ export function Map({ initialTiles }: MapProps = {}) {
       cancelled = true;
     };
   }, [initialTiles]);
+
+  useEffect(() => {
+    if (initialTiles !== undefined) return;
+
+    const interval = setInterval(refetchTiles, TILES_POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [initialTiles, refetchTiles]);
+
+  useEffect(() => {
+    if (initialTiles !== undefined) return;
+
+    const onFocus = () => void refetchTiles();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [initialTiles, refetchTiles]);
 
   const geojsonData = useMemo(() => {
     if (tiles.length === 0) return EMPTY_GEOJSON;

@@ -42,8 +42,8 @@ interface StravaWebhookPayload {
 
 /**
  * Strava Webhook アクティビティ通知（POST）
- * object_type === 'activity' かつ aspect_type === 'create' の場合のみ、
- * /backend-api の processActivityEvent を呼び出して非同期で処理を開始し、
+ * object_type === 'activity' かつ aspect_type === 'create' のときは processActivityEvent、
+ * aspect_type === 'delete' のときは processActivityDelete を backend-api で実行する。
  * 即座に 200 OK を返す（Strava の 2 秒タイムアウト制限を回避するため）。
  */
 export async function POST(request: NextRequest) {
@@ -60,18 +60,28 @@ export async function POST(request: NextRequest) {
   const { object_type, aspect_type, object_id, owner_id } = body;
 
   if (
-    object_type === "activity" &&
-    aspect_type === "create" &&
-    typeof object_id === "number" &&
-    typeof owner_id === "number"
+    object_type !== "activity" ||
+    typeof object_id !== "number" ||
+    typeof owner_id !== "number"
   ) {
+    return new NextResponse(null, { status: 200 });
+  }
+
+  const isDelete = aspect_type === "delete";
+  const isCreate = aspect_type === "create";
+
+  if (isCreate || isDelete) {
     const baseUrl =
       process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "http://localhost:3001";
     const url = `${baseUrl}/webhook/activity`;
     void fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ object_id, owner_id }),
+      body: JSON.stringify({
+        object_id,
+        owner_id,
+        ...(isDelete ? { action: "delete" } : {}),
+      }),
     }).catch((err) => {
       console.error("[strava-webhook] backend fetch error:", err);
     });

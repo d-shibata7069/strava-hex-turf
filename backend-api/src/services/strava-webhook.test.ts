@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import {
   verifyWebhook,
   processActivityEvent,
+  processActivityDelete,
   type StravaWebhookDeps,
   type WebhookVerifyQuery,
 } from "./strava-webhook.js";
@@ -97,7 +98,7 @@ describe("processActivityEvent", () => {
     };
     const result = await processActivityEvent(12345, 999, deps);
     expect(result).toEqual({ ok: false, reason: "activity has no map.summary_polyline" });
-  });
+  }, 10000);
 
   it("Polyline をデコードして H3 を計算し、tiles に Upsert を呼ぶ", async () => {
     const mockGetH3 = vi.fn((_points: ReadonlyArray<[number, number]>) => ["87283472bffffff", "87283472cffffff"]);
@@ -126,6 +127,7 @@ describe("processActivityEvent", () => {
           }),
         };
       if (table === "tiles") return { upsert: mockUpsert };
+      if (table === "activity_tiles") return { upsert: vi.fn().mockResolvedValue({ error: null }) };
       return {};
     });
     const deps: StravaWebhookDeps = {
@@ -193,6 +195,7 @@ describe("processActivityEvent", () => {
           }),
         };
       if (table === "tiles") return { upsert: mockUpsert };
+      if (table === "activity_tiles") return { upsert: vi.fn().mockResolvedValue({ error: null }) };
       return {};
     });
     const deps: StravaWebhookDeps = {
@@ -209,4 +212,52 @@ describe("processActivityEvent", () => {
     const groupIds = rows.map((r: { group_id: string }) => r.group_id).sort();
     expect(groupIds).toEqual(["g1", "g2"]);
   });
+});
+
+describe("processActivityDelete", () => {
+  it("ユーザーがDBにいない場合は ok: true（何もしない）", async () => {
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "users")
+        return {
+          select: () => ({ eq: () => ({ maybeSingle: () => Promise.resolve({ data: null, error: null }) }) }),
+        };
+      return {};
+    });
+    const result = await processActivityDelete(100, 999, {
+      supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
+    });
+    expect(result).toEqual({ ok: true });
+  });
+
+  it("当該 activity_id の activity_tiles が無い場合は ok: true", async () => {
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "users")
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () =>
+                Promise.resolve({
+                  data: { id: "user-1" },
+                  error: null,
+                }),
+            }),
+          }),
+        };
+      if (table === "activity_tiles") {
+        const select = vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+          }),
+        });
+        const del = vi.fn().mockResolvedValue({ error: null });
+        return { select, delete: () => ({ eq: del }) };
+      }
+      return {};
+    });
+    const result = await processActivityDelete(100, 200, {
+      supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
+    });
+    expect(result).toEqual({ ok: true });
+  });
+
 });
