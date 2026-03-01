@@ -19,18 +19,41 @@ const EMPTY_GEOJSON: H3GeoJSONFeatureCollection = {
 };
 
 /**
- * スコア（0–100）に応じた fill-opacity の式。
- * score 100 → 0.8、score 0 → 0.2 で線形補間（防衛の濃さを表現）。
- * @see https://maplibre.org/maplibre-style-spec/expressions/#interpolate
+ * スコアを数値として取得（API が文字列で返す場合・null 対策）。
+ * 欠損時は 100 として扱う。
+ */
+const SCORE_AS_NUMBER: DataDrivenPropertyValueSpecification<number> = [
+  "coalesce",
+  ["to-number", ["get", "score"]],
+  100,
+];
+
+/**
+ * スコア（0–100）に応じた fill-opacity。
+ * 0→0、100→0.4 を均等に傾斜。
  */
 const FILL_OPACITY_BY_SCORE: DataDrivenPropertyValueSpecification<number> = [
   "interpolate",
   ["linear"],
-  ["get", "score"],
+  SCORE_AS_NUMBER,
   0,
-  0.2,
+  0,
   100,
-  0.8,
+  0.4,
+];
+
+/**
+ * スコア（0–100）に応じた fill-color。
+ * 0→薄い緑、100→濃い緑を均等に傾斜。最大は #15803d で抑える。
+ */
+const FILL_COLOR_BY_SCORE: DataDrivenPropertyValueSpecification<string> = [
+  "interpolate",
+  ["linear"],
+  SCORE_AS_NUMBER,
+  0,
+  "#bbf7d0",   // 薄い緑
+  100,
+  "#15803d",    // 濃い緑（最大）
 ];
 
 /** 東京都新宿区周辺の初期表示（経度・緯度・ズーム） */
@@ -202,7 +225,7 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           type="fill"
           source="h3-hex-source"
           paint={{
-            "fill-color": "#22c55e",
+            "fill-color": FILL_COLOR_BY_SCORE,
             "fill-opacity": FILL_OPACITY_BY_SCORE,
           }}
         />
@@ -213,6 +236,21 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           paint={{
             "line-color": "#15803d",
             "line-width": 1.5,
+          }}
+        />
+        <Layer
+          id="h3-hex-score-label"
+          type="symbol"
+          source="h3-hex-source"
+          layout={{
+            "text-field": ["to-string", ["get", "score"]],
+            "text-size": 11,
+            "text-anchor": "center",
+          }}
+          paint={{
+            "text-color": "#052e16",
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 1.5,
           }}
         />
       </MapLibreMap>
