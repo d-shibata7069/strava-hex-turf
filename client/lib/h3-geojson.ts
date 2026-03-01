@@ -80,7 +80,8 @@ export interface TileFeatureProperties {
 /**
  * タイルレコード配列を GeoJSON FeatureCollection に変換する。
  * 各 Feature の properties に score, owner_id, group_id を含め、スコアに応じた描画に利用する。
- * 無効な H3 インデックスは除外する。cellsToMultiPolygon が失敗した場合は空の FeatureCollection を返す。
+ * 無効な H3 インデックスは除外する。同一 h3_index の重複は cellsToMultiPolygon 用にユニーク化し、
+ * 得たポリゴンを各タイルに割り当てる。cellsToMultiPolygon が失敗した場合は空の FeatureCollection を返す。
  */
 export function tilesToGeoJSONFeatureCollection(
   tiles: TileRecord[]
@@ -100,36 +101,41 @@ export function tilesToGeoJSONFeatureCollection(
     return { type: "FeatureCollection", features: [] };
   }
 
-  const h3Indexes = validTiles.map((t) => t.h3_index);
+  const uniqueIndexes: string[] = [];
+  const seen = new Set<string>();
+  for (const t of validTiles) {
+    if (!seen.has(t.h3_index)) {
+      seen.add(t.h3_index);
+      uniqueIndexes.push(t.h3_index);
+    }
+  }
 
   try {
-    const coordinates = cellsToMultiPolygon(h3Indexes, true);
+    const coordinates = cellsToMultiPolygon(uniqueIndexes, true);
+    const h3IndexToPolygon = new Map<string, number[][][]>();
+    uniqueIndexes.forEach((h3, i) => {
+      const polygon = coordinates[i];
+      if (polygon) h3IndexToPolygon.set(h3, polygon);
+    });
 
-    const features: H3GeoJSONFeature[] = coordinates.map((polygon, i) => {
-      const tile = validTiles[i];
-      if (!tile) {
+    const features = validTiles
+      .map((tile) => {
+        const polygon = h3IndexToPolygon.get(tile.h3_index);
+        if (!polygon) return null;
         return {
           type: "Feature" as const,
           geometry: {
             type: "MultiPolygon" as const,
             coordinates: [polygon],
           },
-          properties: {} as Record<string, unknown>,
+          properties: {
+            score: tile.score,
+            owner_id: tile.owner_id,
+            group_id: tile.group_id,
+          } as TileFeatureProperties & Record<string, unknown>,
         };
-      }
-      return {
-        type: "Feature" as const,
-        geometry: {
-          type: "MultiPolygon" as const,
-          coordinates: [polygon],
-        },
-        properties: {
-          score: tile.score,
-          owner_id: tile.owner_id,
-          group_id: tile.group_id,
-        } as TileFeatureProperties & Record<string, unknown>,
-      };
-    });
+      })
+      .filter((f): f is NonNullable<typeof f> => f !== null) as H3GeoJSONFeature[];
 
     return {
       type: "FeatureCollection",
