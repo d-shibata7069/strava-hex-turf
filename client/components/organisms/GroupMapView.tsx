@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Map } from "./Map";
 import { ActivityTimeline } from "./ActivityTimeline";
+import { Leaderboard } from "./Leaderboard";
 
 export interface MembershipItem {
   group_id: string;
@@ -49,7 +50,10 @@ export function GroupMapView({ memberships }: GroupMapViewProps) {
         </select>
       </div>
       <Map groupId={selectedGroupId} />
-      <ActivityTimeline groupId={selectedGroupId} />
+      <aside className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96">
+        <Leaderboard groupId={selectedGroupId} />
+        <ActivityTimeline groupId={selectedGroupId} embedded />
+      </aside>
     </div>
   );
 }

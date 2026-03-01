@@ -14,6 +14,8 @@ export interface ActivityTimelineProps {
   initialLogs?: ActivityLogEntry[] | null;
   /** 初期表示でパネルを開くか。デフォルトは false（閉じる） */
   defaultOpen?: boolean;
+  /** true の場合は親の aside 内に埋め込み表示（外側の aside を描画しない） */
+  embedded?: boolean;
 }
 
 function formatRelativeTime(isoString: string): string {
@@ -32,7 +34,7 @@ function formatRelativeTime(isoString: string): string {
   return date.toLocaleDateString("ja-JP", { month: "short", day: "numeric", year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined });
 }
 
-export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false }: ActivityTimelineProps) {
+export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, embedded = false }: ActivityTimelineProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [logs, setLogs] = useState<ActivityLogEntry[]>(initialLogs ?? []);
   const [error, setError] = useState<string | null>(null);
@@ -91,23 +93,35 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false }: 
   }, [groupId, fetchLogs, initialLogs]);
 
   if (groupId == null) {
-    return (
-      <aside
-        className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96"
-        aria-label="Activity Log"
-      >
+    const content = (
+      <>
         <div className="border-b border-gray-200 px-4 py-3">
           <h2 className="text-sm font-semibold text-gray-800">Activity Log</h2>
         </div>
         <div className="flex flex-1 items-center justify-center p-4 text-center text-sm text-gray-500">
           グループに参加するとタイムラインが表示されます
         </div>
+      </>
+    );
+    if (embedded) {
+      return (
+        <div className="flex flex-1 flex-col min-h-0" aria-label="Activity Log">
+          {content}
+        </div>
+      );
+    }
+    return (
+      <aside
+        className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96"
+        aria-label="Activity Log"
+      >
+        {content}
       </aside>
     );
   }
 
   if (!isOpen) {
-    return (
+    const button = (
       <button
         type="button"
         onClick={() => setIsOpen(true)}
@@ -118,13 +132,28 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false }: 
         <List className="h-5 w-5 text-gray-600" aria-hidden />
       </button>
     );
+    if (embedded) {
+      return (
+        <div className="flex flex-1 flex-col min-h-0" aria-label="Activity Log">
+          <div className="flex flex-1 items-center justify-end">
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-50"
+              aria-label="Activity Log を開く"
+              title="Activity Log を開く"
+            >
+              <List className="h-5 w-5 text-gray-600" aria-hidden />
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return button;
   }
 
-  return (
-    <aside
-      className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96"
-      aria-label="Activity Log"
-    >
+  const openContent = (
+    <>
       <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
         <h2 className="text-sm font-semibold text-gray-800">Activity Log</h2>
         <button
@@ -181,6 +210,23 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false }: 
           </ul>
         )}
       </div>
+    </>
+  );
+
+  if (embedded) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col" aria-label="Activity Log">
+        {openContent}
+      </div>
+    );
+  }
+
+  return (
+    <aside
+      className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96"
+      aria-label="Activity Log"
+    >
+      {openContent}
     </aside>
   );
 }
