@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 export function CreateGroupView() {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [createdInviteCode, setCreatedInviteCode] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,6 +61,8 @@ export function CreateGroupView() {
       document.execCommand("copy");
       document.body.removeChild(textarea);
     }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2000);
   }
 
   if (createdInviteCode) {
@@ -80,10 +83,19 @@ export function CreateGroupView() {
               type="button"
               onClick={() => handleCopyInviteCode(createdInviteCode)}
               className="flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
-              title="招待コードをコピー"
+              title={copied ? "コピーしました" : "招待コードをコピー"}
             >
-              <Copy className="h-4 w-4" aria-hidden />
-              コピー
+              {copied ? (
+                <>
+                  <Check className="h-4 w-4 text-green-600" aria-hidden />
+                  コピーしました
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" aria-hidden />
+                  コピー
+                </>
+              )}
             </button>
           </div>
           <Link

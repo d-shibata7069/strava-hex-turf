@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 interface Membership {
   group_id: string;
@@ -17,6 +17,7 @@ export function MyGroupsView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actioningId, setActioningId] = useState<string | null>(null);
+  const [copiedGroupId, setCopiedGroupId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -88,7 +89,7 @@ export function MyGroupsView() {
     }
   }
 
-  async function handleCopyInviteCode(code: string) {
+  async function handleCopyInviteCode(code: string, groupId: string) {
     try {
       await navigator.clipboard.writeText(code);
     } catch {
@@ -99,6 +100,8 @@ export function MyGroupsView() {
       document.execCommand("copy");
       document.body.removeChild(textarea);
     }
+    setCopiedGroupId(groupId);
+    window.setTimeout(() => setCopiedGroupId(null), 2000);
   }
 
   if (loading) {
@@ -173,11 +176,15 @@ export function MyGroupsView() {
                   {m.invite_code && (
                     <button
                       type="button"
-                      onClick={() => handleCopyInviteCode(m.invite_code!)}
+                      onClick={() => handleCopyInviteCode(m.invite_code!, m.group_id)}
                       className="ml-1.5 inline-flex items-center gap-1 rounded p-1 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700"
-                      title="招待コードをコピー"
+                      title={copiedGroupId === m.group_id ? "コピーしました" : "招待コードをコピー"}
                     >
-                      <Copy className="h-3.5 w-3.5" aria-hidden />
+                      {copiedGroupId === m.group_id ? (
+                        <Check className="h-3.5 w-3.5 text-green-600" aria-hidden />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5" aria-hidden />
+                      )}
                     </button>
                   )}
                 </p>
