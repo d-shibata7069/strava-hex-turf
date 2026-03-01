@@ -12,6 +12,7 @@ const notoSansJP = Noto_Sans_JP({
 export const metadata: Metadata = {
   title: "Strava陣取り",
   description: "ランニングルートを陣取りゲームに",
+  icons: { icon: "/icon.svg" },
 };
 
 export default function RootLayout({
