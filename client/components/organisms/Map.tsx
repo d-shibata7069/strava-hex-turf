@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { Map as MapLibreMap, Source, Layer } from "@vis.gl/react-maplibre";
-import { latLngToCell, gridDisk } from "h3-js";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { h3IndexesToGeoJSONFeatureCollection } from "@/lib/h3-geojson";
 
@@ -40,17 +39,11 @@ const BASE_MAP_STYLE = {
   ],
 };
 
-/** モック用 H3 インデックス（Resolution 7）：新宿付近のセル数個 */
-function getMockH3Indexes(): string[] {
-  const center = latLngToCell(35.6896, 139.6917, 7);
-  return gridDisk(center, 1);
-}
-
-export function Map() {
+export function Map({ initialH3Indexes }: { initialH3Indexes?: string[] }) {
   const geojsonData = useMemo(() => {
-    const h3Indexes = getMockH3Indexes();
+    const h3Indexes = initialH3Indexes ?? [];
     return h3IndexesToGeoJSONFeatureCollection(h3Indexes);
-  }, []);
+  }, [initialH3Indexes]);
 
   return (
     <div className="absolute inset-0">
