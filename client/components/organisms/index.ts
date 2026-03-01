@@ -15,3 +15,5 @@ export { LandingPage } from "./LandingPage";
 export { LoginView } from "./LoginView";
 export type { LoginViewProps } from "./LoginView";
 export { Map } from "./Map";
+export { SettingsView } from "./SettingsView";
+export type { SettingsViewProps } from "./SettingsView";

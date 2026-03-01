@@ -30,10 +30,16 @@ export function HeaderView({ user }: { user: HeaderUser | null }) {
                 <span className="hidden sm:inline">マイグループ</span>
               </Link>
               <NotificationBell />
-              <UserProfileBadge
-                displayName={user.displayName}
-                iconUrl={user.iconUrl}
-              />
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900"
+                aria-label="アカウント設定"
+              >
+                <UserProfileBadge
+                  displayName={user.displayName}
+                  iconUrl={user.iconUrl}
+                />
+              </Link>
               <LogoutButton />
             </>
           ) : (
