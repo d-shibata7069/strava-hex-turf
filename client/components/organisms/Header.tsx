@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 import { LogoLink, StravaConnectButton, LogoutButton } from "@/components/atoms";
@@ -20,6 +21,24 @@ export function HeaderView({ user }: { user: HeaderUser | null }) {
         <nav className="flex items-center gap-4">
           {user ? (
             <>
+              <Link
+                href="/groups"
+                className="text-sm text-zinc-600 hover:text-zinc-900"
+              >
+                マイグループ
+              </Link>
+              <Link
+                href="/join"
+                className="text-sm text-zinc-600 hover:text-zinc-900"
+              >
+                参加
+              </Link>
+              <Link
+                href="/groups/new"
+                className="text-sm text-zinc-600 hover:text-zinc-900"
+              >
+                作成
+              </Link>
               <UserProfileBadge
                 displayName={user.displayName}
                 iconUrl={user.iconUrl}

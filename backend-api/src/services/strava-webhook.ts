@@ -122,6 +122,7 @@ export async function processActivityEvent(
   const points: ReadonlyArray<[number, number]> = decoded;
   const h3Indexes = getH3(points);
   if (h3Indexes.length === 0) {
+    console.warn("[processActivityEvent] skip: no H3 cells (points=%d)", points.length);
     return { ok: true }; // 通過タイルなしでも成功扱い
   }
 
@@ -135,6 +136,7 @@ export async function processActivityEvent(
   }
   const groupIds = (members as GroupMemberRow[] | null)?.map((r) => r.group_id) ?? [];
   if (groupIds.length === 0) {
+    console.warn("[processActivityEvent] skip: user has no group_members (user_id=%s)", userRow.id);
     return { ok: true }; // 所属グループがなければスキップ
   }
 
@@ -160,6 +162,7 @@ export async function processActivityEvent(
   if (upsertError) {
     return { ok: false, reason: `tiles upsert error: ${upsertError.message}` };
   }
+  console.log("[processActivityEvent] tiles upserted", { rows: rows.length, groups: groupIds.length, h3Count: h3Indexes.length });
   return { ok: true };
 }
 
