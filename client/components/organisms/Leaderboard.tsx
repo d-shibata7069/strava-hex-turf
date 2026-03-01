@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { Crown, Trophy } from "lucide-react";
 import { Avatar } from "@/components/atoms/Avatar";
 import type { LeaderboardEntry } from "@/app/api/groups/[id]/leaderboard/route";
@@ -48,9 +49,25 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
   const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
   const isOpen = isControlled ? controlledOpen : internalOpen;
   const setOpen = isControlled ? (value: boolean) => onOpenChange(value) : setInternalOpen;
+  const [sortBy, setSortBy] = useState<"tiles" | "score">("tiles");
   const [entries, setEntries] = useState<LeaderboardEntry[]>(initialEntries ?? []);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(initialEntries === undefined);
+
+  const sortedEntries = useMemo(() => {
+    if (sortBy === "tiles") {
+      return [...entries].sort((a, b) => {
+        const va = Number(a.tile_count) ?? 0;
+        const vb = Number(b.tile_count) ?? 0;
+        return vb - va;
+      });
+    }
+    return [...entries].sort((a, b) => {
+      const va = Number(a.total_score) ?? 0;
+      const vb = Number(b.total_score) ?? 0;
+      return vb - va;
+    });
+  }, [entries, sortBy]);
 
   const fetchLeaderboard = useCallback(async () => {
     if (!groupId) {
@@ -142,6 +159,35 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
           <span className="text-lg leading-none" aria-hidden>×</span>
         </button>
       </div>
+      <div className="mt-2 flex items-center gap-2">
+        <span className="text-xs text-gray-500">並び順:</span>
+        <div
+          className="inline-flex rounded-lg border border-gray-200 bg-gray-100 p-0.5"
+          role="group"
+          aria-label="ソート基準"
+        >
+          <button
+            type="button"
+            onClick={() => setSortBy("tiles")}
+            className={`rounded-md px-2.5 py-1 text-xs font-medium transition ${
+              sortBy === "tiles" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
+            }`}
+            aria-pressed={sortBy === "tiles"}
+          >
+            タイル数
+          </button>
+          <button
+            type="button"
+            onClick={() => setSortBy("score")}
+            className={`rounded-md px-2.5 py-1 text-xs font-medium transition ${
+              sortBy === "score" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
+            }`}
+            aria-pressed={sortBy === "score"}
+          >
+            合計スコア
+          </button>
+        </div>
+      </div>
       <div className="mt-2 max-h-64 overflow-y-auto">
         {loading && entries.length === 0 ? (
           <div className="flex items-center justify-center py-6 text-sm text-gray-500">
@@ -149,15 +195,19 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
           </div>
         ) : error ? (
           <div className="py-2 text-sm text-amber-700">{error}</div>
-        ) : entries.length === 0 ? (
+        ) : sortedEntries.length === 0 ? (
           <div className="py-4 text-center text-sm text-gray-500">
             まだタイルがありません
           </div>
         ) : (
           <ol className="space-y-1.5">
-            {entries.map((entry, index) => {
+            {sortedEntries.map((entry, index) => {
               const rank = index + 1;
               const tileCount = typeof entry.tile_count === "string" ? entry.tile_count : String(entry.tile_count ?? 0);
+              const scoreStr = typeof entry.total_score === "string" ? entry.total_score : String(entry.total_score ?? 0);
+              const valueLabel = sortBy === "tiles" ? `${tileCount} タイル` : `${scoreStr} pt`;
+              const valueAria = sortBy === "tiles" ? `${tileCount}タイル` : `${scoreStr}pt`;
+              const userUrl = groupId ? `/groups/${groupId}/users/${entry.user_id}` : "#";
               return (
                 <li
                   key={entry.user_id}
@@ -179,18 +229,23 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
                       {rank}
                     </span>
                   )}
-                  <Avatar
-                    src={entry.icon_url ?? null}
-                    alt=""
-                    size="sm"
-                    className="shrink-0"
-                  />
-                  <span className="min-w-0 flex-1 truncate text-sm text-gray-900">
-                    {entry.display_name || "名前なし"}
-                  </span>
-                  <span className="shrink-0 text-sm font-semibold text-green-700" aria-label={`${tileCount}タイル`}>
-                    {tileCount}
-                    <span className="ml-0.5 text-xs font-normal text-gray-500">タイル</span>
+                  <Link
+                    href={userUrl}
+                    className="flex min-w-0 flex-1 items-center gap-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    aria-label={`${entry.display_name || "名前なし"}の詳細`}
+                  >
+                    <Avatar
+                      src={entry.icon_url ?? null}
+                      alt=""
+                      size="sm"
+                      className="shrink-0"
+                    />
+                    <span className="min-w-0 flex-1 truncate text-sm text-gray-900">
+                      {entry.display_name || "名前なし"}
+                    </span>
+                  </Link>
+                  <span className="shrink-0 text-sm font-semibold text-green-700" aria-label={valueAria}>
+                    {valueLabel}
                   </span>
                 </li>
               );

@@ -10,6 +10,7 @@ export interface LeaderboardEntry {
   display_name: string | null;
   icon_url: string | null;
   tile_count: string;
+  total_score?: string;
 }
 
 /**
