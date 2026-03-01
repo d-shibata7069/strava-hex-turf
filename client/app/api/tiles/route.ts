@@ -38,7 +38,7 @@ export async function GET() {
 
   const { data: tilesRaw, error: tilesError } = await supabase
     .from("tiles")
-    .select("h3_index, owner_id, score, group_id, users!owner_id(icon_url)")
+    .select("h3_index, owner_id, score, group_id, last_updated_at, users!owner_id(icon_url, display_name)")
     .in("group_id", groupIds);
 
   if (tilesError) {
@@ -59,7 +59,8 @@ export async function GET() {
       owner_id: string;
       score: number;
       group_id: string;
-      users?: { icon_url: string | null } | { icon_url: string | null }[] | null;
+      last_updated_at?: string | null;
+      users?: { icon_url: string | null; display_name?: string | null } | { icon_url: string | null; display_name?: string | null }[] | null;
     }) => {
       const users = row.users;
       const iconUrl =
@@ -68,12 +69,20 @@ export async function GET() {
           : Array.isArray(users)
             ? users[0]?.icon_url ?? null
             : users.icon_url ?? null;
+      const displayName =
+        users == null
+          ? null
+          : Array.isArray(users)
+            ? users[0]?.display_name ?? null
+            : users.display_name ?? null;
       return {
         h3_index: row.h3_index,
         owner_id: row.owner_id,
         score: row.score,
         group_id: row.group_id,
         icon_url: iconUrl,
+        display_name: displayName ?? undefined,
+        last_updated_at: row.last_updated_at ?? undefined,
       };
     }
   );

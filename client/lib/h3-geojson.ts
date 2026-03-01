@@ -66,13 +66,17 @@ export function h3IndexesToGeoJSONFeatureCollection(
   }
 }
 
-/** API から取得するタイル1件の型（h3_index, owner_id, score, group_id, icon_url） */
+/** API から取得するタイル1件の型（h3_index, owner_id, score, group_id, icon_url, display_name, last_updated_at） */
 export interface TileRecord {
   h3_index: string;
   owner_id: string;
   score: number;
   group_id: string;
   icon_url?: string | null;
+  /** 所有者の表示名（ツールチップ表示用） */
+  display_name?: string | null;
+  /** 最終更新日時 ISO 文字列（取得/防衛日時・ツールチップ表示用） */
+  last_updated_at?: string | null;
 }
 
 /** タイル用 GeoJSON Feature の properties（地図の fill-opacity / fill-color などで参照） */
@@ -84,6 +88,10 @@ export interface TileFeatureProperties {
   color: string;
   /** 所有者のアバター画像URL（ズーム時シンボル表示用） */
   icon_url?: string | null;
+  /** 所有者の表示名（ツールチップ表示用） */
+  display_name?: string | null;
+  /** 最終更新日時 ISO 文字列（ツールチップ表示用） */
+  last_updated_at?: string | null;
 }
 
 /**
@@ -143,6 +151,8 @@ export function tilesToGeoJSONFeatureCollection(
             group_id: tile.group_id,
             color: stringToColor(tile.owner_id),
             icon_url: tile.icon_url ?? null,
+            display_name: tile.display_name ?? null,
+            last_updated_at: tile.last_updated_at ?? null,
           } as TileFeatureProperties & Record<string, unknown>,
         };
       })
@@ -160,6 +170,10 @@ export function tilesToGeoJSONFeatureCollection(
 /** アイコン表示用の Point Feature の properties（icon_url は URL またはデフォルトアイコンID） */
 export interface TileIconPointProperties {
   icon_url: string;
+  /** 所有者の表示名（ツールチップ表示用） */
+  display_name?: string | null;
+  /** 最終更新日時 ISO 文字列（ツールチップ表示用） */
+  last_updated_at?: string | null;
 }
 
 /** デフォルトアイコン（プロフィール未設定時）の MapLibre 画像ID */
@@ -202,7 +216,11 @@ export function tilesToIconPointFeatureCollection(
           type: "Point",
           coordinates: [lng, lat],
         },
-        properties: { icon_url: iconUrl },
+        properties: {
+          icon_url: iconUrl,
+          display_name: t.display_name ?? null,
+          last_updated_at: t.last_updated_at ?? null,
+        },
       });
     } catch {
       // 無効なセルはスキップ
