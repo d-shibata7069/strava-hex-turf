@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start:decay": "node dist/decay-scores.js",
+    "start:backfill-daily-stats": "node dist/backfill-daily-stats.js",
     "test": "vitest run",
     "test:watch": "vitest"
   },

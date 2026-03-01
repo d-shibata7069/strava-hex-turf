@@ -35,3 +35,28 @@ npm run start:decay
 ```bash
 npm run test
 ```
+
+## 日次スナップショットバックフィル（backfill-daily-stats）
+
+### 目的
+
+ユーザー詳細ページの成績推移チャート用に、`user_group_daily_stats` テーブルへ過去の日次スナップショットを投入する。  
+現在の `tiles` テーブルから「各日時点で有効だったタイル」（last_updated_at から 30 日以内）のタイル数・合計スコアを算出し、一括 UPSERT する。単体実行（手動）用。
+
+### ローカルでの実行
+
+```bash
+cd batch
+npm install
+npm run build
+npm run start:backfill-daily-stats [1week|1month|1year]
+```
+
+- 第 1 引数で期間を指定する。省略時は `1month`。
+  - `1week`（または `1w`）: 過去 7 日分
+  - `1month`（または `1m`）: 過去 30 日分
+  - `1year`（または `1y`）: 過去 365 日分
+- 成功時: 標準出力に `[backfill-daily-stats] 成功 処理時間: xxx ms` が出力される。
+- 失敗時: エラーメッセージが標準エラーに出力され、終了コード 1 で終了する。
+
+**前提:** マイグレーション `20260301190000_backfill_user_group_daily_stats_rpc.sql` が適用済みであること（`supabase db push` で RPC `backfill_user_group_daily_stats` が作成されていること）。

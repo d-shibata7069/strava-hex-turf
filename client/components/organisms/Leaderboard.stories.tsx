@@ -30,11 +30,11 @@ export const NoGroup: Story = {
 /** ダミーデータを注入してランキングの見た目を確認（1〜3位の王冠装飾付き） */
 function getMockEntries(): LeaderboardEntry[] {
   return [
-    { user_id: "u1", display_name: "山田太郎", icon_url: null, tile_count: "42" },
-    { user_id: "u2", display_name: "佐藤花子", icon_url: null, tile_count: "28" },
-    { user_id: "u3", display_name: "ランナー", icon_url: null, tile_count: "15" },
-    { user_id: "u4", display_name: "四郎", icon_url: null, tile_count: "7" },
-    { user_id: "u5", display_name: "五郎", icon_url: null, tile_count: "3" },
+    { user_id: "u1", display_name: "山田太郎", icon_url: null, tile_count: "42", total_score: "1200" },
+    { user_id: "u2", display_name: "佐藤花子", icon_url: null, tile_count: "28", total_score: "890" },
+    { user_id: "u3", display_name: "ランナー", icon_url: null, tile_count: "15", total_score: "450" },
+    { user_id: "u4", display_name: "四郎", icon_url: null, tile_count: "7", total_score: "210" },
+    { user_id: "u5", display_name: "五郎", icon_url: null, tile_count: "3", total_score: "90" },
   ];
 }
 

@@ -1,3 +1,5 @@
+export { UserStatsView } from "./UserStatsView";
+export type { UserStatsViewProps } from "./UserStatsView";
 export { ActivityTimeline } from "./ActivityTimeline";
 export type { ActivityTimelineProps } from "./ActivityTimeline";
 export { GroupMapView } from "./GroupMapView";
