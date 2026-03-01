@@ -9,6 +9,7 @@ import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import {
   processActivityEvent,
+  processActivityDelete,
   createDefaultDeps,
 } from "./services/strava-webhook.js";
 import { decryptStravaToken } from "./utils/token-crypto.js";
@@ -46,7 +47,7 @@ function getSupabase() {
   return createClient(url, key);
 }
 
-function parseBody(req: IncomingMessage): Promise<{ object_id: number; owner_id: number } | null> {
+function parseBody(req: IncomingMessage): Promise<{ object_id: number; owner_id: number; action?: string } | null> {
   return new Promise((resolve) => {
     let data = "";
     req.on("data", (chunk) => {
@@ -63,6 +64,7 @@ function parseBody(req: IncomingMessage): Promise<{ object_id: number; owner_id:
           resolve({
             object_id: (body as { object_id: number }).object_id,
             owner_id: (body as { owner_id: number }).owner_id,
+            action: typeof (body as { action?: string }).action === "string" ? (body as { action: string }).action : undefined,
           });
         } else {
           resolve(null);
@@ -84,25 +86,73 @@ async function handlePost(
     res.end(JSON.stringify({ error: "Missing or invalid object_id, owner_id" }));
     return;
   }
-  console.log("[webhook-server] received activity event", { object_id: body.object_id, owner_id: body.owner_id });
+  const isDelete = body.action === "delete";
+  console.log("[webhook-server] received activity event", {
+    object_id: body.object_id,
+    owner_id: body.owner_id,
+    action: isDelete ? "delete" : "create",
+  });
 
   const supabase = getSupabase();
-  const deps = createDefaultDeps(supabase);
-  deps.decryptStravaToken = (enc) => decryptStravaToken(enc) ?? enc;
-  const result = await processActivityEvent(
-    body.object_id,
-    body.owner_id,
-    deps
-  );
-  if (result.ok === false) {
-    console.error("[webhook-server] processActivityEvent failed:", result.reason);
-    res.writeHead(500, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: result.reason }));
+
+  if (isDelete) {
+    const result = await processActivityDelete(
+      body.object_id,
+      body.owner_id,
+      { supabase }
+    );
+    if (result.ok === false) {
+      console.error("[webhook-server] processActivityDelete failed:", result.reason);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: result.reason }));
+      return;
+    }
+    console.log("[webhook-server] processActivityDelete ok", { object_id: body.object_id });
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true }));
     return;
   }
-  console.log("[webhook-server] processActivityEvent ok", { object_id: body.object_id });
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ ok: true }));
+
+  const deps = createDefaultDeps(supabase);
+  deps.decryptStravaToken = (enc) => decryptStravaToken(enc) ?? enc;
+  try {
+    const result = await processActivityEvent(
+      body.object_id,
+      body.owner_id,
+      deps
+    );
+    if (result.ok === false) {
+      console.error("[webhook-server] processActivityEvent failed:", result.reason);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: result.reason }));
+      return;
+    }
+    console.log("[webhook-server] processActivityEvent ok", { object_id: body.object_id });
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true }));
+    return;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("404") || msg.includes("Record Not Found")) {
+      console.log("[webhook-server] activity 404 (deleted?), running processActivityDelete", { object_id: body.object_id });
+      const delResult = await processActivityDelete(
+        body.object_id,
+        body.owner_id,
+        { supabase }
+      );
+      if (delResult.ok === false) {
+        console.error("[webhook-server] processActivityDelete failed:", delResult.reason);
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: delResult.reason }));
+        return;
+      }
+      console.log("[webhook-server] processActivityDelete ok (after 404)", { object_id: body.object_id });
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true }));
+      return;
+    }
+    throw err;
+  }
 }
 
 function notFound(res: ServerResponse): void {
