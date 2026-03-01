@@ -210,7 +210,8 @@ export function createDefaultDeps(supabase: SupabaseClient): StravaWebhookDeps {
 /**
  * アクティビティ削除イベントを処理する
  * - activity_tiles から当該 activity_id の行を取得
- * - 同一 user の別アクティビティが同じ (h3_index, group_id) を保持していなければ、tiles から当該タイルを削除
+ * - 各 (h3_index, group_id) について、当該 activity を除いた残りの activity_tiles を参照し、
+ *   残りがなければ tiles 行を削除、残っていれば activity_id が最大のユーザーを新オーナーとして tiles を UPDATE（取り合いの復元）
  * - 最後に activity_tiles から当該 activity_id の行を削除
  */
 export async function processActivityDelete(
@@ -253,34 +254,58 @@ export async function processActivityDelete(
     return { ok: true };
   }
 
-  let deletedTiles = 0;
+  let tilesDeleted = 0;
+  let tilesRestored = 0;
+  const now = new Date().toISOString();
+
   for (const { h3_index, group_id } of toProcess) {
-    const { count, error: countError } = await supabase
+    const { data: remaining, error: remainingError } = await supabase
       .from("activity_tiles")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", userRow.id)
+      .select("user_id, activity_id")
       .eq("h3_index", h3_index)
       .eq("group_id", group_id)
-      .neq("activity_id", objectId);
+      .neq("activity_id", objectId)
+      .order("activity_id", { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-    if (countError || (count ?? 0) > 0) {
-      if (countError) {
-        console.error("[processActivityDelete] count check error", { h3_index, group_id, error: countError.message });
-      }
-      continue; // 他アクティビティが同じタイルを保持しているかエラー → タイルは削除しない
+    if (remainingError) {
+      console.error("[processActivityDelete] remaining claimants query error", { h3_index, group_id, error: remainingError.message });
+      continue;
     }
 
-    const { error: tileDelError } = await supabase
-      .from("tiles")
-      .delete()
-      .eq("h3_index", h3_index)
-      .eq("group_id", group_id)
-      .eq("owner_id", userRow.id);
+    if (!remaining) {
+      const { error: tileDelError } = await supabase
+        .from("tiles")
+        .delete()
+        .eq("h3_index", h3_index)
+        .eq("group_id", group_id)
+        .eq("owner_id", userRow.id);
 
-    if (tileDelError) {
-      console.error("[processActivityDelete] tiles delete error", { h3_index, group_id, error: tileDelError.message });
+      if (tileDelError) {
+        console.error("[processActivityDelete] tiles delete error", { h3_index, group_id, error: tileDelError.message });
+      } else {
+        tilesDeleted += 1;
+      }
+      continue;
+    }
+
+    const newOwnerId = (remaining as { user_id: string }).user_id;
+    const { error: updateError } = await supabase
+      .from("tiles")
+      .update({
+        owner_id: newOwnerId,
+        score: TILE_SCORE_RESET,
+        captured_at: now,
+        last_updated_at: now,
+      })
+      .eq("h3_index", h3_index)
+      .eq("group_id", group_id);
+
+    if (updateError) {
+      console.error("[processActivityDelete] tiles update (restore) error", { h3_index, group_id, error: updateError.message });
     } else {
-      deletedTiles += 1;
+      tilesRestored += 1;
     }
   }
 
@@ -293,6 +318,6 @@ export async function processActivityDelete(
     return { ok: false, reason: `activity_tiles delete error: ${activityTilesDelError.message}` };
   }
 
-  console.log("[processActivityDelete] done", { activity_id: objectId, tiles_removed: deletedTiles });
+  console.log("[processActivityDelete] done", { activity_id: objectId, tiles_deleted: tilesDeleted, tiles_restored: tilesRestored });
   return { ok: true };
 }
