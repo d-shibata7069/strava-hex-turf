@@ -22,7 +22,11 @@ export async function GET() {
   if (membersError) {
     console.error("group_members fetch error:", membersError);
     return NextResponse.json(
-      { error: "Internal Server Error", message: "グループ取得に失敗しました" },
+      {
+        error: "Internal Server Error",
+        message: "グループ取得に失敗しました",
+        detail: membersError.message,
+      },
       { status: 500 }
     );
   }
@@ -40,7 +44,11 @@ export async function GET() {
   if (tilesError) {
     console.error("tiles fetch error:", tilesError);
     return NextResponse.json(
-      { error: "Internal Server Error", message: "タイル取得に失敗しました" },
+      {
+        error: "Internal Server Error",
+        message: "タイル取得に失敗しました",
+        detail: tilesError.message,
+      },
       { status: 500 }
     );
   }

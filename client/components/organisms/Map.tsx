@@ -93,7 +93,8 @@ export function Map({ initialTiles }: MapProps = {}) {
             setTiles([]);
             return;
           }
-          setFetchError("タイルの取得に失敗しました");
+          const data = (await res.json()) as { message?: string; detail?: string };
+          setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
           setTiles([]);
           return;
         }
