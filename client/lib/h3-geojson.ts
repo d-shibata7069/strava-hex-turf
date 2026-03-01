@@ -22,7 +22,7 @@ export interface H3GeoJSONFeatureCollection {
 /**
  * H3インデックスの配列を GeoJSON FeatureCollection（MultiPolygon）に変換する
  * cellsToMultiPolygon の戻り値は [lng, lat] の閉じたループで GeoJSON 準拠
- * 無効な H3 インデックスは除外する。すべて無効な場合は空の FeatureCollection を返す。
+ * 無効な H3 インデックスは除外する。セルごとに cellsToMultiPolygon を呼ぶ（複数渡すと隣接セルがマージされるため）。
  *
  * @param h3Indexes - H3インデックス（同一解像度・重複なしを想定）
  * @returns GeoJSON FeatureCollection（1 Feature = 1 ポリゴン）
@@ -42,17 +42,20 @@ export function h3IndexesToGeoJSONFeatureCollection(
   }
 
   try {
-    const coordinates = cellsToMultiPolygon(validIndexes, true);
-
-    const features: H3GeoJSONFeature[] = coordinates.map((polygon) => ({
-      type: "Feature",
-      geometry: {
-        type: "MultiPolygon",
-        coordinates: [polygon],
-      },
-      properties: {},
-    }));
-
+    const features: H3GeoJSONFeature[] = [];
+    for (const h3 of validIndexes) {
+      const multiPolygonCoords = cellsToMultiPolygon([h3], true);
+      const polygon = multiPolygonCoords?.[0];
+      if (!polygon) continue;
+      features.push({
+        type: "Feature",
+        geometry: {
+          type: "MultiPolygon",
+          coordinates: [polygon],
+        },
+        properties: {},
+      });
+    }
     return {
       type: "FeatureCollection",
       features,
@@ -80,8 +83,8 @@ export interface TileFeatureProperties {
 /**
  * タイルレコード配列を GeoJSON FeatureCollection に変換する。
  * 各 Feature の properties に score, owner_id, group_id を含め、スコアに応じた描画に利用する。
- * 無効な H3 インデックスは除外する。同一 h3_index の重複は cellsToMultiPolygon 用にユニーク化し、
- * 得たポリゴンを各タイルに割り当てる。cellsToMultiPolygon が失敗した場合は空の FeatureCollection を返す。
+ * 無効な H3 インデックスは除外する。同一 h3_index の重複はユニーク化し、
+ * cellsToMultiPolygon はセルごとに1回ずつ呼ぶ（複数セルを渡すと隣接セルが1つにマージされるため）。
  */
 export function tilesToGeoJSONFeatureCollection(
   tiles: TileRecord[]
@@ -111,12 +114,12 @@ export function tilesToGeoJSONFeatureCollection(
   }
 
   try {
-    const coordinates = cellsToMultiPolygon(uniqueIndexes, true);
     const h3IndexToPolygon = new Map<string, number[][][]>();
-    uniqueIndexes.forEach((h3, i) => {
-      const polygon = coordinates[i];
+    for (const h3 of uniqueIndexes) {
+      const multiPolygonCoords = cellsToMultiPolygon([h3], true);
+      const polygon = multiPolygonCoords?.[0];
       if (polygon) h3IndexToPolygon.set(h3, polygon);
-    });
+    }
 
     const features = validTiles
       .map((tile) => {

@@ -34,6 +34,8 @@ export interface StravaActivityMap {
 /** Strava API GET /activities/{id} のレスポンス（本処理で利用するフィールドのみ） */
 export interface StravaActivityResponse {
   map?: StravaActivityMap | null;
+  /** アクティビティ開始日時（UTC, ISO 8601）。タイルの last_updated_at / captured_at に使用 */
+  start_date?: string | null;
 }
 
 /** 処理に必要な外部依存（テストで差し替え可能） */
@@ -141,7 +143,12 @@ export async function processActivityEvent(
     return { ok: true }; // 所属グループがなければスキップ
   }
 
-  const now = new Date().toISOString();
+  // タイルを通過した日時＝アクティビティ開始日時。過去のアクティビティ登録時も正しく減衰基準になるよう start_date を使用
+  const activityDate =
+    activity?.start_date && /^\d{4}-\d{2}-\d{2}T[\d:.]+Z?$/i.test(activity.start_date)
+      ? activity.start_date
+      : new Date().toISOString();
+
   const rows: TileRow[] = [];
   for (const groupId of groupIds) {
     for (const h3Index of h3Indexes) {
@@ -150,8 +157,8 @@ export async function processActivityEvent(
         group_id: groupId,
         owner_id: userRow.id,
         score: TILE_SCORE_RESET,
-        captured_at: now,
-        last_updated_at: now,
+        captured_at: activityDate,
+        last_updated_at: activityDate,
       });
     }
   }
@@ -169,6 +176,7 @@ export async function processActivityEvent(
     user_id: userRow.id,
     h3_index: r.h3_index,
     group_id: r.group_id,
+    passed_through_at: activityDate,
   }));
   const { error: activityTilesError } = await supabase
     .from("activity_tiles")
@@ -285,7 +293,7 @@ export async function processActivityDelete(
   for (const { h3_index, group_id } of toProcess) {
     const { data: remaining, error: remainingError } = await supabase
       .from("activity_tiles")
-      .select("user_id, activity_id")
+      .select("user_id, activity_id, passed_through_at")
       .eq("h3_index", h3_index)
       .eq("group_id", group_id)
       .neq("activity_id", objectId)
@@ -314,14 +322,16 @@ export async function processActivityDelete(
       continue;
     }
 
-    const newOwnerId = (remaining as { user_id: string }).user_id;
+    const rem = remaining as { user_id: string; passed_through_at?: string | null };
+    const restoredAt = rem.passed_through_at ?? now;
+
     const { error: updateError } = await supabase
       .from("tiles")
       .update({
-        owner_id: newOwnerId,
+        owner_id: rem.user_id,
         score: TILE_SCORE_RESET,
-        captured_at: now,
-        last_updated_at: now,
+        captured_at: restoredAt,
+        last_updated_at: restoredAt,
       })
       .eq("h3_index", h3_index)
       .eq("group_id", group_id);

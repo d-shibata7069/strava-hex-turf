@@ -271,6 +271,54 @@ describe("processActivityEvent", () => {
     expect(result).toEqual({ ok: true });
     expect(mockLogsInsert.mock.calls[0][0][0].message).toBe("ランナー が 1個の陣地を奪取・防衛しました！");
   });
+
+  it("アクティビティに start_date がある場合は last_updated_at / captured_at にその日時を使う", async () => {
+    const activityStartDate = "2024-06-15T08:30:00Z";
+    const mockGetH3 = vi.fn(() => ["h3-one"]);
+    const mockTilesUpsert = vi.fn().mockResolvedValue({ error: null });
+    const mockActivityTilesUpsert = vi.fn().mockResolvedValue({ error: null });
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "users")
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () =>
+                Promise.resolve({
+                  data: { id: "u1", strava_access_token: "t", display_name: "A" },
+                  error: null,
+                }),
+            }),
+          }),
+        };
+      if (table === "group_members")
+        return {
+          select: () => ({
+            eq: () => Promise.resolve({ data: [{ group_id: "g1" }], error: null }),
+          }),
+        };
+      if (table === "tiles") return { upsert: mockTilesUpsert };
+      if (table === "activity_tiles") return { upsert: mockActivityTilesUpsert };
+      if (table === "activity_logs") return { insert: vi.fn().mockResolvedValue({ error: null }) };
+      return {};
+    });
+    const deps: StravaWebhookDeps = {
+      supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
+      fetchStravaActivity: vi.fn().mockResolvedValue({
+        map: { summary_polyline: DUMMY_POLYLINE },
+        start_date: activityStartDate,
+      }),
+      getH3IndexesFromPoints: mockGetH3,
+    };
+    const result = await processActivityEvent(1, 2, deps);
+    expect(result).toEqual({ ok: true });
+
+    const tileRows = mockTilesUpsert.mock.calls[0][0];
+    expect(tileRows[0].last_updated_at).toBe(activityStartDate);
+    expect(tileRows[0].captured_at).toBe(activityStartDate);
+
+    const activityTilesRows = mockActivityTilesUpsert.mock.calls[0][0];
+    expect(activityTilesRows[0].passed_through_at).toBe(activityStartDate);
+  });
 });
 
 describe("processActivityDelete", () => {

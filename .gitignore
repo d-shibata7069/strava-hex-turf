@@ -8,4 +8,5 @@ node_modules
 
 # build output
 backend-api/dist
+batch/dist
 
