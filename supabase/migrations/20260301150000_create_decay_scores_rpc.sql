@@ -7,15 +7,13 @@ RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
-DECLARE
-  elapsed_days double precision;
-  new_score integer;
 BEGIN
   UPDATE tiles
   SET score = GREATEST(
     0,
     (100 - (EXTRACT(EPOCH FROM (now() - last_updated_at)) / 86400.0 / 30.0) * 100)::integer
-  );
+  )
+  WHERE true;
 END;
 $$;
 
