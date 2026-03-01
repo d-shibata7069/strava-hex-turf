@@ -19,7 +19,7 @@ export function UserProfileBadge({
       className={`flex items-center gap-2 text-sm text-gray-700 ${className}`.trim()}
     >
       <Avatar src={iconUrl} size="md" />
-      <span className="font-medium">{displayName ?? "ユーザー"}</span>
+      <span className="hidden font-medium sm:inline-block">{displayName ?? "ユーザー"}</span>
     </span>
   );
 }
