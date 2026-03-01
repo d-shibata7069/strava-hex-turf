@@ -16,7 +16,7 @@ export function SettingsView({ displayName, iconUrl }: SettingsViewProps) {
 
   async function handleDeleteAccount() {
     const ok = window.confirm(
-      "アカウントを完全に削除します。陣地データは空き地として残り、それ以外のデータは削除されます。この操作は取り消せません。よろしいですか？"
+      "アカウントを完全に削除します。陣地データを含むすべてのデータが削除されます。この操作は取り消せません。よろしいですか？"
     );
     if (!ok) return;
 
@@ -56,7 +56,7 @@ export function SettingsView({ displayName, iconUrl }: SettingsViewProps) {
       <section className="rounded-lg border-2 border-red-200 bg-red-50/50 p-4">
         <h2 className="mb-2 text-sm font-semibold text-red-800">Danger Zone</h2>
         <p className="mb-4 text-sm text-red-700">
-          アカウントを削除すると、あなたの陣地は空き地として残り、グループ参加履歴や活動ログなどのデータは削除されます。この操作は取り消せません。
+          アカウントを削除すると、あなたの陣地・グループ参加履歴・活動ログなどのデータはすべて削除されます。この操作は取り消せません。
         </p>
         <button
           type="button"
