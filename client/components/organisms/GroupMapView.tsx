@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Map } from "./Map";
-import { ActivityTimeline } from "./ActivityTimeline";
 import { Leaderboard } from "./Leaderboard";
 
 export interface MembershipItem {
@@ -20,8 +19,7 @@ export function GroupMapView({ memberships }: GroupMapViewProps) {
   const firstGroupId = memberships[0]?.group_id ?? null;
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(firstGroupId);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
-  const [logOpen, setLogOpen] = useState(false);
-  const bothClosed = !leaderboardOpen && !logOpen;
+  const panelClosed = !leaderboardOpen;
 
   if (memberships.length === 0) {
     return (
@@ -55,19 +53,13 @@ export function GroupMapView({ memberships }: GroupMapViewProps) {
       <Map groupId={selectedGroupId} />
       <aside
         className={`absolute right-0 top-0 z-10 flex flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur ${
-          bothClosed ? "rounded-l-lg overflow-hidden" : "h-full w-80 max-w-[85vw] sm:w-96"
+          panelClosed ? "rounded-l-lg overflow-hidden" : "h-full w-80 max-w-[85vw] sm:w-96"
         }`}
       >
         <Leaderboard
           groupId={selectedGroupId}
           open={leaderboardOpen}
           onOpenChange={setLeaderboardOpen}
-        />
-        <ActivityTimeline
-          groupId={selectedGroupId}
-          embedded
-          open={logOpen}
-          onOpenChange={setLogOpen}
         />
       </aside>
     </div>

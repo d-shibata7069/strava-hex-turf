@@ -111,11 +111,11 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
 
   if (!isOpen) {
     return (
-      <div className="flex shrink-0 justify-end overflow-hidden rounded-tl-lg border-b border-gray-200 py-1" aria-label="リーダーボード">
+      <div className="flex shrink-0 justify-end overflow-hidden rounded-l-lg border-b border-gray-200 py-1" aria-label="リーダーボード">
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex items-center justify-center rounded-tl-lg border-r border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-100 focus:outline-none"
+          className="flex items-center justify-center rounded-l-lg border-r border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-100 focus:outline-none"
           aria-label="ランキングを開く"
           title="ランキングを開く"
         >
