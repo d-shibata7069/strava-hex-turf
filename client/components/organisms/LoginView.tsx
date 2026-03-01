@@ -4,19 +4,26 @@ import { StravaConnectButton } from "@/components/atoms";
 export interface LoginViewProps {
   /** Strava 認可画面への URL（Storybook ではモック URL を渡す） */
   authUrl: string;
+  /** コールバックからのエラー表示用（例: error=token_encryption） */
+  errorMessage?: string | null;
 }
 
 /**
  * ログイン画面（Strava OAuth 認可へ進む専用ページ）。
  * LP はトップで見せるため、ここは認可アクションに特化したミニマルなUI。
  */
-export function LoginView({ authUrl }: LoginViewProps) {
+export function LoginView({ authUrl, errorMessage }: LoginViewProps) {
   return (
     <main className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
         <h1 className="mb-2 text-center text-xl font-semibold text-zinc-900">
           Strava と連携
         </h1>
+        {errorMessage ? (
+          <p className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-center text-sm text-amber-800" role="alert">
+            {errorMessage}
+          </p>
+        ) : null}
         <p className="mb-6 text-center text-sm text-zinc-600">
           以下のボタンから Strava の認可画面に進み、陣取りで利用する権限を許可してください。
         </p>

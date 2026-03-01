@@ -23,7 +23,7 @@ Node.js 18 以上を推奨。
   - **NEXT_PUBLIC_SUPABASE_URL** … Supabase ダッシュボードの **Settings → API** にある Project URL。
   - **NEXT_PUBLIC_SUPABASE_ANON_KEY** … 同上の **Project API keys** の `anon` (public)。
   - **SUPABASE_SERVICE_ROLE_KEY** … 同上の **Project API keys** の `service_role`（「Reveal」で表示する secret）。RLS をバイパスするため **サーバー側（API Route 等）でのみ** 使用し、クライアントやリポジトリに載せないこと。
-  - **STRAVA_TOKEN_ENCRYPTION_KEY** … Strava のアクセス／リフレッシュトークンを DB に保存する前に暗号化するための鍵（32 バイトの base64）。本番では必ず設定すること。生成例: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`。backend-api の Webhook サーバーでも同じ値を設定する。
+  - **STRAVA_TOKEN_ENCRYPTION_KEY** … Strava のアクセス／リフレッシュトークンを DB に保存する前に暗号化するための鍵（32 バイトの base64）。**必須。** 未設定の場合、Strava ログインは失敗します（トークンの平文保存は禁止）。生成例: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`。backend-api の Webhook サーバーでも同じ値を設定する。
   - **STRAVA_WEBHOOK_VERIFY_TOKEN** … Strava Webhook 購読確認用。Strava の Webhook 設定で設定する「Verify Token」と同一の文字列にすること。
   - **BACKEND_API_URL** … アクティビティ処理を行う backend-api の Webhook サーバー URL（例: ローカル `http://localhost:3001`、末尾スラッシュなし）。[backend-api/README.md](../backend-api/README.md) の「Webhook サーバー」を参照。
 - Strava アプリ設定の「Authorization Callback Domain」に、コールバックのホスト（例: `localhost`）を登録する。

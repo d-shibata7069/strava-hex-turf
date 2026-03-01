@@ -32,6 +32,8 @@ describe("verifyWebhook", () => {
 describe("processActivityEvent", () => {
   /** ダミー Polyline（Mapbox の例: デコードすると [lat, lng] の配列になる） */
   const DUMMY_POLYLINE = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+  /** テスト用: DB の「暗号化値」をそのまま Bearer トークンとして使うモック */
+  const mockDecrypt = (enc: string) => enc;
 
   it("ユーザー未登録の場合は ok: false", async () => {
     const mockFrom = vi.fn((table: string) => {
@@ -45,6 +47,7 @@ describe("processActivityEvent", () => {
       supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
       fetchStravaActivity: vi.fn(),
       getH3IndexesFromPoints: vi.fn(),
+      decryptStravaToken: mockDecrypt,
     };
     const result = await processActivityEvent(12345, 999, deps);
     expect(result).toEqual({ ok: false, reason: "user not found" });
@@ -70,9 +73,36 @@ describe("processActivityEvent", () => {
       supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
       fetchStravaActivity: vi.fn(),
       getH3IndexesFromPoints: vi.fn(),
+      decryptStravaToken: mockDecrypt,
     };
     const result = await processActivityEvent(12345, 999, deps);
     expect(result).toEqual({ ok: false, reason: "user has no strava_access_token" });
+  });
+
+  it("トークン復号に失敗した場合は ok: false", async () => {
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "users")
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () =>
+                Promise.resolve({
+                  data: { id: "user-1", strava_access_token: "encrypted-value", display_name: "User" },
+                  error: null,
+                }),
+            }),
+          }),
+        };
+      return {};
+    });
+    const deps: StravaWebhookDeps = {
+      supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
+      fetchStravaActivity: vi.fn(),
+      getH3IndexesFromPoints: vi.fn(),
+      decryptStravaToken: () => null,
+    };
+    const result = await processActivityEvent(12345, 999, deps);
+    expect(result).toEqual({ ok: false, reason: "strava_access_token decryption failed" });
   });
 
   it("summary_polyline が無い場合は ok: false", async () => {
@@ -95,6 +125,7 @@ describe("processActivityEvent", () => {
       supabase: { from: mockFrom } as StravaWebhookDeps["supabase"],
       fetchStravaActivity: vi.fn().mockResolvedValue({ map: {} }),
       getH3IndexesFromPoints: vi.fn(),
+      decryptStravaToken: mockDecrypt,
     };
     const result = await processActivityEvent(12345, 999, deps);
     expect(result).toEqual({ ok: false, reason: "activity has no map.summary_polyline" });
@@ -138,6 +169,7 @@ describe("processActivityEvent", () => {
         map: { summary_polyline: DUMMY_POLYLINE },
       }),
       getH3IndexesFromPoints: mockGetH3,
+      decryptStravaToken: mockDecrypt,
     };
     const result = await processActivityEvent(100, 200, deps);
     expect(result).toEqual({ ok: true });
@@ -219,6 +251,7 @@ describe("processActivityEvent", () => {
         map: { summary_polyline: DUMMY_POLYLINE },
       }),
       getH3IndexesFromPoints: mockGetH3,
+      decryptStravaToken: mockDecrypt,
     };
     const result = await processActivityEvent(1, 2, deps);
     expect(result).toEqual({ ok: true });
@@ -266,6 +299,7 @@ describe("processActivityEvent", () => {
         map: { summary_polyline: DUMMY_POLYLINE },
       }),
       getH3IndexesFromPoints: mockGetH3,
+      decryptStravaToken: mockDecrypt,
     };
     const result = await processActivityEvent(1, 2, deps);
     expect(result).toEqual({ ok: true });
@@ -308,6 +342,7 @@ describe("processActivityEvent", () => {
         start_date: activityStartDate,
       }),
       getH3IndexesFromPoints: mockGetH3,
+      decryptStravaToken: mockDecrypt,
     };
     const result = await processActivityEvent(1, 2, deps);
     expect(result).toEqual({ ok: true });

@@ -113,8 +113,7 @@ async function handlePost(
     return;
   }
 
-  const deps = createDefaultDeps(supabase);
-  deps.decryptStravaToken = (enc) => decryptStravaToken(enc) ?? enc;
+  const deps = createDefaultDeps(supabase, decryptStravaToken);
   try {
     const result = await processActivityEvent(
       body.object_id,

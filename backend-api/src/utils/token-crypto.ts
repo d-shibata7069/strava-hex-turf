@@ -18,7 +18,7 @@ function getKey(): Buffer | null {
 
 /**
  * 暗号化済みトークンを復号する。キー未設定または復号失敗時は null。
- * 平文で保存されている既存レコードは復号できないので、呼び出し側で null のときは元の値をそのまま使う。
+ * 平文での DB 保存は禁止のため、呼び出し側で null のときに平文として扱ってはならない。
  */
 export function decryptStravaToken(encrypted: string): string | null {
   const key = getKey();

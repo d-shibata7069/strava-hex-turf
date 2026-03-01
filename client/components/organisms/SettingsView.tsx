@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Avatar } from "@/components/atoms";
 
 export interface SettingsViewProps {
@@ -12,21 +11,19 @@ export interface SettingsViewProps {
  * アカウント設定画面。現在のユーザー情報、将来の拡張枠、退会（Danger Zone）を表示する。
  */
 export function SettingsView({ displayName, iconUrl }: SettingsViewProps) {
-  const router = useRouter();
-
   async function handleDeleteAccount() {
     const ok = window.confirm(
       "アカウントを完全に削除します。陣地データを含むすべてのデータが削除されます。この操作は取り消せません。よろしいですか？"
     );
     if (!ok) return;
 
-    const res = await fetch("/api/me", { method: "DELETE" });
+    const res = await fetch("/api/me", { method: "DELETE", credentials: "include" });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       alert(body?.message ?? "削除に失敗しました。");
       return;
     }
-    router.replace("/login");
+    window.location.replace("/");
   }
 
   return (
