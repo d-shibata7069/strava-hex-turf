@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { List } from "lucide-react";
 import type { ActivityLogEntry } from "@/app/api/groups/[id]/logs/route";
 
 const LOGS_POLL_INTERVAL_MS = 20_000;
@@ -11,6 +12,8 @@ export interface ActivityTimelineProps {
   groupId: string | null;
   /** Storybook 等で視覚確認するためのダミーログ。指定時は API フェッチを行わずこのデータを表示 */
   initialLogs?: ActivityLogEntry[] | null;
+  /** 初期表示でパネルを開くか。デフォルトは false（閉じる） */
+  defaultOpen?: boolean;
 }
 
 function formatRelativeTime(isoString: string): string {
@@ -29,7 +32,8 @@ function formatRelativeTime(isoString: string): string {
   return date.toLocaleDateString("ja-JP", { month: "short", day: "numeric", year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined });
 }
 
-export function ActivityTimeline({ groupId, initialLogs }: ActivityTimelineProps) {
+export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false }: ActivityTimelineProps) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const [logs, setLogs] = useState<ActivityLogEntry[]>(initialLogs ?? []);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(initialLogs === undefined);
@@ -102,13 +106,37 @@ export function ActivityTimeline({ groupId, initialLogs }: ActivityTimelineProps
     );
   }
 
+  if (!isOpen) {
+    return (
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="absolute right-0 top-1/2 z-10 flex -translate-y-1/2 items-center gap-1 rounded-l-lg border border-r-0 border-gray-200 bg-white/95 pl-2 pr-2 py-4 shadow-md backdrop-blur transition hover:bg-gray-50"
+        aria-label="Activity Log を開く"
+        title="Activity Log を開く"
+      >
+        <List className="h-5 w-5 shrink-0 text-gray-600" aria-hidden />
+        <span className="hidden text-xs font-medium text-gray-600 sm:inline">Activity Log</span>
+      </button>
+    );
+  }
+
   return (
     <aside
       className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96"
       aria-label="Activity Log"
     >
-      <div className="border-b border-gray-200 px-4 py-3">
+      <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
         <h2 className="text-sm font-semibold text-gray-800">Activity Log</h2>
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          aria-label="Activity Log を閉じる"
+          title="閉じる"
+        >
+          <span className="text-lg leading-none" aria-hidden>×</span>
+        </button>
       </div>
       <div className="flex-1 overflow-y-auto">
         {loading && logs.length === 0 ? (
