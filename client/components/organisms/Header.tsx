@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 import { LogoLink, StravaConnectButton, LogoutButton } from "@/components/atoms";
-import { UserProfileBadge } from "@/components/molecules";
+import { UserProfileBadge, NotificationBell } from "@/components/molecules";
 
 export interface HeaderUser {
   displayName: string | null;
@@ -39,6 +39,7 @@ export function HeaderView({ user }: { user: HeaderUser | null }) {
               >
                 作成
               </Link>
+              <NotificationBell />
               <UserProfileBadge
                 displayName={user.displayName}
                 iconUrl={user.iconUrl}
