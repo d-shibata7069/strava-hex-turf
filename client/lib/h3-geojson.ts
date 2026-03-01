@@ -92,6 +92,10 @@ export interface TileFeatureProperties {
   display_name?: string | null;
   /** 最終更新日時 ISO 文字列（ツールチップ表示用） */
   last_updated_at?: string | null;
+  /** タイル中心の経度（Popup の固定表示位置用） */
+  longitude: number;
+  /** タイル中心の緯度（Popup の固定表示位置用） */
+  latitude: number;
 }
 
 /**
@@ -139,6 +143,7 @@ export function tilesToGeoJSONFeatureCollection(
       .map((tile) => {
         const polygon = h3IndexToPolygon.get(tile.h3_index);
         if (!polygon) return null;
+        const [lat, lng] = cellToLatLng(tile.h3_index);
         return {
           type: "Feature" as const,
           geometry: {
@@ -153,6 +158,8 @@ export function tilesToGeoJSONFeatureCollection(
             icon_url: tile.icon_url ?? null,
             display_name: tile.display_name ?? null,
             last_updated_at: tile.last_updated_at ?? null,
+            longitude: lng,
+            latitude: lat,
           } as TileFeatureProperties & Record<string, unknown>,
         };
       })
@@ -174,6 +181,8 @@ export interface TileIconPointProperties {
   display_name?: string | null;
   /** 最終更新日時 ISO 文字列（ツールチップ表示用） */
   last_updated_at?: string | null;
+  /** スコア（ツールチップ表示用） */
+  score?: number | null;
 }
 
 /** デフォルトアイコン（プロフィール未設定時）の MapLibre 画像ID */
@@ -220,6 +229,7 @@ export function tilesToIconPointFeatureCollection(
           icon_url: iconUrl,
           display_name: t.display_name ?? null,
           last_updated_at: t.last_updated_at ?? null,
+          score: t.score ?? null,
         },
       });
     } catch {

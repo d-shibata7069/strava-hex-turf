@@ -68,10 +68,12 @@ const HOVERABLE_LAYER_IDS = ["h3-hex-fill", "h3-hex-user-icon"] as const;
 
 /** ホバー/タップ時に表示する陣地情報 */
 interface HoverInfo {
+  /** Popup を表示する固定位置（タイル中心。カーソルは追わない） */
   lngLat: { lng: number; lat: number };
   display_name: string | null;
   last_updated_at: string | null;
   icon_url: string | null;
+  score: number | null;
 }
 
 /** last_updated_at（ISO 文字列）を「取得/防衛: YYYY/MM/DD HH:mm」形式にフォーマット */
@@ -89,6 +91,23 @@ function formatCaptureDate(isoString: string | null | undefined): string {
   } catch {
     return "—";
   }
+}
+
+/** Feature から Popup の固定表示位置（タイル中心）を取得。カーソル位置は使わない。 */
+function getPopupLngLat(
+  feature: MapGeoJSONFeature,
+  properties: Record<string, unknown>
+): { lng: number; lat: number } | null {
+  if (feature.layer?.id === "h3-hex-fill") {
+    const lng = properties.longitude;
+    const lat = properties.latitude;
+    if (typeof lng === "number" && typeof lat === "number") return { lng, lat };
+  }
+  if (feature.layer?.id === "h3-hex-user-icon" && feature.geometry?.type === "Point") {
+    const coords = feature.geometry.coordinates;
+    if (Array.isArray(coords) && coords.length >= 2) return { lng: coords[0], lat: coords[1] };
+  }
+  return null;
 }
 
 /** 縁のグラデーション：上（明るいオレンジ赤）→ 下（濃い赤） */
@@ -388,24 +407,21 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
     );
     if (hit?.properties) {
       const p = hit.properties as Record<string, unknown>;
-      setHoverInfo({
-        lngLat: { lng: e.lngLat.lng, lat: e.lngLat.lat },
-        display_name: (p.display_name as string | null) ?? null,
-        last_updated_at: (p.last_updated_at as string | null) ?? null,
-        icon_url: (p.icon_url as string | null) ?? null,
-      });
+      const fixedLngLat = getPopupLngLat(hit, p);
+      if (fixedLngLat) {
+        setHoverInfo({
+          lngLat: fixedLngLat,
+          display_name: (p.display_name as string | null) ?? null,
+          last_updated_at: (p.last_updated_at as string | null) ?? null,
+          icon_url: (p.icon_url as string | null) ?? null,
+          score: typeof p.score === "number" ? p.score : (p.score != null ? Number(p.score) : null),
+        });
+      }
       map.getCanvas().style.cursor = "pointer";
     } else {
       setHoverInfo(null);
       map.getCanvas().style.cursor = "";
     }
-  }, []);
-
-  /** マウスが地図外に出たとき: hoverInfo をクリアしカーソルを戻す */
-  const handleMapMouseLeave = useCallback((e: MapLayerMouseEvent) => {
-    setHoverInfo(null);
-    const map = "getMap" in e.target && typeof e.target.getMap === "function" ? e.target.getMap() : e.target;
-    map.getCanvas().style.cursor = "";
   }, []);
 
   /** クリック/タップ: 対象レイヤー上なら Popup 表示（スマホでタップ時に表示するため） */
@@ -418,13 +434,24 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
     );
     if (hit?.properties) {
       const p = hit.properties as Record<string, unknown>;
-      setHoverInfo({
-        lngLat: { lng: e.lngLat.lng, lat: e.lngLat.lat },
-        display_name: (p.display_name as string | null) ?? null,
-        last_updated_at: (p.last_updated_at as string | null) ?? null,
-        icon_url: (p.icon_url as string | null) ?? null,
-      });
+      const fixedLngLat = getPopupLngLat(hit, p);
+      if (fixedLngLat) {
+        setHoverInfo({
+          lngLat: fixedLngLat,
+          display_name: (p.display_name as string | null) ?? null,
+          last_updated_at: (p.last_updated_at as string | null) ?? null,
+          icon_url: (p.icon_url as string | null) ?? null,
+          score: typeof p.score === "number" ? p.score : (p.score != null ? Number(p.score) : null),
+        });
+      }
     }
+  }, []);
+
+  /** マウスが地図外に出たとき: hoverInfo をクリアしカーソルを戻す */
+  const handleMapMouseLeave = useCallback((e: MapLayerMouseEvent) => {
+    setHoverInfo(null);
+    const map = "getMap" in e.target && typeof e.target.getMap === "function" ? e.target.getMap() : e.target;
+    map.getCanvas().style.cursor = "";
   }, []);
 
   const refetchTiles = useCallback(async () => {
@@ -572,21 +599,6 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
             "line-width": 1.5,
           }}
         />
-        <Layer
-          id="h3-hex-score-label"
-          type="symbol"
-          source="h3-hex-source"
-          layout={{
-            "text-field": ["to-string", ["get", "score"]],
-            "text-size": 11,
-            "text-anchor": "center",
-          }}
-          paint={{
-            "text-color": "#052e16",
-            "text-halo-color": "#ffffff",
-            "text-halo-width": 1.5,
-          }}
-        />
         <TileIconLayer tiles={tiles} />
         {hoverInfo && (
           <Popup
@@ -613,6 +625,9 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
                 </span>
                 <span className="text-xs text-gray-500">
                   取得/防衛: {formatCaptureDate(hoverInfo.last_updated_at)}
+                </span>
+                <span className="text-xs text-gray-500">
+                  スコア: {hoverInfo.score != null ? hoverInfo.score : "—"}
                 </span>
               </div>
             </div>
