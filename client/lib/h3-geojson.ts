@@ -66,12 +66,13 @@ export function h3IndexesToGeoJSONFeatureCollection(
   }
 }
 
-/** API から取得するタイル1件の型（h3_index, owner_id, score, group_id） */
+/** API から取得するタイル1件の型（h3_index, owner_id, score, group_id, icon_url） */
 export interface TileRecord {
   h3_index: string;
   owner_id: string;
   score: number;
   group_id: string;
+  icon_url?: string | null;
 }
 
 /** タイル用 GeoJSON Feature の properties（地図の fill-opacity / fill-color などで参照） */
@@ -81,6 +82,8 @@ export interface TileFeatureProperties {
   group_id: string;
   /** ユーザー（owner_id）識別用の固有HEXカラー */
   color: string;
+  /** 所有者のアバター画像URL（ズーム時シンボル表示用） */
+  icon_url?: string | null;
 }
 
 /**
@@ -139,6 +142,7 @@ export function tilesToGeoJSONFeatureCollection(
             owner_id: tile.owner_id,
             group_id: tile.group_id,
             color: stringToColor(tile.owner_id),
+            icon_url: tile.icon_url ?? null,
           } as TileFeatureProperties & Record<string, unknown>,
         };
       })

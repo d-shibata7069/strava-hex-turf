@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Map as MapLibreMap, Source, Layer } from "@vis.gl/react-maplibre";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Map as MapLibreMap, Source, Layer, useMap } from "@vis.gl/react-maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
-import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+import type { DataDrivenPropertyValueSpecification, FilterSpecification } from "maplibre-gl";
 import {
   tilesToGeoJSONFeatureCollection,
   type TileRecord,
@@ -48,6 +48,84 @@ const INITIAL_VIEW_STATE = {
   latitude: 35.6896,
   zoom: 12,
 } as const;
+
+/** ユーザーアイコンをタイル中心に表示するシンボルレイヤー（minzoom: 14）。useMap で map を取得し、icon_url を動的登録する。 */
+function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
+  const maps = useMap();
+  const mapRef = maps?.current;
+  const loadedUrlsRef = useRef<Set<string>>(new Set());
+  const [loadedUrls, setLoadedUrls] = useState<Set<string>>(new Set());
+
+  const uniqueIconUrls = useMemo(() => {
+    const urls = new Set<string>();
+    for (const t of tiles) {
+      if (t.icon_url && t.icon_url.trim()) urls.add(t.icon_url.trim());
+    }
+    return Array.from(urls);
+  }, [tiles]);
+
+  useEffect(() => {
+    const map = mapRef?.getMap?.();
+    if (!map || uniqueIconUrls.length === 0) return;
+
+    const mapInstance = map;
+    let cancelled = false;
+
+    async function loadAndAddImages() {
+      const nextLoaded = new Set(loadedUrlsRef.current);
+      for (const url of uniqueIconUrls) {
+        if (nextLoaded.has(url)) continue;
+        try {
+          const response = await mapInstance.loadImage(url);
+          if (cancelled) return;
+          const image = response.data;
+          if (image && !mapInstance.hasImage(url)) {
+            mapInstance.addImage(url, image);
+          }
+          nextLoaded.add(url);
+        } catch {
+          // 読み込み失敗（CORS等）はスキップ
+        }
+      }
+      if (!cancelled) {
+        loadedUrlsRef.current = nextLoaded;
+        setLoadedUrls(new Set(nextLoaded));
+      }
+    }
+
+    loadAndAddImages();
+    return () => { cancelled = true; };
+  }, [mapRef, uniqueIconUrls]);
+
+  const filter: FilterSpecification | undefined = useMemo(() => {
+    const list = Array.from(loadedUrls);
+    if (list.length === 0) return ["==", ["get", "icon_url"], ""];
+    return [
+      "all",
+      ["has", "icon_url"],
+      ["in", ["get", "icon_url"], ["literal", list]],
+    ] as FilterSpecification;
+  }, [loadedUrls]);
+
+  if (!mapRef) return null;
+
+  return (
+    <Layer
+      id="h3-hex-user-icon"
+      type="symbol"
+      source="h3-hex-source"
+      minzoom={14}
+      layout={{
+        "symbol-placement": "point",
+        "icon-image": ["get", "icon_url"],
+        "icon-size": 0.35,
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+      }}
+      filter={filter}
+    />
+  );
+}
 
 /**
  * ベース地図用スタイル（ラスタータイルのみ）。
@@ -239,6 +317,7 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
             "text-halo-width": 1.5,
           }}
         />
+        <TileIconLayer tiles={tiles} />
       </MapLibreMap>
     </div>
   );
