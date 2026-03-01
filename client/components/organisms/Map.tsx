@@ -1,9 +1,18 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { Map as MapLibreMap, Source, Layer } from "@vis.gl/react-maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { h3IndexesToGeoJSONFeatureCollection } from "@/lib/h3-geojson";
+
+const TILES_POLL_INTERVAL_MS = 15_000;
+
+async function fetchTiles(): Promise<string[]> {
+  const res = await fetch("/api/tiles");
+  if (!res.ok) return [];
+  const data = (await res.json()) as { h3Indexes?: string[] };
+  return Array.isArray(data.h3Indexes) ? data.h3Indexes : [];
+}
 
 /** 東京都新宿区周辺の初期表示（経度・緯度・ズーム） */
 const INITIAL_VIEW_STATE = {
@@ -40,10 +49,31 @@ const BASE_MAP_STYLE = {
 };
 
 export function Map({ initialH3Indexes }: { initialH3Indexes?: string[] }) {
-  const geojsonData = useMemo(() => {
-    const h3Indexes = initialH3Indexes ?? [];
-    return h3IndexesToGeoJSONFeatureCollection(h3Indexes);
+  const [h3Indexes, setH3Indexes] = useState<string[]>(initialH3Indexes ?? []);
+
+  useEffect(() => {
+    setH3Indexes(initialH3Indexes ?? []);
   }, [initialH3Indexes]);
+
+  const refetchTiles = useCallback(async () => {
+    const next = await fetchTiles();
+    setH3Indexes(next);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(refetchTiles, TILES_POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [refetchTiles]);
+
+  useEffect(() => {
+    const onFocus = () => void refetchTiles();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [refetchTiles]);
+
+  const geojsonData = useMemo(() => {
+    return h3IndexesToGeoJSONFeatureCollection(h3Indexes);
+  }, [h3Indexes]);
 
   return (
     <div className="absolute inset-0">
