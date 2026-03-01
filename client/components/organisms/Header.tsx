@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Users } from "lucide-react";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 import { LogoLink, StravaConnectButton, LogoutButton } from "@/components/atoms";
@@ -14,7 +15,7 @@ export interface HeaderUser {
  */
 export function HeaderView({ user }: { user: HeaderUser | null }) {
   return (
-    <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
+    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
       <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
         <LogoLink />
 
@@ -23,21 +24,10 @@ export function HeaderView({ user }: { user: HeaderUser | null }) {
             <>
               <Link
                 href="/groups"
-                className="text-sm text-zinc-600 hover:text-zinc-900"
+                className="flex items-center gap-1.5 text-sm text-zinc-600 hover:text-zinc-900"
               >
-                マイグループ
-              </Link>
-              <Link
-                href="/join"
-                className="text-sm text-zinc-600 hover:text-zinc-900"
-              >
-                参加
-              </Link>
-              <Link
-                href="/groups/new"
-                className="text-sm text-zinc-600 hover:text-zinc-900"
-              >
-                作成
+                <Users className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="hidden sm:inline">マイグループ</span>
               </Link>
               <NotificationBell />
               <UserProfileBadge
