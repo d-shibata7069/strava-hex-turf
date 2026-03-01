@@ -69,19 +69,32 @@ const BASE_MAP_STYLE = {
 
 export interface MapProps {
   /**
-   * 省略時は /api/tiles から取得。Storybook などでモックデータを渡す場合に使用。
+   * 表示するグループID。指定時は /api/groups/[id]/tiles からそのグループのタイルのみ取得する。
+   * null の場合はタイルを取得せず空の地図を表示する。
+   */
+  groupId?: string | null;
+  /**
+   * 省略時は groupId または /api/tiles から取得。Storybook などでモックデータを渡す場合に使用。
    */
   initialTiles?: TileRecord[] | null;
 }
 
-export function Map({ initialTiles }: MapProps = {}) {
+export function Map({ groupId, initialTiles }: MapProps = {}) {
   const [tiles, setTiles] = useState<TileRecord[]>(initialTiles ?? []);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const refetchTiles = useCallback(async () => {
+    if (groupId == null && initialTiles === undefined) {
+      setTiles([]);
+      return;
+    }
     setFetchError(null);
     try {
-      const res = await fetch("/api/tiles", { credentials: "include" });
+      const url =
+        groupId != null
+          ? `/api/groups/${encodeURIComponent(groupId)}/tiles`
+          : "/api/tiles";
+      const res = await fetch(url, { credentials: "include" });
       if (!res.ok) {
         if (res.status === 401) {
           setTiles([]);
@@ -98,11 +111,16 @@ export function Map({ initialTiles }: MapProps = {}) {
       setFetchError("タイルの取得に失敗しました");
       setTiles([]);
     }
-  }, []);
+  }, [groupId, initialTiles]);
 
   useEffect(() => {
     if (initialTiles !== undefined) {
       setTiles(initialTiles ?? []);
+      return;
+    }
+    if (groupId == null) {
+      setTiles([]);
+      setFetchError(null);
       return;
     }
 
@@ -111,9 +129,11 @@ export function Map({ initialTiles }: MapProps = {}) {
     async function loadTiles() {
       setFetchError(null);
       try {
-        const res = await fetch("/api/tiles", { credentials: "include" });
+        const res = await fetch(`/api/groups/${encodeURIComponent(groupId!)}/tiles`, {
+          credentials: "include",
+        });
         if (!res.ok) {
-          if (res.status === 401) {
+          if (res.status === 401 || res.status === 403) {
             if (!cancelled) setTiles([]);
             return;
           }
@@ -138,22 +158,22 @@ export function Map({ initialTiles }: MapProps = {}) {
     return () => {
       cancelled = true;
     };
-  }, [initialTiles]);
+  }, [groupId, initialTiles]);
 
   useEffect(() => {
-    if (initialTiles !== undefined) return;
+    if (initialTiles !== undefined || groupId == null) return;
 
     const interval = setInterval(refetchTiles, TILES_POLL_INTERVAL_MS);
     return () => clearInterval(interval);
-  }, [initialTiles, refetchTiles]);
+  }, [initialTiles, groupId, refetchTiles]);
 
   useEffect(() => {
-    if (initialTiles !== undefined) return;
+    if (initialTiles !== undefined || groupId == null) return;
 
     const onFocus = () => void refetchTiles();
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
-  }, [initialTiles, refetchTiles]);
+  }, [initialTiles, groupId, refetchTiles]);
 
   const geojsonData = useMemo(() => {
     if (tiles.length === 0) return EMPTY_GEOJSON;

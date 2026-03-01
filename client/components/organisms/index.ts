@@ -1,5 +1,7 @@
 export { ActivityTimeline } from "./ActivityTimeline";
 export type { ActivityTimelineProps } from "./ActivityTimeline";
+export { GroupMapView } from "./GroupMapView";
+export type { GroupMapViewProps, MembershipItem } from "./GroupMapView";
 export { CreateGroupView } from "./CreateGroupView";
 export { Header, HeaderView } from "./Header";
 export type { HeaderUser } from "./Header";
