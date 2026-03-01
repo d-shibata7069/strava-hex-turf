@@ -1,3 +1,5 @@
+export { ActivityTimeline } from "./ActivityTimeline";
+export type { ActivityTimelineProps } from "./ActivityTimeline";
 export { CreateGroupView } from "./CreateGroupView";
 export { Header, HeaderView } from "./Header";
 export type { HeaderUser } from "./Header";
