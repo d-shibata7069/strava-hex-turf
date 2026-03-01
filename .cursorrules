@@ -13,8 +13,8 @@ Strava APIとH3インデックス（Resolution 7）を利用したランナー�
 - `/client`: フロントエンド。Next.js (App Router), React, Tailwind CSS。
 - `/backend-api`: バックエンドAPI。Node.js, TypeScript。
 - `/batch`: 定期実行処理。Node.js, TypeScript。
-- `/batch_analysis`: データ分析用。
-- `/db`: データベース管理。Supabase CLIを用いたマイグレーションファイル（SQL）を配置。
+- `/batch-analysis`: データ分析用。
+- `/supabase`: データベース管理。Supabase CLIを用いたマイグレーションファイル（SQL）を配置。
 - `/infra`: インフラ管理。Terraform（`.tf`ファイル）を配置。
 
 # Communication & Output Rules (Strict Requirements)
@@ -33,5 +33,5 @@ Strava APIとH3インデックス（Resolution 7）を利用したランナー�
 # Documentation Management (Strict)
 モノレポ構造の責務分離に従い、ドキュメント（README）を以下の規約で管理すること。
 1. ルートディレクトリの `README.md` はプロジェクトの「顔」として機能させる。一般ユーザーや他の開発者が一目で「何のアプリか」「どんな見た目か（UIのスクリーンショット等）」「何から始めればいいか（Quick Start）」を理解できるように記述すること。画像素材や未確定の情報がある場合は、プレースホルダー（TODOや空白）として残しておくこと。
-2. 環境構築の手順、依存パッケージの解説、各コンポーネントのローカル実行コマンドなど、詳細な技術的セットアップ情報はルートに記載せず、対象となる各ディレクトリ（`/client`, `/backend-api`, `/db`, `/infra` 等）の `README.md` に切り分けて記載すること。
+2. 環境構築の手順、依存パッケージの解説、各コンポーネントのローカル実行コマンドなど、詳細な技術的セットアップ情報はルートに記載せず、対象となる各ディレクトリ（`/client`, `/backend-api`, `/supabase`, `/infra` 等）の `README.md` に切り分けて記載すること。
 3. 今後、環境構築やデプロイに必要な手順が追加・変更された場合は、コードの変更と合わせて、必ず対応するディレクトリの `README.md`（および必要に応じてルートの `README.md`）を更新するコミットを含めること。
