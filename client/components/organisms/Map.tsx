@@ -6,14 +6,23 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type { DataDrivenPropertyValueSpecification, FilterSpecification } from "maplibre-gl";
 import {
   tilesToGeoJSONFeatureCollection,
+  tilesToIconPointFeatureCollection,
+  DEFAULT_ICON_ID,
   type TileRecord,
   type H3GeoJSONFeatureCollection,
+  type TileIconPointFeatureCollection,
 } from "@/lib/h3-geojson";
 
 const TILES_POLL_INTERVAL_MS = 15_000;
 
 /** 空の GeoJSON（タイル未取得時・未ログイン時） */
 const EMPTY_GEOJSON: H3GeoJSONFeatureCollection = {
+  type: "FeatureCollection",
+  features: [],
+};
+
+/** 空の Point FeatureCollection（アイコン用ソース） */
+const EMPTY_ICON_POINTS: TileIconPointFeatureCollection = {
   type: "FeatureCollection",
   features: [],
 };
@@ -49,7 +58,32 @@ const INITIAL_VIEW_STATE = {
   zoom: 12,
 } as const;
 
-/** ユーザーアイコンをタイル中心に表示するシンボルレイヤー（minzoom: 14）。useMap で map を取得し、icon_url を動的登録する。 */
+/** デフォルトアイコン用の 32x32 RGBA 画像データ（灰色の円）を生成する。MapLibre の addImage に渡す。 */
+function createDefaultIconImage(): ImageData {
+  const size = 32;
+  const data = new Uint8ClampedArray(size * size * 4);
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = (size / 2) - 2;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const dx = x - cx;
+      const dy = y - cy;
+      const i = (y * size + x) * 4;
+      if (dx * dx + dy * dy <= r * r) {
+        data[i] = 120;     // R
+        data[i + 1] = 120; // G
+        data[i + 2] = 120; // B
+        data[i + 3] = 255; // A
+      } else {
+        data[i + 3] = 0;
+      }
+    }
+  }
+  return new ImageData(data, size, size);
+}
+
+/** ユーザーアイコンをタイル中心に表示するシンボルレイヤー（minzoom: 12.5）。useMap で map を取得し、styleimagemissing でデフォルトアイコンを登録する。 */
 function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
   const maps = useMap();
   const mapRef = maps?.current;
@@ -59,14 +93,63 @@ function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
   const uniqueIconUrls = useMemo(() => {
     const urls = new Set<string>();
     for (const t of tiles) {
-      if (t.icon_url && t.icon_url.trim()) urls.add(t.icon_url.trim());
+      if (t.icon_url && t.icon_url.trim() && t.icon_url !== DEFAULT_ICON_ID) {
+        urls.add(t.icon_url.trim());
+      }
     }
     return Array.from(urls);
   }, [tiles]);
 
+  /** 外部オリジンの画像は CORS でブロックされるため、自前プロキシ経由のURLに変換する。 */
+  const getImageLoadUrl = useCallback((url: string): string => {
+    if (typeof window === "undefined") return url;
+    try {
+      const target = new URL(url);
+      const origin = window.location.origin;
+      if (target.origin === origin) return url;
+      return `${origin}/api/proxy-image?url=${encodeURIComponent(url)}`;
+    } catch {
+      return url;
+    }
+  }, []);
+
   useEffect(() => {
     const map = mapRef?.getMap?.();
-    if (!map || uniqueIconUrls.length === 0) return;
+    if (!map) return;
+
+    const mapInstance = map;
+
+    const onStyleImageMissing = (e: { id: string }) => {
+      if (e.id === DEFAULT_ICON_ID && !mapInstance.hasImage(DEFAULT_ICON_ID)) {
+        try {
+          mapInstance.addImage(DEFAULT_ICON_ID, createDefaultIconImage());
+        } catch {
+          // 無視
+        }
+      }
+    };
+
+    mapInstance.on("styleimagemissing", onStyleImageMissing);
+
+    const url = typeof window !== "undefined" ? `${window.location.origin}/default-avatar.svg` : "";
+    if (url) {
+      mapInstance.loadImage(url).then((res) => {
+        if (!mapInstance.hasImage(DEFAULT_ICON_ID) && res?.data) {
+          mapInstance.addImage(DEFAULT_ICON_ID, res.data);
+        }
+      }).catch(() => {
+        // 静的ファイル読み込み失敗時は styleimagemissing のプログラム生成に任せる
+      });
+    }
+
+    return () => {
+      mapInstance.off("styleimagemissing", onStyleImageMissing);
+    };
+  }, [mapRef]);
+
+  useEffect(() => {
+    const map = mapRef?.getMap?.();
+    if (!map) return;
 
     const mapInstance = map;
     let cancelled = false;
@@ -76,7 +159,8 @@ function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
       for (const url of uniqueIconUrls) {
         if (nextLoaded.has(url)) continue;
         try {
-          const response = await mapInstance.loadImage(url);
+          const loadUrl = getImageLoadUrl(url);
+          const response = await mapInstance.loadImage(loadUrl);
           if (cancelled) return;
           const image = response.data;
           if (image && !mapInstance.hasImage(url)) {
@@ -84,7 +168,7 @@ function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
           }
           nextLoaded.add(url);
         } catch {
-          // 読み込み失敗（CORS等）はスキップ
+          // 読み込み失敗はスキップ（CORS/プロキシエラー等）
         }
       }
       if (!cancelled) {
@@ -95,11 +179,10 @@ function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
 
     loadAndAddImages();
     return () => { cancelled = true; };
-  }, [mapRef, uniqueIconUrls]);
+  }, [mapRef, uniqueIconUrls, getImageLoadUrl]);
 
   const filter: FilterSpecification | undefined = useMemo(() => {
-    const list = Array.from(loadedUrls);
-    if (list.length === 0) return ["==", ["get", "icon_url"], ""];
+    const list = [DEFAULT_ICON_ID, ...Array.from(loadedUrls)];
     return [
       "all",
       ["has", "icon_url"],
@@ -107,16 +190,13 @@ function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
     ] as FilterSpecification;
   }, [loadedUrls]);
 
-  if (!mapRef) return null;
-
   return (
     <Layer
       id="h3-hex-user-icon"
       type="symbol"
-      source="h3-hex-source"
-      minzoom={14}
+      source="h3-hex-icon-source"
+      minzoom={12.5}
       layout={{
-        "symbol-placement": "point",
         "icon-image": ["get", "icon_url"],
         "icon-size": 0.35,
         "icon-allow-overlap": true,
@@ -267,6 +347,11 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
     return tilesToGeoJSONFeatureCollection(tiles);
   }, [tiles]);
 
+  const iconPointData = useMemo(() => {
+    if (tiles.length === 0) return EMPTY_ICON_POINTS;
+    return tilesToIconPointFeatureCollection(tiles);
+  }, [tiles]);
+
   return (
     <div className="absolute inset-0">
       {fetchError && (
@@ -283,6 +368,11 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           id="h3-hex-source"
           type="geojson"
           data={geojsonData}
+        />
+        <Source
+          id="h3-hex-icon-source"
+          type="geojson"
+          data={iconPointData}
         />
         <Layer
           id="h3-hex-fill"
