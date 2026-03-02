@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { List } from "lucide-react";
 import type { ActivityLogEntry } from "@/app/api/groups/[id]/logs/route";
 
@@ -22,23 +23,30 @@ export interface ActivityTimelineProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-function formatRelativeTime(isoString: string): string {
-  const date = new Date(isoString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSec = Math.floor(diffMs / 1000);
-  const diffMin = Math.floor(diffSec / 60);
-  const diffHour = Math.floor(diffMin / 60);
-  const diffDay = Math.floor(diffHour / 24);
+function useFormatRelativeTime() {
+  const t = useTranslations("time");
+  const locale = useLocale();
+  return function formatRelativeTime(isoString: string): string {
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
 
-  if (diffSec < 60) return "たった今";
-  if (diffMin < 60) return `${diffMin}分前`;
-  if (diffHour < 24) return `${diffHour}時間前`;
-  if (diffDay < 7) return `${diffDay}日前`;
-  return date.toLocaleDateString("ja-JP", { month: "short", day: "numeric", year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined });
+    if (diffSec < 60) return t("justNow");
+    if (diffMin < 60) return t("minutesAgo", { n: diffMin });
+    if (diffHour < 24) return t("hoursAgo", { n: diffHour });
+    if (diffDay < 7) return t("daysAgo", { n: diffDay });
+    return date.toLocaleDateString(locale === "ja" ? "ja-JP" : "en-US", { month: "short", day: "numeric", year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined });
+  };
 }
 
 export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, embedded = false, open: controlledOpen, onOpenChange }: ActivityTimelineProps) {
+  const t = useTranslations("activityTimeline");
+  const tCommon = useTranslations("common");
+  const formatRelativeTime = useFormatRelativeTime();
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
   const isOpen = isControlled ? controlledOpen : internalOpen;
@@ -62,14 +70,14 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
           return;
         }
         const data = (await res.json()) as { message?: string };
-        setError(data.message ?? "ログの取得に失敗しました");
+        setError(data.message ?? t("fetchError"));
         setLogs([]);
         return;
       }
       const data = (await res.json()) as ActivityLogEntry[];
       setLogs(Array.isArray(data) ? data.slice(0, MAX_LOGS) : []);
     } catch {
-      setError("ログの取得に失敗しました");
+      setError(t("fetchError"));
       setLogs([]);
     } finally {
       setLoading(false);
@@ -103,16 +111,16 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
     const content = (
       <>
         <div className="border-b border-gray-200 px-4 py-3">
-          <h2 className="text-sm font-semibold text-gray-800">Activity Log</h2>
+          <h2 className="text-sm font-semibold text-gray-800">{t("title")}</h2>
         </div>
         <div className="flex flex-1 items-center justify-center p-4 text-center text-sm text-gray-500">
-          グループに参加するとタイムラインが表示されます
+          {t("joinToShow")}
         </div>
       </>
     );
     if (embedded) {
       return (
-        <div className="flex flex-1 flex-col min-h-0" aria-label="Activity Log">
+        <div className="flex flex-1 flex-col min-h-0" aria-label={t("title")}>
           {content}
         </div>
       );
@@ -120,7 +128,7 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
     return (
       <aside
         className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96"
-        aria-label="Activity Log"
+        aria-label={t("title")}
       >
         {content}
       </aside>
@@ -133,22 +141,22 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
         type="button"
         onClick={() => setOpen(true)}
         className="absolute right-0 top-20 z-10 flex items-center justify-center rounded-l-lg border border-r-0 border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-50"
-        aria-label="Activity Log を開く"
-        title="Activity Log を開く"
+        aria-label={t("openAria")}
+        title={t("openAria")}
       >
         <List className="h-5 w-5 text-gray-600" aria-hidden />
       </button>
     );
     if (embedded) {
       return (
-        <div className="flex shrink-0 flex-col overflow-hidden rounded-bl-lg border-b border-gray-200 py-1" aria-label="Activity Log">
+        <div className="flex shrink-0 flex-col overflow-hidden rounded-bl-lg border-b border-gray-200 py-1" aria-label={t("title")}>
           <div className="flex justify-end">
             <button
               type="button"
               onClick={() => setOpen(true)}
               className="flex items-center justify-center rounded-bl-lg border-r border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-100 focus:outline-none"
-              aria-label="Activity Log を開く"
-              title="Activity Log を開く"
+              aria-label={t("openAria")}
+              title={t("openAria")}
             >
               <List className="h-5 w-5 text-gray-600" aria-hidden />
             </button>
@@ -162,13 +170,13 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
   const openContent = (
     <>
       <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
-        <h2 className="text-sm font-semibold text-gray-800">Activity Log</h2>
+        <h2 className="text-sm font-semibold text-gray-800">{t("title")}</h2>
         <button
           type="button"
           onClick={() => setOpen(false)}
           className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          aria-label="Activity Log を閉じる"
-          title="閉じる"
+          aria-label={t("closeAria")}
+          title={t("closeAria")}
         >
           <span className="text-lg leading-none" aria-hidden>×</span>
         </button>
@@ -176,13 +184,13 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
       <div className="flex-1 overflow-y-auto">
         {loading && logs.length === 0 ? (
           <div className="flex items-center justify-center p-6 text-sm text-gray-500">
-            読み込み中…
+            {tCommon("loading")}
           </div>
         ) : error ? (
           <div className="p-4 text-sm text-amber-700">{error}</div>
         ) : logs.length === 0 ? (
           <div className="flex flex-1 items-center justify-center p-6 text-center text-sm text-gray-500">
-            まだログはありません
+            {t("empty")}
           </div>
         ) : (
           <ul className="divide-y divide-gray-100">
@@ -222,7 +230,7 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
 
   if (embedded) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col" aria-label="Activity Log">
+      <div className="flex min-h-0 flex-1 flex-col" aria-label={t("title")}>
         {openContent}
       </div>
     );
@@ -231,7 +239,7 @@ export function ActivityTimeline({ groupId, initialLogs, defaultOpen = false, em
   return (
     <aside
       className="absolute right-0 top-0 z-10 flex h-full w-80 max-w-[85vw] flex-col border-l border-gray-200 bg-white/95 shadow-lg backdrop-blur sm:w-96"
-      aria-label="Activity Log"
+      aria-label={t("title")}
     >
       {openContent}
     </aside>

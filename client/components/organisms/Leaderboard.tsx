@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { Crown, Trophy } from "lucide-react";
 import { Avatar } from "@/components/atoms/Avatar";
 import type { LeaderboardEntry } from "@/app/api/groups/[id]/leaderboard/route";
@@ -45,6 +46,9 @@ function RankCrown({ rank }: { rank: number }) {
 }
 
 export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open: controlledOpen, onOpenChange }: LeaderboardProps) {
+  const t = useTranslations("leaderboard");
+  const tCommon = useTranslations("common");
+  const tGroupUser = useTranslations("groupUser");
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
   const isOpen = isControlled ? controlledOpen : internalOpen;
@@ -86,14 +90,14 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
           return;
         }
         const data = (await res.json()) as { message?: string };
-        setError(data.message ?? "ランキングの取得に失敗しました");
+        setError(data.message ?? t("fetchError"));
         setEntries([]);
         return;
       }
       const data = (await res.json()) as LeaderboardEntry[];
       setEntries(Array.isArray(data) ? data : []);
     } catch {
-      setError("ランキングの取得に失敗しました");
+      setError(t("fetchError"));
       setEntries([]);
     } finally {
       setLoading(false);
@@ -117,10 +121,10 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
 
   if (groupId == null) {
     return (
-      <div className="shrink-0 border-b border-gray-200 px-4 py-3" aria-label="リーダーボード">
-        <h2 className="text-sm font-semibold text-gray-800">ランキング</h2>
+      <div className="shrink-0 border-b border-gray-200 px-4 py-3" aria-label={t("title")}>
+        <h2 className="text-sm font-semibold text-gray-800">{t("title")}</h2>
         <div className="mt-2 text-center text-sm text-gray-500">
-          グループに参加するとランキングが表示されます
+          {t("joinToShow")}
         </div>
       </div>
     );
@@ -128,13 +132,13 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
 
   if (!isOpen) {
     return (
-      <div className="flex shrink-0 justify-end overflow-hidden rounded-l-lg border-b border-gray-200 py-1" aria-label="リーダーボード">
+      <div className="flex shrink-0 justify-end overflow-hidden rounded-l-lg border-b border-gray-200 py-1" aria-label={t("title")}>
         <button
           type="button"
           onClick={() => setOpen(true)}
           className="flex items-center justify-center rounded-l-lg border-r border-gray-200 bg-white/95 p-2.5 shadow-md backdrop-blur transition hover:bg-gray-100 focus:outline-none"
-          aria-label="ランキングを開く"
-          title="ランキングを開く"
+          aria-label={t("openAria")}
+          title={t("openAria")}
         >
           <Trophy className="h-5 w-5 text-amber-500" aria-hidden />
         </button>
@@ -143,28 +147,28 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
   }
 
   return (
-    <div className="shrink-0 border-b border-gray-200 px-4 py-3" aria-label="リーダーボード">
+    <div className="shrink-0 border-b border-gray-200 px-4 py-3" aria-label={t("title")}>
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
           <Trophy className="h-4 w-4 text-amber-500" aria-hidden />
-          ランキング
+          {t("title")}
         </h2>
         <button
           type="button"
           onClick={() => setOpen(false)}
           className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          aria-label="ランキングを閉じる"
-          title="閉じる"
+          aria-label={t("closeAria")}
+          title={t("closeAria")}
         >
           <span className="text-lg leading-none" aria-hidden>×</span>
         </button>
       </div>
       <div className="mt-2 flex items-center gap-2">
-        <span className="text-xs text-gray-500">並び順:</span>
+        <span className="text-xs text-gray-500">{t("sortLabel")}</span>
         <div
           className="inline-flex rounded-lg border border-gray-200 bg-gray-100 p-0.5"
           role="group"
-          aria-label="ソート基準"
+          aria-label={t("sortBy")}
         >
           <button
             type="button"
@@ -174,7 +178,7 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
             }`}
             aria-pressed={sortBy === "tiles"}
           >
-            タイル数
+            {t("tilesCount")}
           </button>
           <button
             type="button"
@@ -184,20 +188,20 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
             }`}
             aria-pressed={sortBy === "score"}
           >
-            合計スコア
+            {t("totalScore")}
           </button>
         </div>
       </div>
       <div className="mt-2 max-h-64 overflow-y-auto">
         {loading && entries.length === 0 ? (
           <div className="flex items-center justify-center py-6 text-sm text-gray-500">
-            読み込み中…
+            {tCommon("loading")}
           </div>
         ) : error ? (
           <div className="py-2 text-sm text-amber-700">{error}</div>
         ) : sortedEntries.length === 0 ? (
           <div className="py-4 text-center text-sm text-gray-500">
-            まだタイルがありません
+            {t("noTiles")}
           </div>
         ) : (
           <ol className="space-y-1.5">
@@ -205,8 +209,9 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
               const rank = index + 1;
               const tileCount = typeof entry.tile_count === "string" ? entry.tile_count : String(entry.tile_count ?? 0);
               const scoreStr = typeof entry.total_score === "string" ? entry.total_score : String(entry.total_score ?? 0);
-              const valueLabel = sortBy === "tiles" ? `${tileCount} タイル` : `${scoreStr} pt`;
-              const valueAria = sortBy === "tiles" ? `${tileCount}タイル` : `${scoreStr}pt`;
+              const valueLabel = sortBy === "tiles" ? t("tilesValue", { count: tileCount }) : t("scoreValue", { score: scoreStr });
+              const valueAria = sortBy === "tiles" ? t("tilesValue", { count: tileCount }) : t("scoreValue", { score: scoreStr });
+              const displayName = entry.display_name || tGroupUser("noName");
               const userUrl = groupId ? `/groups/${groupId}/users/${entry.user_id}` : "#";
               return (
                 <li
@@ -232,7 +237,7 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
                   <Link
                     href={userUrl}
                     className="flex min-w-0 flex-1 items-center gap-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
-                    aria-label={`${entry.display_name || "名前なし"}の詳細`}
+                    aria-label={t("detailAria", { name: displayName })}
                   >
                     <Avatar
                       src={entry.icon_url ?? null}
@@ -241,7 +246,7 @@ export function Leaderboard({ groupId, initialEntries, defaultOpen = true, open:
                       className="shrink-0"
                     />
                     <span className="min-w-0 flex-1 truncate text-sm text-gray-900">
-                      {entry.display_name || "名前なし"}
+                      {displayName}
                     </span>
                   </Link>
                   <span className="shrink-0 text-sm font-semibold text-green-700" aria-label={valueAria}>

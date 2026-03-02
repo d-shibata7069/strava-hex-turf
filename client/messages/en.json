@@ -11,7 +11,9 @@
     "privacy": "Privacy Policy",
     "legal": "Legal",
     "user": "User",
-    "mapBack": "Back to Map"
+    "mapBack": "Back to Map",
+    "loading": "Loading…",
+    "or": "or"
   },
   "header": {
     "accountSettingsAria": "Account settings",
@@ -118,5 +120,112 @@
     "label": "Language",
     "ja": "日本語",
     "en": "English"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{n} min ago",
+    "hoursAgo": "{n} hr ago",
+    "daysAgo": "{n} days ago"
+  },
+  "notification": {
+    "title": "Notifications",
+    "openAria": "Open notifications",
+    "closeAria": "Close notifications",
+    "empty": "No notifications yet",
+    "fetchError": "Failed to load"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "joinToShow": "Join a group to see the leaderboard",
+    "openAria": "Open leaderboard",
+    "closeAria": "Close leaderboard",
+    "sortLabel": "Sort by:",
+    "sortBy": "Sort order",
+    "tilesCount": "Tiles",
+    "totalScore": "Total score",
+    "noTiles": "No tiles yet",
+    "fetchError": "Failed to load leaderboard",
+    "tilesValue": "{count} tiles",
+    "scoreValue": "{score} pt",
+    "detailAria": "{name} details"
+  },
+  "map": {
+    "groupSelectLabel": "Display group",
+    "joinPrefix": "Join a",
+    "joinLink": "group",
+    "joinSuffix": "to see the map",
+    "defaultGroupName": "Group",
+    "tilesFetchError": "Failed to load tiles",
+    "tilePopupCapture": "Capture/defense:",
+    "tilePopupScore": "Score:"
+  },
+  "userStats": {
+    "statsSubtitle": "Stats over time",
+    "periodLabel": "Period",
+    "noData": "No data",
+    "fetchError": "Failed to load data",
+    "tileCountTrend": "Tile count over time",
+    "totalScoreTrend": "Total score over time",
+    "dateLabel": "Date: {date}",
+    "tileCount": "Tiles",
+    "totalScore": "Total score"
+  },
+  "groups": {
+    "myGroupsTitle": "My Groups",
+    "myGroupsDesc": "Groups you've joined. Share invite codes to add members.",
+    "createGroup": "Create group",
+    "joinWithCode": "Join with code",
+    "noGroupsYet": "You haven't joined any groups yet.",
+    "inviteCode": "Invite code:",
+    "copyCode": "Copy invite code",
+    "copied": "Copied",
+    "leave": "Leave",
+    "delete": "Delete",
+    "leaveConfirm": "Delete this group? All turf data in the group will be removed.",
+    "processing": "Processing…",
+    "noName": "(No name)",
+    "fetchError": "Failed to load",
+    "leaveFailed": "Failed to leave",
+    "deleteFailed": "Failed to delete",
+    "networkError": "Network error"
+  },
+  "createGroup": {
+    "title": "Create group",
+    "description": "Enter a group name and an invite code will be generated.",
+    "groupNameLabel": "Group name",
+    "placeholder": "e.g. Weekend Runners",
+    "submit": "Create",
+    "creating": "Creating…",
+    "groupListLink": "Back to group list",
+    "createdTitle": "Group created",
+    "createdDescription": "Share the invite code with others to let them join.",
+    "copy": "Copy",
+    "nameRequired": "Please enter a group name",
+    "fetchError": "Failed to create",
+    "networkError": "Network error"
+  },
+  "joinGroup": {
+    "title": "Join a group",
+    "description": "Enter an invite code to see that group's turf on the map and capture tiles with Strava activities.",
+    "inviteCodeLabel": "Invite code",
+    "placeholder": "e.g. my-group-001",
+    "submit": "Join",
+    "joining": "Joining…",
+    "backToTop": "Back to top",
+    "codeRequired": "Please enter an invite code",
+    "fetchError": "Failed to join",
+    "networkError": "Network error"
+  },
+  "activityTimeline": {
+    "title": "Activity Log",
+    "joinToShow": "Join a group to see the timeline",
+    "openAria": "Open Activity Log",
+    "closeAria": "Close Activity Log",
+    "empty": "No logs yet",
+    "fetchError": "Failed to load logs"
+  },
+  "metadata": {
+    "title": "Strava Turf",
+    "description": "Turn your running routes into a turf game"
   }
 }

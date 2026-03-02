@@ -11,7 +11,9 @@
     "privacy": "プライバシーポリシー",
     "legal": "法務情報",
     "user": "ユーザー",
-    "mapBack": "マップに戻る"
+    "mapBack": "マップに戻る",
+    "loading": "読み込み中…",
+    "or": "または"
   },
   "header": {
     "accountSettingsAria": "アカウント設定",
@@ -118,5 +120,112 @@
     "label": "言語",
     "ja": "日本語",
     "en": "English"
+  },
+  "time": {
+    "justNow": "たった今",
+    "minutesAgo": "{n}分前",
+    "hoursAgo": "{n}時間前",
+    "daysAgo": "{n}日前"
+  },
+  "notification": {
+    "title": "通知",
+    "openAria": "通知を開く",
+    "closeAria": "通知を閉じる",
+    "empty": "まだ通知はありません",
+    "fetchError": "取得に失敗しました"
+  },
+  "leaderboard": {
+    "title": "ランキング",
+    "joinToShow": "グループに参加するとランキングが表示されます",
+    "openAria": "ランキングを開く",
+    "closeAria": "ランキングを閉じる",
+    "sortLabel": "並び順:",
+    "sortBy": "ソート基準",
+    "tilesCount": "タイル数",
+    "totalScore": "合計スコア",
+    "noTiles": "まだタイルがありません",
+    "fetchError": "ランキングの取得に失敗しました",
+    "tilesValue": "{count} タイル",
+    "scoreValue": "{score} pt",
+    "detailAria": "{name}の詳細"
+  },
+  "map": {
+    "groupSelectLabel": "表示するグループ",
+    "joinPrefix": "グループに",
+    "joinLink": "参加",
+    "joinSuffix": "すると地図が表示されます",
+    "defaultGroupName": "グループ",
+    "tilesFetchError": "タイルの取得に失敗しました",
+    "tilePopupCapture": "取得/防衛:",
+    "tilePopupScore": "スコア:"
+  },
+  "userStats": {
+    "statsSubtitle": "成績推移",
+    "periodLabel": "表示期間",
+    "noData": "データがありません",
+    "fetchError": "データの取得に失敗しました",
+    "tileCountTrend": "タイル数の推移",
+    "totalScoreTrend": "合計スコアの推移",
+    "dateLabel": "日付: {date}",
+    "tileCount": "タイル数",
+    "totalScore": "合計スコア"
+  },
+  "groups": {
+    "myGroupsTitle": "マイグループ",
+    "myGroupsDesc": "参加しているグループの一覧です。招待コードを共有してメンバーを増やせます。",
+    "createGroup": "グループを作成",
+    "joinWithCode": "招待コードで参加",
+    "noGroupsYet": "まだどのグループにも参加していません。",
+    "inviteCode": "招待コード:",
+    "copyCode": "招待コードをコピー",
+    "copied": "コピーしました",
+    "leave": "退会",
+    "delete": "削除",
+    "leaveConfirm": "このグループを削除しますか？グループ内の陣地データもすべて削除されます。",
+    "processing": "処理中…",
+    "noName": "（名前なし）",
+    "fetchError": "取得に失敗しました",
+    "leaveFailed": "退会に失敗しました",
+    "deleteFailed": "削除に失敗しました",
+    "networkError": "通信エラーが発生しました"
+  },
+  "createGroup": {
+    "title": "グループを作成",
+    "description": "グループ名を入力すると、招待コードが自動で発行されます。",
+    "groupNameLabel": "グループ名",
+    "placeholder": "例: 週末ラン部",
+    "submit": "作成する",
+    "creating": "作成中…",
+    "groupListLink": "グループ一覧へ",
+    "createdTitle": "グループを作成しました",
+    "createdDescription": "招待コードをメンバーに共有して参加してもらえます。",
+    "copy": "コピー",
+    "nameRequired": "グループ名を入力してください",
+    "fetchError": "作成に失敗しました",
+    "networkError": "通信エラーが発生しました"
+  },
+  "joinGroup": {
+    "title": "グループに参加",
+    "description": "招待コードを入力すると、そのグループの陣地が地図に表示され、Strava のアクティビティでタイルを獲得できます。",
+    "inviteCodeLabel": "招待コード",
+    "placeholder": "例: my-group-001",
+    "submit": "参加する",
+    "joining": "参加中…",
+    "backToTop": "トップへ戻る",
+    "codeRequired": "招待コードを入力してください",
+    "fetchError": "参加に失敗しました",
+    "networkError": "通信エラーが発生しました"
+  },
+  "activityTimeline": {
+    "title": "Activity Log",
+    "joinToShow": "グループに参加するとタイムラインが表示されます",
+    "openAria": "Activity Log を開く",
+    "closeAria": "Activity Log を閉じる",
+    "empty": "まだログはありません",
+    "fetchError": "ログの取得に失敗しました"
+  },
+  "metadata": {
+    "title": "Strava陣取り",
+    "description": "ランニングルートを陣取りゲームに"
   }
 }

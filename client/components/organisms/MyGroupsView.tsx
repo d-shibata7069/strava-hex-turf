@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Copy, Check } from "lucide-react";
 
 interface Membership {
@@ -12,6 +13,8 @@ interface Membership {
 }
 
 export function MyGroupsView() {
+  const t = useTranslations("groups");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +30,7 @@ export function MyGroupsView() {
           credentials: "include",
         });
         if (!res.ok) {
-          if (!cancelled) setError("取得に失敗しました");
+          if (!cancelled) setError(t("fetchError"));
           return;
         }
         const data = (await res.json()) as Membership[];
@@ -54,13 +57,13 @@ export function MyGroupsView() {
       });
       if (!res.ok) {
         const data = (await res.json()) as { message?: string };
-        alert(data.message ?? "退会に失敗しました");
+        alert(data.message ?? t("leaveFailed"));
         return;
       }
       setMemberships((prev) => prev.filter((m) => m.group_id !== groupId));
       router.refresh();
     } catch {
-      alert("通信エラーが発生しました");
+      alert(t("networkError"));
     } finally {
       setActioningId(null);
     }
@@ -68,7 +71,7 @@ export function MyGroupsView() {
 
   async function handleDelete(groupId: string) {
     if (actioningId) return;
-    if (!confirm("このグループを削除しますか？グループ内の陣地データもすべて削除されます。")) return;
+    if (!confirm(t("leaveConfirm"))) return;
     setActioningId(groupId);
     try {
       const res = await fetch(`/api/groups/${groupId}`, {
@@ -77,13 +80,13 @@ export function MyGroupsView() {
       });
       if (!res.ok) {
         const data = (await res.json()) as { message?: string };
-        alert(data.message ?? "削除に失敗しました");
+        alert(data.message ?? t("deleteFailed"));
         return;
       }
       setMemberships((prev) => prev.filter((m) => m.group_id !== groupId));
       router.refresh();
     } catch {
-      alert("通信エラーが発生しました");
+      alert(t("networkError"));
     } finally {
       setActioningId(null);
     }
@@ -107,16 +110,16 @@ export function MyGroupsView() {
   if (loading) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-8">
-        <p className="text-zinc-500">読み込み中…</p>
+        <p className="text-zinc-500">{tCommon("loading")}</p>
       </main>
     );
   }
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-8">
-      <h1 className="mb-2 text-xl font-semibold text-zinc-900">マイグループ</h1>
+      <h1 className="mb-2 text-xl font-semibold text-zinc-900">{t("myGroupsTitle")}</h1>
       <p className="mb-6 text-sm text-zinc-600">
-        参加しているグループの一覧です。招待コードを共有してメンバーを増やせます。
+        {t("myGroupsDesc")}
       </p>
 
       {error && (
@@ -130,32 +133,32 @@ export function MyGroupsView() {
           href="/groups/new"
           className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600"
         >
-          グループを作成
+          {t("createGroup")}
         </Link>
         <Link
           href="/join"
           className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
         >
-          招待コードで参加
+          {t("joinWithCode")}
         </Link>
       </div>
 
       {memberships.length === 0 ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-8 text-center text-zinc-600">
-          <p className="mb-4">まだどのグループにも参加していません。</p>
+          <p className="mb-4">{t("noGroupsYet")}</p>
           <div className="flex justify-center gap-3">
             <Link
               href="/join"
               className="text-sm font-medium text-orange-500 hover:underline"
             >
-              招待コードで参加
+              {t("joinWithCode")}
             </Link>
-            <span className="text-zinc-400">または</span>
+            <span className="text-zinc-400">{tCommon("or")}</span>
             <Link
               href="/groups/new"
               className="text-sm font-medium text-orange-500 hover:underline"
             >
-              グループを作成
+              {t("createGroup")}
             </Link>
           </div>
         </div>
@@ -168,17 +171,17 @@ export function MyGroupsView() {
             >
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-zinc-900">
-                  {m.group_name || "（名前なし）"}
+                  {m.group_name || t("noName")}
                 </p>
                 <p className="text-sm text-zinc-500">
-                  招待コード:{" "}
+                  {t("inviteCode")}{" "}
                   <code className="rounded bg-zinc-100 px-1">{m.invite_code ?? "—"}</code>
                   {m.invite_code && (
                     <button
                       type="button"
                       onClick={() => handleCopyInviteCode(m.invite_code!, m.group_id)}
                       className="ml-1.5 inline-flex items-center gap-1 rounded p-1 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700"
-                      title={copiedGroupId === m.group_id ? "コピーしました" : "招待コードをコピー"}
+                      title={copiedGroupId === m.group_id ? t("copied") : t("copyCode")}
                     >
                       {copiedGroupId === m.group_id ? (
                         <Check className="h-3.5 w-3.5 text-green-600" aria-hidden />
@@ -196,7 +199,7 @@ export function MyGroupsView() {
                   disabled={!!actioningId}
                   className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
                 >
-                  {actioningId === m.group_id ? "処理中…" : "退会"}
+                  {actioningId === m.group_id ? t("processing") : t("leave")}
                 </button>
                 <button
                   type="button"
@@ -204,7 +207,7 @@ export function MyGroupsView() {
                   disabled={!!actioningId}
                   className="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
                 >
-                  削除
+                  {t("delete")}
                 </button>
               </div>
             </li>
@@ -216,7 +219,7 @@ export function MyGroupsView() {
         href="/"
         className="mt-6 inline-block text-sm text-zinc-500 hover:text-zinc-700"
       >
-        ← トップへ戻る
+        {tCommon("backToTop")}
       </Link>
     </main>
   );

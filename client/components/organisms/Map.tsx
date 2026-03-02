@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Map as MapLibreMap, Source, Layer, useMap, Popup } from "@vis.gl/react-maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { DataDrivenPropertyValueSpecification, FilterSpecification } from "maplibre-gl";
@@ -392,6 +393,7 @@ export interface MapProps {
 }
 
 export function Map({ groupId, initialTiles }: MapProps = {}) {
+  const t = useTranslations("map");
   const [tiles, setTiles] = useState<TileRecord[]>(initialTiles ?? []);
   const [fetchError, setFetchError] = useState<string | null>(null);
   /** ホバー/タップ中のタイル情報（Popup 表示用）。null のときは非表示 */
@@ -472,14 +474,14 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           return;
         }
         const data = (await res.json()) as { message?: string; detail?: string };
-        setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
+        setFetchError(data.detail ?? data.message ?? t("tilesFetchError"));
         setTiles([]);
         return;
       }
       const data = (await res.json()) as TileRecord[];
       setTiles(Array.isArray(data) ? data : []);
     } catch {
-      setFetchError("タイルの取得に失敗しました");
+      setFetchError(t("tilesFetchError"));
       setTiles([]);
     }
   }, [groupId, initialTiles]);
@@ -510,7 +512,7 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           }
           const data = (await res.json()) as { message?: string; detail?: string };
           if (!cancelled) {
-            setFetchError(data.detail ?? data.message ?? "タイルの取得に失敗しました");
+            setFetchError(data.detail ?? data.message ?? t("tilesFetchError"));
             setTiles([]);
           }
           return;
@@ -519,7 +521,7 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
         if (!cancelled) setTiles(Array.isArray(data) ? data : []);
       } catch {
         if (!cancelled) {
-          setFetchError("タイルの取得に失敗しました");
+          setFetchError(t("tilesFetchError"));
           setTiles([]);
         }
       }
@@ -624,10 +626,10 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
                   {hoverInfo.display_name ?? "—"}
                 </span>
                 <span className="text-xs text-gray-500">
-                  取得/防衛: {formatCaptureDate(hoverInfo.last_updated_at)}
+                  {t("tilePopupCapture")} {formatCaptureDate(hoverInfo.last_updated_at)}
                 </span>
                 <span className="text-xs text-gray-500">
-                  スコア: {hoverInfo.score != null ? hoverInfo.score : "—"}
+                  {t("tilePopupScore")} {hoverInfo.score != null ? hoverInfo.score : "—"}
                 </span>
               </div>
             </div>
