@@ -4,6 +4,9 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ["h3-js"],
+  },
   async rewrites() {
     return [{ source: "/favicon.ico", destination: "/icon.svg" }];
   },
