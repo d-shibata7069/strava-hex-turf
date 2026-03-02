@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 /** Strava公式ロゴアイコン（白・オレンジ背景用） */
 function StravaLogoIcon({ className }: { className?: string }) {

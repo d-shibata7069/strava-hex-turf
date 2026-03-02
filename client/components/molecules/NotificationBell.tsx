@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bell } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Avatar } from "@/components/atoms/Avatar";
 import type { MyActivityLogEntry } from "@/app/api/me/activity-logs/route";
 
@@ -29,30 +30,37 @@ function setLastReadAt(ms: number): void {
   }
 }
 
-function formatRelativeTime(isoString: string): string {
-  const date = new Date(isoString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSec = Math.floor(diffMs / 1000);
-  const diffMin = Math.floor(diffSec / 60);
-  const diffHour = Math.floor(diffMin / 60);
-  const diffDay = Math.floor(diffHour / 24);
+function useFormatRelativeTime() {
+  const t = useTranslations("time");
+  const locale = useLocale();
+  return function formatRelativeTime(isoString: string): string {
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
 
-  if (diffSec < 60) return "たった今";
-  if (diffMin < 60) return `${diffMin}分前`;
-  if (diffHour < 24) return `${diffHour}時間前`;
-  if (diffDay < 7) return `${diffDay}日前`;
-  return date.toLocaleDateString("ja-JP", {
-    month: "short",
-    day: "numeric",
-    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
-  });
+    if (diffSec < 60) return t("justNow");
+    if (diffMin < 60) return t("minutesAgo", { n: diffMin });
+    if (diffHour < 24) return t("hoursAgo", { n: diffHour });
+    if (diffDay < 7) return t("daysAgo", { n: diffDay });
+    return date.toLocaleDateString(locale === "ja" ? "ja-JP" : "en-US", {
+      month: "short",
+      day: "numeric",
+      year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+    });
+  };
 }
 
 /**
  * ヘッダー用の通知ベル。クリックでドロップダウンを開き、参加グループの Activity Log を表示する（Strava の通知風）。
  */
 export function NotificationBell() {
+  const t = useTranslations("notification");
+  const tCommon = useTranslations("common");
+  const formatRelativeTime = useFormatRelativeTime();
   const [isOpen, setIsOpen] = useState(false);
   const [logs, setLogs] = useState<MyActivityLogEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -75,14 +83,14 @@ export function NotificationBell() {
           return;
         }
         const data = (await res.json()) as { message?: string };
-        setError(data.message ?? "取得に失敗しました");
+        setError(data.message ?? t("fetchError"));
         setLogs([]);
         return;
       }
       const data = (await res.json()) as MyActivityLogEntry[];
       setLogs(Array.isArray(data) ? data.slice(0, MAX_LOGS) : []);
     } catch {
-      setError("取得に失敗しました");
+      setError(t("fetchError"));
       setLogs([]);
     } finally {
       setLoading(false);
@@ -132,7 +140,7 @@ export function NotificationBell() {
           setIsOpen((prev) => !prev);
         }}
         className="relative flex items-center justify-center rounded-full p-2 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300"
-        aria-label={isOpen ? "通知を閉じる" : "通知を開く"}
+        aria-label={isOpen ? t("closeAria") : t("openAria")}
         aria-expanded={isOpen}
       >
         <Bell className="h-5 w-5" aria-hidden />
@@ -150,21 +158,21 @@ export function NotificationBell() {
         <div
           className="absolute right-0 top-full z-50 mt-1 w-80 max-h-[min(24rem,70vh)] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
           role="dialog"
-          aria-label="通知"
+          aria-label={t("title")}
         >
           <div className="border-b border-gray-200 px-3 py-2">
-            <h2 className="text-sm font-semibold text-gray-800">通知</h2>
+            <h2 className="text-sm font-semibold text-gray-800">{t("title")}</h2>
           </div>
           <div className="overflow-y-auto max-h-[min(22rem,calc(70vh-2.5rem))]">
             {loading && logs.length === 0 ? (
               <div className="flex items-center justify-center py-8 text-sm text-zinc-500">
-                読み込み中…
+                {tCommon("loading")}
               </div>
             ) : error ? (
               <div className="px-3 py-4 text-sm text-amber-700">{error}</div>
             ) : logs.length === 0 ? (
               <div className="px-3 py-8 text-center text-sm text-zinc-500">
-                まだ通知はありません
+                {t("empty")}
               </div>
             ) : (
               <ul className="divide-y divide-gray-100">

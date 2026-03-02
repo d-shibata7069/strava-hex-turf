@@ -1,10 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Copy, Check } from "lucide-react";
 
 export function CreateGroupView() {
+  const t = useTranslations("createGroup");
+  const tGroups = useTranslations("groups");
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -17,7 +20,7 @@ export function CreateGroupView() {
     setCreatedInviteCode(null);
     const n = name.trim();
     if (!n) {
-      setError("グループ名を入力してください");
+      setError(t("nameRequired"));
       return;
     }
     setSubmitting(true);
@@ -34,7 +37,7 @@ export function CreateGroupView() {
         invite_code?: string;
       };
       if (!res.ok) {
-        setError(data.message ?? data.error ?? "作成に失敗しました");
+        setError(data.message ?? data.error ?? t("fetchError"));
         return;
       }
       if (typeof data.invite_code === "string") {
@@ -43,7 +46,7 @@ export function CreateGroupView() {
         setCreatedInviteCode(null);
       }
     } catch {
-      setError("通信エラーが発生しました");
+      setError(t("networkError"));
     } finally {
       setSubmitting(false);
     }
@@ -70,10 +73,10 @@ export function CreateGroupView() {
       <main className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center bg-zinc-50 px-4">
         <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
           <h1 className="mb-2 text-center text-xl font-semibold text-zinc-900">
-            グループを作成しました
+            {t("createdTitle")}
           </h1>
           <p className="mb-6 text-center text-sm text-zinc-600">
-            招待コードをメンバーに共有して参加してもらえます。
+            {t("createdDescription")}
           </p>
           <div className="mb-6 flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3">
             <code className="min-w-0 flex-1 truncate font-mono text-sm text-zinc-900">
@@ -83,17 +86,17 @@ export function CreateGroupView() {
               type="button"
               onClick={() => handleCopyInviteCode(createdInviteCode)}
               className="flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
-              title={copied ? "コピーしました" : "招待コードをコピー"}
+              title={copied ? t("copied") : tGroups("copyCode")}
             >
               {copied ? (
                 <>
                   <Check className="h-4 w-4 text-green-600" aria-hidden />
-                  コピーしました
+                  {t("copied")}
                 </>
               ) : (
                 <>
                   <Copy className="h-4 w-4" aria-hidden />
-                  コピー
+                  {t("copy")}
                 </>
               )}
             </button>
@@ -102,7 +105,7 @@ export function CreateGroupView() {
             href="/groups"
             className="block w-full rounded-lg bg-orange-500 px-4 py-3 text-center text-sm font-medium text-white hover:bg-orange-600"
           >
-            グループ一覧へ
+            {t("groupListLink")}
           </Link>
         </div>
       </main>
@@ -113,10 +116,10 @@ export function CreateGroupView() {
     <main className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
         <h1 className="mb-2 text-center text-xl font-semibold text-zinc-900">
-          グループを作成
+          {t("title")}
         </h1>
         <p className="mb-6 text-center text-sm text-zinc-600">
-          グループ名を入力すると、招待コードが自動で発行されます。
+          {t("description")}
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
@@ -124,14 +127,14 @@ export function CreateGroupView() {
               htmlFor="name"
               className="mb-1 block text-sm font-medium text-zinc-700"
             >
-              グループ名
+              {t("groupNameLabel")}
             </label>
             <input
               id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="例: 週末ラン部"
+              placeholder={t("placeholder")}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
               disabled={submitting}
               autoComplete="off"
@@ -147,14 +150,14 @@ export function CreateGroupView() {
             disabled={submitting}
             className="w-full rounded-lg bg-orange-500 px-4 py-3 text-sm font-medium text-white hover:bg-orange-600 disabled:opacity-50"
           >
-            {submitting ? "作成中…" : "作成する"}
+            {submitting ? t("creating") : t("submit")}
           </button>
         </form>
         <Link
           href="/groups"
           className="mt-4 flex w-full items-center justify-center text-sm text-zinc-500 hover:text-zinc-700"
         >
-          グループ一覧へ
+          {t("groupListLink")}
         </Link>
       </div>
     </main>

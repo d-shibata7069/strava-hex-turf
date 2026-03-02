@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   LineChart,
   Line,
@@ -36,6 +37,8 @@ function formatDateLabel(dateStr: string): string {
 }
 
 export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName }: UserStatsViewProps) {
+  const t = useTranslations("userStats");
+  const tCommon = useTranslations("common");
   const [range, setRange] = useState<RangeKey>("1M");
   const [stats, setStats] = useState<UserGroupDailyStat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,14 +54,14 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName
       );
       if (!res.ok) {
         const data = (await res.json()) as { message?: string };
-        setError(data.message ?? "データの取得に失敗しました");
+        setError(data.message ?? t("fetchError"));
         setStats([]);
         return;
       }
       const data = (await res.json()) as UserGroupDailyStat[];
       setStats(Array.isArray(data) ? data : []);
     } catch {
-      setError("データの取得に失敗しました");
+      setError(t("fetchError"));
       setStats([]);
     } finally {
       setLoading(false);
@@ -91,14 +94,14 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName
               </span>
             ) : null}
           </div>
-          <p className="mt-0.5 text-sm text-gray-500">成績推移</p>
+          <p className="mt-0.5 text-sm text-gray-500">{t("statsSubtitle")}</p>
         </div>
       </div>
 
       <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-800">表示期間</h2>
-          <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-50 p-0.5" role="group" aria-label="表示期間">
+          <h2 className="text-sm font-semibold text-gray-800">{t("periodLabel")}</h2>
+          <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-50 p-0.5" role="group" aria-label={t("periodLabel")}>
             {(["1W", "1M", "1Y"] as const).map((key) => (
               <button
                 key={key}
@@ -116,15 +119,15 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName
         </div>
 
         {loading ? (
-          <div className="flex h-64 items-center justify-center text-gray-500">読み込み中…</div>
+          <div className="flex h-64 items-center justify-center text-gray-500">{tCommon("loading")}</div>
         ) : error ? (
           <div className="py-8 text-center text-amber-700">{error}</div>
         ) : chartData.length === 0 ? (
-          <div className="py-8 text-center text-gray-500">データがありません</div>
+          <div className="py-8 text-center text-gray-500">{t("noData")}</div>
         ) : (
           <div className="space-y-8">
             <div>
-              <h3 className="mb-2 text-xs font-medium text-gray-600">タイル数の推移</h3>
+              <h3 className="mb-2 text-xs font-medium text-gray-600">{t("tileCountTrend")}</h3>
               <ResponsiveContainer width="100%" height={220}>
                 <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -147,14 +150,14 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName
                       borderRadius: "8px",
                       boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                     }}
-                    labelFormatter={(label) => `日付: ${label}`}
-                    formatter={(value: number | undefined) => [`${value ?? 0} タイル`, "タイル数"]}
+                    labelFormatter={(label) => t("dateLabel", { date: label })}
+                    formatter={(value: number | undefined) => [`${value ?? 0}`, t("tileCount")]}
                     labelStyle={{ color: "#374151" }}
                   />
                   <Line
                     type="monotone"
                     dataKey="tile_count"
-                    name="タイル数"
+                    name={t("tileCount")}
                     stroke="#059669"
                     strokeWidth={2}
                     dot={{ fill: "#059669", r: 3 }}
@@ -165,7 +168,7 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName
             </div>
 
             <div>
-              <h3 className="mb-2 text-xs font-medium text-gray-600">合計スコアの推移</h3>
+              <h3 className="mb-2 text-xs font-medium text-gray-600">{t("totalScoreTrend")}</h3>
               <ResponsiveContainer width="100%" height={220}>
                 <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -188,14 +191,14 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName
                       borderRadius: "8px",
                       boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                     }}
-                    labelFormatter={(label) => `日付: ${label}`}
-                    formatter={(value: number | undefined) => [`${value ?? 0} pt`, "合計スコア"]}
+                    labelFormatter={(label) => t("dateLabel", { date: label })}
+                    formatter={(value: number | undefined) => [`${value ?? 0} pt`, t("totalScore")]}
                     labelStyle={{ color: "#374151" }}
                   />
                   <Line
                     type="monotone"
                     dataKey="total_score"
-                    name="合計スコア"
+                    name={t("totalScore")}
                     stroke="#2563eb"
                     strokeWidth={2}
                     dot={{ fill: "#2563eb", r: 3 }}

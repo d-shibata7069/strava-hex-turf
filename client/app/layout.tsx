@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import "./globals.css";
-import { Header } from "@/components/organisms/Header";
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
@@ -15,15 +15,16 @@ export const metadata: Metadata = {
   icons: { icon: "/icon.svg" },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+
   return (
-    <html lang="ja" className={notoSansJP.variable}>
+    <html lang={locale} className={notoSansJP.variable}>
       <body className="min-h-screen antialiased font-sans">
-        <Header />
         {children}
       </body>
     </html>

@@ -1,5 +1,6 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Users } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 import { LogoLink, StravaConnectButton, LogoutButton } from "@/components/atoms";
@@ -10,16 +11,18 @@ export interface HeaderUser {
   iconUrl: string | null;
 }
 
-/**
- * ヘッダーの表示用コンポーネント。Storybook でログイン/未ログインの見た目を確認するために分離。
- */
-export function HeaderView({ user }: { user: HeaderUser | null }) {
+export interface HeaderViewProps {
+  user: HeaderUser | null;
+  labels: { myGroups: string; accountSettings: string };
+}
+
+export function HeaderView({ user, labels }: HeaderViewProps) {
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
       <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
         <LogoLink />
 
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-3 sm:gap-4">
           {user ? (
             <>
               <Link
@@ -27,13 +30,13 @@ export function HeaderView({ user }: { user: HeaderUser | null }) {
                 className="flex items-center gap-1.5 text-sm text-zinc-600 hover:text-zinc-900"
               >
                 <Users className="h-4 w-4 shrink-0" aria-hidden />
-                <span className="hidden sm:inline">マイグループ</span>
+                <span className="hidden sm:inline">{labels.myGroups}</span>
               </Link>
               <NotificationBell />
               <Link
                 href="/settings"
                 className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900"
-                aria-label="アカウント設定"
+                aria-label={labels.accountSettings}
               >
                 <UserProfileBadge
                   displayName={user.displayName}
@@ -68,5 +71,7 @@ export async function Header() {
     };
   }
 
-  return <HeaderView user={user} />;
+  const t = await getTranslations("common");
+  const labels = { myGroups: t("myGroups"), accountSettings: t("accountSettings") };
+  return <HeaderView user={user} labels={labels} />;
 }

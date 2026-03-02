@@ -11,3 +11,10 @@
 - `molecules`: 複数のatomを組み合わせた要素（例：アイコン付きボタン、ユーザー名＋アバターのバッジ）。
 - `organisms`: ヘッダー、ログインフォーム、地図コンテナなど、独立して機能を持つ大きなブロック。
 ※ 注意: Next.jsのネイティブな機能と重複するため、`templates` と `pages` 階層はコンポーネント配下には作成せず、`app/` ディレクトリ配下の `layout.tsx` および `page.tsx` をそのまま該当レイヤーとして扱うこと。
+
+# Internationalization (i18n) – Client Only (Strict)
+全ページ・全UIは日本語・英語の両対応とする。以下のルールを守ること。
+1. **新規ページ・新規UIを追加する際**は、表示テキストをハードコードせず、必ず next-intl の辞書（`client/messages/ja.json` と `client/messages/en.json`）にキーを追加し、`useTranslations` または `getTranslations` で参照すること。
+2. **内部リンク**は Next.js の `Link` ではなく `@/i18n/navigation` の `Link` を使うこと。**サーバーコンポーネントでのリダイレクト**は `next/navigation` の `redirect` ではなく `@/i18n/navigation` の `redirect` と `getLocale()` を組み合わせて行うこと（例: `redirect({ href: "/login", locale: await getLocale() })`）。
+3. 辞書のキーは名前空間（common, ページ名など）で整理し、日本語・英語の両方に同じキーを追加すること。英語文案は法務・利用規約等を除き、自然な英語で記述すること。
+4. **言語の切り替え**は設定画面（`/settings`）でのみ行う。ヘッダーには言語切り替えUIを配置しない。
