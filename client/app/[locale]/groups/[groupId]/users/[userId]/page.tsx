@@ -1,5 +1,6 @@
-import { redirect, notFound } from "next/navigation";
-import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Link, redirect } from "@/i18n/navigation";
+import { getTranslations, getLocale } from "next-intl/server";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 import { UserStatsView } from "@/components/organisms";
@@ -14,7 +15,8 @@ type PageProps = { params: Promise<{ groupId: string; userId: string }> };
 export default async function GroupUserPage({ params }: PageProps) {
   const currentUserId = await getSessionUserId();
   if (!currentUserId) {
-    redirect("/login");
+    const locale = await getLocale();
+    redirect({ href: "/login", locale });
   }
 
   const { groupId, userId } = await params;
@@ -32,9 +34,10 @@ export default async function GroupUserPage({ params }: PageProps) {
     .maybeSingle();
 
   if (!myMember) {
+    const t = await getTranslations("groupUser");
     return (
       <div className="p-4 text-center text-gray-600">
-        このグループのメンバーではないため表示できません。
+        {t("notMember")}
       </div>
     );
   }
@@ -66,6 +69,9 @@ export default async function GroupUserPage({ params }: PageProps) {
     notFound();
   }
 
+  const tCommon = await getTranslations("common");
+  const tGroupUser = await getTranslations("groupUser");
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-4xl px-4 py-6">
@@ -74,12 +80,12 @@ export default async function GroupUserPage({ params }: PageProps) {
           className="mb-4 inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
         >
           <ChevronLeft className="h-4 w-4" />
-          マップに戻る
+          {tCommon("mapBack")}
         </Link>
         <UserStatsView
           groupId={groupId}
           userId={user.id}
-          displayName={user.display_name ?? "名前なし"}
+          displayName={user.display_name ?? tGroupUser("noName")}
           iconUrl={user.icon_url ?? null}
           groupName={group?.name ?? null}
         />

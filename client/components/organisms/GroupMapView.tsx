@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useState } from "react";
 import { Map } from "./Map";
 import { Leaderboard } from "./Leaderboard";

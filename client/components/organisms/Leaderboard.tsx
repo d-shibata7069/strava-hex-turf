@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Crown, Trophy } from "lucide-react";
 import { Avatar } from "@/components/atoms/Avatar";
 import type { LeaderboardEntry } from "@/app/api/groups/[id]/leaderboard/route";

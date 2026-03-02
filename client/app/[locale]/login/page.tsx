@@ -1,15 +1,16 @@
 import { LoginView } from "@/components/organisms/LoginView";
+import { getTranslations } from "next-intl/server";
 
 const STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize";
 
-const LOGIN_ERROR_MESSAGES: Record<string, string> = {
-  denied: "Strava の認可がキャンセルされました。",
-  no_code: "認可コードが取得できませんでした。",
-  config: "Strava の設定が不足しています。",
-  token_exchange: "Strava とのトークン交換に失敗しました。",
-  no_athlete: "アスリート情報を取得できませんでした。",
-  upsert: "アカウントの登録に失敗しました。",
-  token_encryption: "トークンの暗号化に失敗しました。管理者に STRAVA_TOKEN_ENCRYPTION_KEY の設定を確認してください。",
+const LOGIN_ERROR_KEYS: Record<string, string> = {
+  denied: "errorDenied",
+  no_code: "errorNoCode",
+  config: "errorConfig",
+  token_exchange: "errorTokenExchange",
+  no_athlete: "errorNoAthlete",
+  upsert: "errorUpsert",
+  token_encryption: "errorTokenEncryption",
 };
 
 function buildStravaAuthUrl(): string {
@@ -34,6 +35,8 @@ export default async function LoginPage({
 }) {
   const { error } = searchParams;
   const authUrl = buildStravaAuthUrl();
-  const errorMessage = error && LOGIN_ERROR_MESSAGES[error] ? LOGIN_ERROR_MESSAGES[error] : null;
+  const t = await getTranslations("login");
+  const errorMessage =
+    error && LOGIN_ERROR_KEYS[error] ? t(LOGIN_ERROR_KEYS[error]) : null;
   return <LoginView authUrl={authUrl} errorMessage={errorMessage} />;
 }

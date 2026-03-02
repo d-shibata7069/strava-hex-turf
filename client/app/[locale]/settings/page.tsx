@@ -1,4 +1,5 @@
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
+import { getLocale } from "next-intl/server";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 import { SettingsView } from "@/components/organisms";
@@ -9,7 +10,8 @@ import { SettingsView } from "@/components/organisms";
 export default async function SettingsPage() {
   const userId = await getSessionUserId();
   if (!userId) {
-    redirect("/login");
+    const locale = await getLocale();
+    redirect({ href: "/login", locale });
   }
 
   const supabase = getSupabaseServer();

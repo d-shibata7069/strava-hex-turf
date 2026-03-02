@@ -1,4 +1,5 @@
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
+import { getLocale } from "next-intl/server";
 import { getSessionUserId } from "@/lib/session";
 import { CreateGroupView } from "@/components/organisms";
 
@@ -8,7 +9,8 @@ import { CreateGroupView } from "@/components/organisms";
 export default async function NewGroupPage() {
   const userId = await getSessionUserId();
   if (!userId) {
-    redirect("/login");
+    const locale = await getLocale();
+    redirect({ href: "/login", locale });
   }
 
   return <CreateGroupView />;

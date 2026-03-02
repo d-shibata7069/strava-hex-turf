@@ -34,7 +34,7 @@ Node.js 18 以上を推奨。
 npm run dev
 ```
 
-ブラウザで `http://localhost:3000` を開く。
+ブラウザで `http://localhost:3000` を開く。ルートは next-intl により `/ja` および `/en` のロケールプレフィックス付きで提供され、未指定時はデフォルトロケール（日本語）へリダイレクトされる。多言語辞書は `messages/ja.json` と `messages/en.json` で管理する。
 
 ### 4. Storybook（UI 確認用）
 

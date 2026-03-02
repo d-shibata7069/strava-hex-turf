@@ -1,20 +1,24 @@
+"use client";
+
 import { StravaConnectButton } from "@/components/atoms";
 import { ArrowRightIcon } from "@/components/ui";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 /**
  * 未ログイン時に表示するランディングページ。
  * プロダクトの世界観（陣取り・奪取・仲間と競う）を伝え、/login へ誘導する。
  */
 export function LandingPage() {
+  const t = useTranslations("landing");
+  const tCommon = useTranslations("common");
   return (
     <div className="font-sans">
       {/* Hero: フルビューポート、ダーク、六角形モチーフ */}
       <section
         className="relative flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center overflow-hidden px-4 py-20"
-        aria-label="メイン"
+        aria-label={t("mainAria")}
       >
-        {/* 背景: グラデーション + 六角形パターン */}
         <div
           className="absolute inset-0 bg-zinc-950"
           style={{
@@ -29,15 +33,14 @@ export function LandingPage() {
 
         <div className="relative z-10 mx-auto max-w-3xl text-center">
           <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-emerald-400/90">
-            Run. Capture. Compete.
+            {t("tagline")}
           </p>
           <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
-            走れば、街が
-            <span className="block text-emerald-400">陣取りになる</span>
+            {t("headline")}
+            <span className="block text-emerald-400">{t("headlineHighlight")}</span>
           </h1>
           <p className="mb-10 max-w-xl mx-auto text-lg text-zinc-400 leading-relaxed">
-            Strava のランニングで通過したエリアを「陣地」として獲得。
-            仲間と奪い合い、防衛し、減衰する色とゴーストで競う。
+            {t("subhead")}
           </p>
           <StravaConnectButton
             href="/login"
@@ -45,7 +48,7 @@ export function LandingPage() {
             className="focus:ring-offset-zinc-950"
             rightIcon={<ArrowRightIcon className="h-5 w-5" />}
           >
-            Strava ではじめる
+            {t("cta")}
           </StravaConnectButton>
         </div>
       </section>
@@ -53,11 +56,11 @@ export function LandingPage() {
       {/* 特徴: 3 本柱 */}
       <section
         className="relative border-t border-zinc-800/80 bg-zinc-900/50 px-4 py-16 sm:py-24"
-        aria-label="サービスの特徴"
+        aria-label={t("featuresAria")}
       >
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-12 text-center text-2xl font-bold text-white sm:text-3xl">
-            走るだけで、陣取りが始まる
+            {t("featuresTitle")}
           </h2>
           <ul className="grid gap-10 sm:grid-cols-3">
             <li className="flex flex-col items-center text-center">
@@ -66,9 +69,9 @@ export function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
               </span>
-              <h3 className="mb-2 font-semibold text-white">奪取・防衛</h3>
+              <h3 className="mb-2 font-semibold text-white">{t("feature1Title")}</h3>
               <p className="text-sm leading-relaxed text-zinc-400">
-                通過したタイルは即時で自分の陣地に。同じルートを走れば防衛になり、色がリセットされる。
+                {t("feature1Desc")}
               </p>
             </li>
             <li className="flex flex-col items-center text-center">
@@ -77,9 +80,9 @@ export function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </span>
-              <h3 className="mb-2 font-semibold text-white">30日で減衰</h3>
+              <h3 className="mb-2 font-semibold text-white">{t("feature2Title")}</h3>
               <p className="text-sm leading-relaxed text-zinc-400">
-                獲得から30日かけてスコアが線形に減衰。色は消えてもアイコンはゴーストとして残る。
+                {t("feature2Desc")}
               </p>
             </li>
             <li className="flex flex-col items-center text-center">
@@ -88,9 +91,9 @@ export function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </span>
-              <h3 className="mb-2 font-semibold text-white">グループで競う</h3>
+              <h3 className="mb-2 font-semibold text-white">{t("feature3Title")}</h3>
               <p className="text-sm leading-relaxed text-zinc-400">
-                招待リンクで参加した仲間とマップを共有。奪取ログやランキングで盛り上がる。
+                {t("feature3Desc")}
               </p>
             </li>
           </ul>
@@ -100,14 +103,14 @@ export function LandingPage() {
       {/* 最終 CTA */}
       <section
         className="border-t border-zinc-800/80 bg-zinc-950 px-4 py-16 sm:py-20"
-        aria-label="始める"
+        aria-label={t("startAria")}
       >
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="mb-4 text-2xl font-bold text-white sm:text-3xl">
-            まずは Strava と連携して
+            {t("finalCtaTitle")}
           </h2>
           <p className="mb-8 text-zinc-400">
-            走行データは Strava から読み取るだけ。陣取りは自動で更新される。
+            {t("finalCtaDesc")}
           </p>
           <StravaConnectButton
             href="/login"
@@ -121,14 +124,14 @@ export function LandingPage() {
       {/* フッター: 法務リンク */}
       <footer
         className="border-t border-zinc-800/80 bg-zinc-950 px-4 py-6"
-        aria-label="フッター"
+        aria-label={t("footerAria")}
       >
         <div className="mx-auto flex max-w-5xl justify-center gap-6 text-center text-sm text-zinc-500">
           <Link href="/terms" className="hover:text-zinc-300">
-            利用規約
+            {tCommon("terms")}
           </Link>
           <Link href="/privacy" className="hover:text-zinc-300">
-            プライバシーポリシー
+            {tCommon("privacy")}
           </Link>
         </div>
       </footer>
