@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { latLngToCell, gridDisk } from "h3-js";
 import { Map } from "./Map";
-import type { TileRecord } from "@/lib/h3-geojson-types";
-import {
-  tilesToGeoJSONFeatureCollection,
-  tilesToIconPointFeatureCollection,
-} from "@/lib/h3-geojson";
+import type { TileRecord } from "@/lib/h3-geojson";
 
 const meta: Meta<typeof Map> = {
   component: Map,
@@ -41,17 +37,9 @@ function getMockTiles(): TileRecord[] {
 }
 
 export const WithMockTiles: Story = {
-  render: () => {
-    const mockTiles = getMockTiles();
-    const tilesGeoJSON = tilesToGeoJSONFeatureCollection(mockTiles);
-    const iconPointsGeoJSON = tilesToIconPointFeatureCollection(mockTiles);
-    return (
-      <div style={{ width: "100%", height: "500px" }}>
-        <Map
-          initialTilesGeoJSON={tilesGeoJSON}
-          initialIconPointsGeoJSON={iconPointsGeoJSON}
-        />
-      </div>
-    );
-  },
+  render: () => (
+    <div style={{ width: "100%", height: "500px" }}>
+      <Map initialTiles={getMockTiles()} />
+    </div>
+  ),
 };

@@ -7,10 +7,13 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type { DataDrivenPropertyValueSpecification, FilterSpecification } from "maplibre-gl";
 import type { MapLayerMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import {
+  tilesToGeoJSONFeatureCollection,
+  tilesToIconPointFeatureCollection,
   DEFAULT_ICON_ID,
+  type TileRecord,
   type H3GeoJSONFeatureCollection,
   type TileIconPointFeatureCollection,
-} from "@/lib/h3-geojson-types";
+} from "@/lib/h3-geojson";
 import { Avatar } from "@/components/atoms/Avatar";
 
 const TILES_POLL_INTERVAL_MS = 15_000;
@@ -214,7 +217,7 @@ function toStyleImage(imageData: ImageData): { width: number; height: number; da
 }
 
 /** ユーザーアイコンをタイル中心に表示するシンボルレイヤー（minzoom: 12.5）。useMap で map を取得し、styleimagemissing でデフォルトアイコンを登録する。 */
-function TileIconLayer({ iconPoints }: { iconPoints: TileIconPointFeatureCollection }) {
+function TileIconLayer({ tiles }: { tiles: TileRecord[] }) {
   const maps = useMap();
   const mapRef = maps?.current;
   const loadedUrlsRef = useRef<Set<string>>(new Set());
@@ -222,14 +225,13 @@ function TileIconLayer({ iconPoints }: { iconPoints: TileIconPointFeatureCollect
 
   const uniqueIconUrls = useMemo(() => {
     const urls = new Set<string>();
-    for (const f of iconPoints.features) {
-      const url = f.properties?.icon_url;
-      if (url && typeof url === "string" && url.trim() && url !== DEFAULT_ICON_ID) {
-        urls.add(url.trim());
+    for (const t of tiles) {
+      if (t.icon_url && t.icon_url.trim() && t.icon_url !== DEFAULT_ICON_ID) {
+        urls.add(t.icon_url.trim());
       }
     }
     return Array.from(urls);
-  }, [iconPoints]);
+  }, [tiles]);
 
   /** 外部オリジンの画像は CORS でブロックされるため、自前プロキシ経由のURLに変換する。 */
   const getImageLoadUrl = useCallback((url: string): string => {
@@ -378,12 +380,6 @@ const BASE_MAP_STYLE = {
   ],
 };
 
-/** API が返すタイル GeoJSON の形 */
-export interface TilesGeoJSONResponse {
-  tilesGeoJSON: H3GeoJSONFeatureCollection;
-  iconPointsGeoJSON: TileIconPointFeatureCollection;
-}
-
 export interface MapProps {
   /**
    * 表示するグループID。指定時は /api/groups/[id]/tiles からそのグループのタイルのみ取得する。
@@ -391,26 +387,14 @@ export interface MapProps {
    */
   groupId?: string | null;
   /**
-   * Storybook などでモックデータを渡す場合に使用。指定時は取得を行わない。
+   * 省略時は groupId または /api/tiles から取得。Storybook などでモックデータを渡す場合に使用。
    */
-  initialTilesGeoJSON?: H3GeoJSONFeatureCollection | null;
-  /**
-   * Storybook などでモックのアイコンポイントを渡す場合に使用。initialTilesGeoJSON と同時に指定する。
-   */
-  initialIconPointsGeoJSON?: TileIconPointFeatureCollection | null;
+  initialTiles?: TileRecord[] | null;
 }
 
-export function Map({
-  groupId,
-  initialTilesGeoJSON,
-  initialIconPointsGeoJSON,
-}: MapProps = {}) {
+export function Map({ groupId, initialTiles }: MapProps = {}) {
   const t = useTranslations("map");
-  const [tilesGeoJSON, setTilesGeoJSON] = useState<H3GeoJSONFeatureCollection>(
-    initialTilesGeoJSON ?? EMPTY_GEOJSON
-  );
-  const [iconPointsGeoJSON, setIconPointsGeoJSON] =
-    useState<TileIconPointFeatureCollection>(initialIconPointsGeoJSON ?? EMPTY_ICON_POINTS);
+  const [tiles, setTiles] = useState<TileRecord[]>(initialTiles ?? []);
   const [fetchError, setFetchError] = useState<string | null>(null);
   /** ホバー/タップ中のタイル情報（Popup 表示用）。null のときは非表示 */
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
@@ -473,9 +457,8 @@ export function Map({
   }, []);
 
   const refetchTiles = useCallback(async () => {
-    if (groupId == null && initialTilesGeoJSON === undefined) {
-      setTilesGeoJSON(EMPTY_GEOJSON);
-      setIconPointsGeoJSON(EMPTY_ICON_POINTS);
+    if (groupId == null && initialTiles === undefined) {
+      setTiles([]);
       return;
     }
     setFetchError(null);
@@ -488,35 +471,28 @@ export function Map({
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 401) {
-          setTilesGeoJSON(EMPTY_GEOJSON);
-          setIconPointsGeoJSON(EMPTY_ICON_POINTS);
+          setTiles([]);
           return;
         }
         const err = data as { message?: string; detail?: string };
         setFetchError(err.detail ?? err.message ?? t("tilesFetchError"));
-        setTilesGeoJSON(EMPTY_GEOJSON);
-        setIconPointsGeoJSON(EMPTY_ICON_POINTS);
+        setTiles([]);
         return;
       }
-      const payload = data as TilesGeoJSONResponse;
-      setTilesGeoJSON(payload.tilesGeoJSON ?? EMPTY_GEOJSON);
-      setIconPointsGeoJSON(payload.iconPointsGeoJSON ?? EMPTY_ICON_POINTS);
+      setTiles(Array.isArray(data) ? data : []);
     } catch {
       setFetchError(t("tilesFetchError"));
-      setTilesGeoJSON(EMPTY_GEOJSON);
-      setIconPointsGeoJSON(EMPTY_ICON_POINTS);
+      setTiles([]);
     }
-  }, [groupId, initialTilesGeoJSON, t]);
+  }, [groupId, initialTiles, t]);
 
   useEffect(() => {
-    if (initialTilesGeoJSON !== undefined) {
-      setTilesGeoJSON(initialTilesGeoJSON ?? EMPTY_GEOJSON);
-      setIconPointsGeoJSON(initialIconPointsGeoJSON ?? EMPTY_ICON_POINTS);
+    if (initialTiles !== undefined) {
+      setTiles(initialTiles ?? []);
       return;
     }
     if (groupId == null) {
-      setTilesGeoJSON(EMPTY_GEOJSON);
-      setIconPointsGeoJSON(EMPTY_ICON_POINTS);
+      setTiles([]);
       setFetchError(null);
       return;
     }
@@ -532,30 +508,21 @@ export function Map({
         const data = await res.json();
         if (!res.ok) {
           if (res.status === 401 || res.status === 403) {
-            if (!cancelled) {
-              setTilesGeoJSON(EMPTY_GEOJSON);
-              setIconPointsGeoJSON(EMPTY_ICON_POINTS);
-            }
+            if (!cancelled) setTiles([]);
             return;
           }
           const err = data as { message?: string; detail?: string };
           if (!cancelled) {
             setFetchError(err.detail ?? err.message ?? t("tilesFetchError"));
-            setTilesGeoJSON(EMPTY_GEOJSON);
-            setIconPointsGeoJSON(EMPTY_ICON_POINTS);
+            setTiles([]);
           }
           return;
         }
-        const payload = data as TilesGeoJSONResponse;
-        if (!cancelled) {
-          setTilesGeoJSON(payload.tilesGeoJSON ?? EMPTY_GEOJSON);
-          setIconPointsGeoJSON(payload.iconPointsGeoJSON ?? EMPTY_ICON_POINTS);
-        }
+        if (!cancelled) setTiles(Array.isArray(data) ? data : []);
       } catch {
         if (!cancelled) {
           setFetchError(t("tilesFetchError"));
-          setTilesGeoJSON(EMPTY_GEOJSON);
-          setIconPointsGeoJSON(EMPTY_ICON_POINTS);
+          setTiles([]);
         }
       }
     }
@@ -564,22 +531,32 @@ export function Map({
     return () => {
       cancelled = true;
     };
-  }, [groupId, initialTilesGeoJSON, initialIconPointsGeoJSON, t]);
+  }, [groupId, initialTiles, t]);
 
   useEffect(() => {
-    if (initialTilesGeoJSON !== undefined || groupId == null) return;
+    if (initialTiles !== undefined || groupId == null) return;
 
     const interval = setInterval(refetchTiles, TILES_POLL_INTERVAL_MS);
     return () => clearInterval(interval);
-  }, [initialTilesGeoJSON, groupId, refetchTiles]);
+  }, [initialTiles, groupId, refetchTiles]);
 
   useEffect(() => {
-    if (initialTilesGeoJSON !== undefined || groupId == null) return;
+    if (initialTiles !== undefined || groupId == null) return;
 
     const onFocus = () => void refetchTiles();
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
-  }, [initialTilesGeoJSON, groupId, refetchTiles]);
+  }, [initialTiles, groupId, refetchTiles]);
+
+  const geojsonData = useMemo(() => {
+    if (tiles.length === 0) return EMPTY_GEOJSON;
+    return tilesToGeoJSONFeatureCollection(tiles);
+  }, [tiles]);
+
+  const iconPointData = useMemo(() => {
+    if (tiles.length === 0) return EMPTY_ICON_POINTS;
+    return tilesToIconPointFeatureCollection(tiles);
+  }, [tiles]);
 
   return (
     <div className="absolute inset-0">
@@ -599,12 +576,12 @@ export function Map({
         <Source
           id="h3-hex-source"
           type="geojson"
-          data={tilesGeoJSON}
+          data={geojsonData}
         />
         <Source
           id="h3-hex-icon-source"
           type="geojson"
-          data={iconPointsGeoJSON}
+          data={iconPointData}
         />
         <Layer
           id="h3-hex-fill"
@@ -624,7 +601,7 @@ export function Map({
             "line-width": 1.5,
           }}
         />
-        <TileIconLayer iconPoints={iconPointsGeoJSON} />
+        <TileIconLayer tiles={tiles} />
         {hoverInfo && (
           <Popup
             longitude={hoverInfo.lngLat.lng}

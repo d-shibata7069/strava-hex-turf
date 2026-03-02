@@ -101,9 +101,5 @@ export async function GET(_request: Request, { params }: RouteParams) {
     }
   );
 
-  const { tilesToGeoJSONFeatureCollection, tilesToIconPointFeatureCollection } =
-    await import("@/lib/h3-geojson");
-  const tilesGeoJSON = tilesToGeoJSONFeatureCollection(tiles);
-  const iconPointsGeoJSON = tilesToIconPointFeatureCollection(tiles);
-  return NextResponse.json({ tilesGeoJSON, iconPointsGeoJSON });
+  return NextResponse.json(tiles);
 }

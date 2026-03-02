@@ -33,11 +33,7 @@ export async function GET() {
 
   const groupIds = (memberships ?? []).map((m) => m.group_id);
   if (groupIds.length === 0) {
-    const empty = { type: "FeatureCollection" as const, features: [] };
-    return NextResponse.json({
-      tilesGeoJSON: empty,
-      iconPointsGeoJSON: empty,
-    });
+    return NextResponse.json([]);
   }
 
   const { data: tilesRaw, error: tilesError } = await supabase
@@ -91,9 +87,5 @@ export async function GET() {
     }
   );
 
-  const { tilesToGeoJSONFeatureCollection, tilesToIconPointFeatureCollection } =
-    await import("@/lib/h3-geojson");
-  const tilesGeoJSON = tilesToGeoJSONFeatureCollection(tiles);
-  const iconPointsGeoJSON = tilesToIconPointFeatureCollection(tiles);
-  return NextResponse.json({ tilesGeoJSON, iconPointsGeoJSON });
+  return NextResponse.json(tiles);
 }

@@ -122,11 +122,11 @@ Strava は Webhook のコールバックに **公的な URL** を要求するた
 
 ### Vercel デプロイで「Deploying outputs」の Internal Error が出る場合
 
-ビルドは成功するが「Deploying outputs」段階で `Error: We encountered an internal error. Please try again.` となる場合、サーバーレス関数のトレースサイズや Vercel 側の制限が原因の可能性がある。
+ビルドは成功するが「Deploying outputs」段階で `Error: We encountered an internal error. Please try again.` となる場合、サーバーレス関数に含まれるパッケージ（例: `h3-js` の WASM）が Vercel のデプロイパイプラインで問題を起こすことがある。
 
-1. **ビルド出力の解析:** Vercel のプロジェクトで環境変数 **VERCEL_ANALYZE_BUILD_OUTPUT** を `1` に設定し、再デプロイする。ビルドログに関数ごとのサイズ（MB）と大きなファイル一覧が表示され、原因の切り分けに役立つ。[Vercel: Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)
-2. **ビルドキャッシュのクリア:** Vercel の **Project Settings → General → Build Cache** で「Clear Build Cache」を実行してから再デプロイする。
-3. 本リポジトリでは `next.config.js` の `experimental.outputFileTracingExcludes` で `/api/tiles` と `/api/groups/[id]/tiles` から `h3-js` の browser ビルド・ソースマップ等を除外しており、デプロイサイズの削減を図っている。
+本リポジトリでは **API ルートから `h3-js` を完全に外し、タイル→GeoJSON 変換はクライアント（Map コンポーネント）で行う**構成にしており、サーバーレス関数のトレースに `h3-js` が含まれないようにしている。`/api/tiles` と `/api/groups/[id]/tiles` は生のタイル配列（`TileRecord[]`）を返し、クライアントで `h3-geojson` により GeoJSON に変換して地図に表示する。
+
+それでも失敗する場合: (1) Vercel の環境変数 **VERCEL_ANALYZE_BUILD_OUTPUT** を `1` に設定して再デプロイし、ビルドログで関数サイズを確認する。(2) **Project Settings → General → Build Cache** で「Clear Build Cache」を実行してから再デプロイする。[Vercel: Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)
 
 ## データベース
 
