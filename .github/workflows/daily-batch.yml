@@ -1,0 +1,38 @@
+# 日次バッチ（スコア減衰等）を毎日自動実行するワークフロー
+# 日本時間 午前0時 = UTC 15:00（前日）
+name: Daily Batch
+
+on:
+  schedule:
+    # 毎日 15:00 UTC = 日本時間 翌日 00:00（深夜）
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+jobs:
+  daily-batch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: batch/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./batch
+        run: npm ci
+
+      - name: Build
+        working-directory: ./batch
+        run: npm run build
+
+      - name: Run decay-scores (daily batch)
+        working-directory: ./batch
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run start:decay
