@@ -124,9 +124,15 @@ Strava は Webhook のコールバックに **公的な URL** を要求するた
 
 ビルドは成功するが「Deploying outputs」段階で `Error: We encountered an internal error. Please try again.` となる場合、サーバーレス関数に含まれるパッケージ（例: `h3-js` の WASM）が Vercel のデプロイパイプラインで問題を起こすことがある。
 
-本リポジトリでは **API ルートから `h3-js` を完全に外し、タイル→GeoJSON 変換はクライアント（Map コンポーネント）で行う**構成にしており、サーバーレス関数のトレースに `h3-js` が含まれないようにしている。`/api/tiles` と `/api/groups/[id]/tiles` は生のタイル配列（`TileRecord[]`）を返し、クライアントで `h3-geojson` により GeoJSON に変換して地図に表示する。
+本リポジトリでは **API ルートから `h3-js` を完全に外し、タイル→GeoJSON 変換はクライアント（Map コンポーネント）で行う**構成にしており、サーバーレス関数のトレースに `h3-js` が含まれないようにしている。`/api/tiles` と `/api/groups/[id]/tiles` は生のタイル配列（`TileRecord[]`）を返し、クライアントで `h3-geojson` により GeoJSON に変換して地図に表示する。また **`productionBrowserSourceMaps: false`** でソースマップを出さず出力を軽くし、**`client/vercel.json`** でビルド・インストールコマンドを明示している。
 
-それでも失敗する場合: (1) Vercel の環境変数 **VERCEL_ANALYZE_BUILD_OUTPUT** を `1` に設定して再デプロイし、ビルドログで関数サイズを確認する。(2) **Project Settings → General → Build Cache** で「Clear Build Cache」を実行してから再デプロイする。[Vercel: Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)
+それでも失敗する場合:
+
+1. **Vercel ダッシュボードで Root Directory を確認:** Project Settings → General で **Root Directory** が `client` になっていること（モノレポで client のみデプロイする場合）。
+2. **VERCEL_ANALYZE_BUILD_OUTPUT:** 環境変数に `VERCEL_ANALYZE_BUILD_OUTPUT=1` を設定して再デプロイし、ビルドログで出力サイズを確認する。
+3. **ビルドキャッシュのクリア:** Project Settings → General → Build Cache で「Clear Build Cache」を実行してから再デプロイする。
+4. **CLI で再現:** ローカルで `cd client && npx vercel build` のあと `npx vercel deploy --prebuilt` を実行し、同じエラーが出るか・別のメッセージが出ないか確認する。
+5. **Vercel サポート:** 上記で解決しない場合は [Vercel ヘルプ](https://vercel.com/help) から問い合わせ、失敗したデプロイの URL と時刻を伝えるとよい。[Vercel: Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)
 
 ## データベース
 
