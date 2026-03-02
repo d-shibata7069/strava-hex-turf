@@ -70,6 +70,7 @@
   },
   "settings": {
     "title": "アカウント設定",
+    "languageSection": "言語",
     "currentAccount": "現在のアカウント",
     "privacySettings": "プライバシー設定",
     "notificationSettings": "通知設定",

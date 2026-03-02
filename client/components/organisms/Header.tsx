@@ -5,7 +5,6 @@ import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
 import { LogoLink, StravaConnectButton, LogoutButton } from "@/components/atoms";
 import { UserProfileBadge, NotificationBell } from "@/components/molecules";
-import { LanguageSwitcher } from "@/components/molecules/LanguageSwitcher";
 
 export interface HeaderUser {
   displayName: string | null;
@@ -24,7 +23,6 @@ export function HeaderView({ user, labels }: HeaderViewProps) {
         <LogoLink />
 
         <nav className="flex items-center gap-3 sm:gap-4">
-          <LanguageSwitcher />
           {user ? (
             <>
               <Link

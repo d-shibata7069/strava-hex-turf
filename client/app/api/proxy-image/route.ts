@@ -2,21 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * GET /api/proxy-image?url=...
- * 外部画像URL（Strava CDN等）をサーバー側で取得し、同一オリジンとして返す。
+ * 外部画像URL（Strava CDN・Google プロフィール画像等）をサーバー側で取得し、同一オリジンとして返す。
  * ブラウザの map.loadImage() は fetch を使うため CORS でブロックされるため、
  * このプロキシ経由で取得することで CORS を回避する。
  *
- * 許可するURL: HTTPS かつ Strava 系 CDN（*.cloudfront.net の /pictures/ を含むパス）に限定。
+ * 許可するURL:
+ * - HTTPS かつ Strava 系 CDN（*.cloudfront.net の /pictures/ を含むパス）
+ * - HTTPS かつ Google ユーザーコンテンツ（*.googleusercontent.com、プロフィール画像等）
  */
-const ALLOWED_HOST_PATTERN = /^https:\/\/([a-z0-9-]+\.)*cloudfront\.net\//i;
-const ALLOWED_PATH_PATTERN = /\/pictures\//i;
+const ALLOWED_ORIGINS: Array<{ hostPattern: RegExp; pathPattern?: RegExp }> = [
+  { hostPattern: /^https:\/\/([a-z0-9-]+\.)*cloudfront\.net\//i, pathPattern: /\/pictures\//i },
+  { hostPattern: /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com\//i },
+];
 
 function isAllowedUrl(urlStr: string): boolean {
   try {
     const url = new URL(urlStr);
     if (url.protocol !== "https:") return false;
     const fullUrl = url.toString();
-    return ALLOWED_HOST_PATTERN.test(fullUrl) && ALLOWED_PATH_PATTERN.test(url.pathname);
+    return ALLOWED_ORIGINS.some(
+      ({ hostPattern, pathPattern }) =>
+        hostPattern.test(fullUrl) && (pathPattern == null || pathPattern.test(url.pathname))
+    );
   } catch {
     return false;
   }

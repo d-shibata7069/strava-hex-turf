@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { Avatar } from "@/components/atoms";
+import { LanguageSwitcher } from "@/components/molecules/LanguageSwitcher";
 
 export interface SettingsViewProps {
   displayName: string | null;
@@ -33,6 +34,12 @@ export function SettingsView({ displayName, iconUrl }: SettingsViewProps) {
   return (
     <div className="mx-auto max-w-2xl space-y-8 px-4 py-8">
       <h1 className="text-xl font-semibold text-zinc-900">{t("title")}</h1>
+
+      {/* 言語設定 */}
+      <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <h2 className="mb-3 text-sm font-medium text-zinc-500">{t("languageSection")}</h2>
+        <LanguageSwitcher />
+      </section>
 
       {/* 現在のユーザー情報 */}
       <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
