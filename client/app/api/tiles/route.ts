@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
-import {
-  tilesToGeoJSONFeatureCollection,
-  tilesToIconPointFeatureCollection,
-} from "@/lib/h3-geojson";
 
 /** GET /api/tiles: ログインユーザーが所属するグループのタイル一覧を返す（RLS相当をAPI側で実施） */
 export async function GET() {
@@ -95,6 +91,8 @@ export async function GET() {
     }
   );
 
+  const { tilesToGeoJSONFeatureCollection, tilesToIconPointFeatureCollection } =
+    await import("@/lib/h3-geojson");
   const tilesGeoJSON = tilesToGeoJSONFeatureCollection(tiles);
   const iconPointsGeoJSON = tilesToIconPointFeatureCollection(tiles);
   return NextResponse.json({ tilesGeoJSON, iconPointsGeoJSON });
