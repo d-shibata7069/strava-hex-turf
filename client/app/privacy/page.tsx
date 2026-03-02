@@ -3,16 +3,22 @@ import Link from "next/link";
 /**
  * プライバシーポリシーページ。Strava API 公開審査およびユーザー向けの法務情報。
  */
-export default function PrivacyPage() {
+export default function PrivacyPage({
+  searchParams,
+}: {
+  searchParams: { from?: string };
+}) {
+  const fromSettings = searchParams.from === "settings";
+
   return (
     <main className="min-h-[calc(100vh-3.5rem)] bg-zinc-50 px-4 py-10">
       <article className="mx-auto max-w-3xl">
         <div className="mb-8">
           <Link
-            href="/"
+            href={fromSettings ? "/settings" : "/"}
             className="text-sm text-zinc-500 hover:text-zinc-700"
           >
-            ← トップへ
+            {fromSettings ? "← 設定へ戻る" : "← トップへ"}
           </Link>
         </div>
 

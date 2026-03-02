@@ -55,12 +55,12 @@ export function SettingsView({ displayName, iconUrl }: SettingsViewProps) {
         <h2 className="mb-3 text-sm font-medium text-zinc-500">法務情報</h2>
         <ul className="space-y-2 text-sm">
           <li>
-            <Link href="/terms" className="text-zinc-700 underline hover:text-zinc-900">
+            <Link href="/terms?from=settings" className="text-zinc-700 underline hover:text-zinc-900">
               利用規約
             </Link>
           </li>
           <li>
-            <Link href="/privacy" className="text-zinc-700 underline hover:text-zinc-900">
+            <Link href="/privacy?from=settings" className="text-zinc-700 underline hover:text-zinc-900">
               プライバシーポリシー
             </Link>
           </li>
