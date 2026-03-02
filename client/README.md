@@ -120,6 +120,14 @@ Strava は Webhook のコールバックに **公的な URL** を要求するた
 
 **H3 インデックスを自分で決めたい場合:** [H3 Geo](https://h3geo.org/docs/core-library/restable/) の「Lat/Lng to H3」で緯度・経度・Resolution 7 を指定するとインデックスが得られる。または Node で `require('h3-js').latLngToCell(35.6896, 139.6917, 7)` を実行してもよい。
 
+### Vercel デプロイで「Deploying outputs」の Internal Error が出る場合
+
+ビルドは成功するが「Deploying outputs」段階で `Error: We encountered an internal error. Please try again.` となる場合、サーバーレス関数のトレースサイズや Vercel 側の制限が原因の可能性がある。
+
+1. **ビルド出力の解析:** Vercel のプロジェクトで環境変数 **VERCEL_ANALYZE_BUILD_OUTPUT** を `1` に設定し、再デプロイする。ビルドログに関数ごとのサイズ（MB）と大きなファイル一覧が表示され、原因の切り分けに役立つ。[Vercel: Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)
+2. **ビルドキャッシュのクリア:** Vercel の **Project Settings → General → Build Cache** で「Clear Build Cache」を実行してから再デプロイする。
+3. 本リポジトリでは `next.config.js` の `experimental.outputFileTracingExcludes` で `/api/tiles` と `/api/groups/[id]/tiles` から `h3-js` の browser ビルド・ソースマップ等を除外しており、デプロイサイズの削減を図っている。
+
 ## データベース
 
 Strava OAuth ログインでは `users` テーブルを使用するため、[supabase/README.md](../supabase/README.md) に従い、初期マイグレーションを適用した状態にしておく。
