@@ -41,6 +41,14 @@ export function LoginView({ authUrl, errorMessage }: LoginViewProps) {
           トップへ戻る
         </Link>
       </div>
+      <footer className="mt-8 flex w-full max-w-sm justify-center gap-4 text-center text-xs text-zinc-400">
+        <Link href="/terms" className="hover:text-zinc-600">
+          利用規約
+        </Link>
+        <Link href="/privacy" className="hover:text-zinc-600">
+          プライバシーポリシー
+        </Link>
+      </footer>
     </main>
   );
 }

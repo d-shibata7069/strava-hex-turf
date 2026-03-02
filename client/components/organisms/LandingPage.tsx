@@ -1,5 +1,6 @@
 import { StravaConnectButton } from "@/components/atoms";
 import { ArrowRightIcon } from "@/components/ui";
+import Link from "next/link";
 
 /**
  * 未ログイン時に表示するランディングページ。
@@ -116,6 +117,21 @@ export function LandingPage() {
           />
         </div>
       </section>
+
+      {/* フッター: 法務リンク */}
+      <footer
+        className="border-t border-zinc-800/80 bg-zinc-950 px-4 py-6"
+        aria-label="フッター"
+      >
+        <div className="mx-auto flex max-w-5xl justify-center gap-6 text-center text-sm text-zinc-500">
+          <Link href="/terms" className="hover:text-zinc-300">
+            利用規約
+          </Link>
+          <Link href="/privacy" className="hover:text-zinc-300">
+            プライバシーポリシー
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 }

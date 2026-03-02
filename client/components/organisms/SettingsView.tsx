@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Avatar } from "@/components/atoms";
 
 export interface SettingsViewProps {
@@ -47,6 +48,23 @@ export function SettingsView({ displayName, iconUrl }: SettingsViewProps) {
       <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
         <h2 className="mb-3 text-sm font-medium text-zinc-500">通知設定</h2>
         <p className="text-sm text-zinc-400">（準備中）</p>
+      </section>
+
+      {/* 法務情報 */}
+      <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <h2 className="mb-3 text-sm font-medium text-zinc-500">法務情報</h2>
+        <ul className="space-y-2 text-sm">
+          <li>
+            <Link href="/terms?from=settings" className="text-zinc-700 underline hover:text-zinc-900">
+              利用規約
+            </Link>
+          </li>
+          <li>
+            <Link href="/privacy?from=settings" className="text-zinc-700 underline hover:text-zinc-900">
+              プライバシーポリシー
+            </Link>
+          </li>
+        </ul>
       </section>
 
       {/* Danger Zone */}
