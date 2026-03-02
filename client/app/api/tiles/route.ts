@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
+import {
+  tilesToGeoJSONFeatureCollection,
+  tilesToIconPointFeatureCollection,
+} from "@/lib/h3-geojson";
 
 /** GET /api/tiles: ログインユーザーが所属するグループのタイル一覧を返す（RLS相当をAPI側で実施） */
 export async function GET() {
@@ -33,7 +37,11 @@ export async function GET() {
 
   const groupIds = (memberships ?? []).map((m) => m.group_id);
   if (groupIds.length === 0) {
-    return NextResponse.json([]);
+    const empty = { type: "FeatureCollection" as const, features: [] };
+    return NextResponse.json({
+      tilesGeoJSON: empty,
+      iconPointsGeoJSON: empty,
+    });
   }
 
   const { data: tilesRaw, error: tilesError } = await supabase
@@ -87,5 +95,7 @@ export async function GET() {
     }
   );
 
-  return NextResponse.json(tiles);
+  const tilesGeoJSON = tilesToGeoJSONFeatureCollection(tiles);
+  const iconPointsGeoJSON = tilesToIconPointFeatureCollection(tiles);
+  return NextResponse.json({ tilesGeoJSON, iconPointsGeoJSON });
 }

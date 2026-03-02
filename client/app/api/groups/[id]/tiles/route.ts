@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { getSupabaseServer } from "@/lib/supabase";
+import {
+  tilesToGeoJSONFeatureCollection,
+  tilesToIconPointFeatureCollection,
+} from "@/lib/h3-geojson";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -101,5 +105,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
     }
   );
 
-  return NextResponse.json(tiles);
+  const tilesGeoJSON = tilesToGeoJSONFeatureCollection(tiles);
+  const iconPointsGeoJSON = tilesToIconPointFeatureCollection(tiles);
+  return NextResponse.json({ tilesGeoJSON, iconPointsGeoJSON });
 }
