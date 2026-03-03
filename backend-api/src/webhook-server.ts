@@ -12,7 +12,7 @@ import {
   processActivityDelete,
   createDefaultDeps,
 } from "./services/strava-webhook.js";
-import { decryptStravaToken } from "./utils/token-crypto.js";
+import { decryptStravaToken, encryptStravaToken } from "./utils/token-crypto.js";
 
 function loadEnvFromCwd(): void {
   const cwd = process.cwd();
@@ -38,7 +38,8 @@ function loadEnvFromCwd(): void {
 loadEnvFromCwd();
 
 const PORT = Number(process.env.PORT) || 3001;
-const PATH = "/webhook/activity";
+const PATH_WEBHOOK = "/webhook/activity";
+const PATH_USERS_SYNC = "/users/sync";
 
 function getSupabase() {
   const url =
@@ -47,7 +48,7 @@ function getSupabase() {
   return createClient(url, key);
 }
 
-function parseBody(req: IncomingMessage): Promise<{ object_id: number; owner_id: number; action?: string } | null> {
+function parseJsonBody<T>(req: IncomingMessage): Promise<T | null> {
   return new Promise((resolve) => {
     let data = "";
     req.on("data", (chunk) => {
@@ -55,20 +56,7 @@ function parseBody(req: IncomingMessage): Promise<{ object_id: number; owner_id:
     });
     req.on("end", () => {
       try {
-        const body = JSON.parse(data) as unknown;
-        if (
-          body &&
-          typeof (body as { object_id?: number }).object_id === "number" &&
-          typeof (body as { owner_id?: number }).owner_id === "number"
-        ) {
-          resolve({
-            object_id: (body as { object_id: number }).object_id,
-            owner_id: (body as { owner_id: number }).owner_id,
-            action: typeof (body as { action?: string }).action === "string" ? (body as { action: string }).action : undefined,
-          });
-        } else {
-          resolve(null);
-        }
+        resolve(data ? (JSON.parse(data) as T) : null);
       } catch {
         resolve(null);
       }
@@ -76,11 +64,90 @@ function parseBody(req: IncomingMessage): Promise<{ object_id: number; owner_id:
   });
 }
 
+function parseWebhookBody(req: IncomingMessage): Promise<{ object_id: number; owner_id: number; action?: string } | null> {
+  return parseJsonBody(req).then((body) => {
+    if (
+      body &&
+      typeof (body as { object_id?: number }).object_id === "number" &&
+      typeof (body as { owner_id?: number }).owner_id === "number"
+    ) {
+      return {
+        object_id: (body as { object_id: number }).object_id,
+        owner_id: (body as { owner_id: number }).owner_id,
+        action: typeof (body as { action?: string }).action === "string" ? (body as { action: string }).action : undefined,
+      };
+    }
+    return null;
+  });
+}
+
+/** POST /users/sync のリクエストボディ */
+interface UsersSyncBody {
+  strava_id: number;
+  access_token: string;
+  refresh_token: string;
+  display_name?: string;
+  profile_image_url?: string | null;
+  icon_url?: string | null;
+  strava_token_expires_at?: string | null;
+}
+
+async function handleUsersSync(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  const body = await parseJsonBody<UsersSyncBody>(req);
+  if (!body || typeof body.strava_id !== "number" || typeof body.access_token !== "string" || typeof body.refresh_token !== "string") {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Missing or invalid strava_id, access_token, refresh_token" }));
+    return;
+  }
+
+  const displayName = typeof body.display_name === "string" && body.display_name.trim() ? body.display_name.trim() : `User ${body.strava_id}`;
+  const iconUrl = body.profile_image_url ?? body.icon_url ?? null;
+  const expiresAt = typeof body.strava_token_expires_at === "string" && body.strava_token_expires_at ? body.strava_token_expires_at : null;
+
+  const encryptedAccess = encryptStravaToken(body.access_token);
+  const encryptedRefresh = encryptStravaToken(body.refresh_token);
+  if (!encryptedAccess || !encryptedRefresh) {
+    console.error("[webhook-server] users/sync: token encryption failed (STRAVA_TOKEN_ENCRYPTION_KEY required)");
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Token encryption failed" }));
+    return;
+  }
+
+  try {
+    const supabase = getSupabase();
+    const row: Record<string, unknown> = {
+      strava_id: body.strava_id,
+      display_name: displayName,
+      icon_url: iconUrl,
+      strava_access_token: encryptedAccess,
+      strava_refresh_token: encryptedRefresh,
+      strava_token_expires_at: expiresAt,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabase.from("users").upsert(row, { onConflict: "strava_id" });
+
+    if (error) {
+      console.error("[webhook-server] users/sync upsert error:", error);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: error.message }));
+      return;
+    }
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true }));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[webhook-server] users/sync error:", err);
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: msg }));
+  }
+}
+
 async function handlePost(
   req: IncomingMessage,
   res: ServerResponse
 ): Promise<void> {
-  const body = await parseBody(req);
+  const body = await parseWebhookBody(req);
   if (!body) {
     res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Missing or invalid object_id, owner_id" }));
@@ -159,14 +226,24 @@ function notFound(res: ServerResponse): void {
   res.end();
 }
 
+function getPath(url: string | undefined): string {
+  if (!url) return "";
+  const i = url.indexOf("?");
+  return i === -1 ? url : url.slice(0, i);
+}
+
 const server = createServer(async (req, res) => {
-  if (req.method === "POST" && req.url === PATH) {
+  const path = getPath(req.url);
+  if (req.method === "POST" && path === PATH_WEBHOOK) {
     await handlePost(req, res);
+  } else if (req.method === "POST" && path === PATH_USERS_SYNC) {
+    await handleUsersSync(req, res);
   } else {
     notFound(res);
   }
 });
 
 server.listen(PORT, () => {
-  console.log(`Webhook server listening on http://localhost:${PORT}${PATH}`);
+  console.log(`Webhook server listening on http://localhost:${PORT}${PATH_WEBHOOK}`);
+  console.log(`Users sync endpoint: http://localhost:${PORT}${PATH_USERS_SYNC}`);
 });
