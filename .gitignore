@@ -10,3 +10,4 @@ node_modules
 backend-api/dist
 batch/dist
 
+.vercel

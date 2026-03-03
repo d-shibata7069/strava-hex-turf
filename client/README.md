@@ -120,6 +120,20 @@ Strava は Webhook のコールバックに **公的な URL** を要求するた
 
 **H3 インデックスを自分で決めたい場合:** [H3 Geo](https://h3geo.org/docs/core-library/restable/) の「Lat/Lng to H3」で緯度・経度・Resolution 7 を指定するとインデックスが得られる。または Node で `require('h3-js').latLngToCell(35.6896, 139.6917, 7)` を実行してもよい。
 
+### Vercel デプロイで「Deploying outputs」の Internal Error が出る場合
+
+ビルドは成功するが「Deploying outputs」段階で `Error: We encountered an internal error. Please try again.` となる場合、サーバーレス関数に含まれるパッケージ（例: `h3-js` の WASM）が Vercel のデプロイパイプラインで問題を起こすことがある。
+
+本リポジトリでは **API ルートから `h3-js` を完全に外し、タイル→GeoJSON 変換はクライアント（Map コンポーネント）で行う**構成にしており、サーバーレス関数のトレースに `h3-js` が含まれないようにしている。`/api/tiles` と `/api/groups/[id]/tiles` は生のタイル配列（`TileRecord[]`）を返し、クライアントで `h3-geojson` により GeoJSON に変換して地図に表示する。また **`productionBrowserSourceMaps: false`** でソースマップを出さず出力を軽くし、**`client/vercel.json`** でビルド・インストールコマンドを明示している。
+
+それでも失敗する場合:
+
+1. **Vercel ダッシュボードで Root Directory を確認:** Project Settings → General で **Root Directory** が `client` になっていること（モノレポで client のみデプロイする場合）。
+2. **VERCEL_ANALYZE_BUILD_OUTPUT:** 環境変数に `VERCEL_ANALYZE_BUILD_OUTPUT=1` を設定して再デプロイし、ビルドログで出力サイズを確認する。
+3. **ビルドキャッシュのクリア:** Project Settings → General → Build Cache で「Clear Build Cache」を実行してから再デプロイする。
+4. **CLI で再現:** ローカルで `cd client && npx vercel build` のあと `npx vercel deploy --prebuilt` を実行し、同じエラーが出るか・別のメッセージが出ないか確認する。
+5. **Vercel サポート:** 上記で解決しない場合は [Vercel ヘルプ](https://vercel.com/help) から問い合わせ、失敗したデプロイの URL と時刻を伝えるとよい。[Vercel: Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)
+
 ## データベース
 
 Strava OAuth ログインでは `users` テーブルを使用するため、[supabase/README.md](../supabase/README.md) に従い、初期マイグレーションを適用した状態にしておく。

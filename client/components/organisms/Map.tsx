@@ -468,23 +468,23 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
           ? `/api/groups/${encodeURIComponent(groupId)}/tiles`
           : "/api/tiles";
       const res = await fetch(url, { credentials: "include" });
+      const data = await res.json();
       if (!res.ok) {
         if (res.status === 401) {
           setTiles([]);
           return;
         }
-        const data = (await res.json()) as { message?: string; detail?: string };
-        setFetchError(data.detail ?? data.message ?? t("tilesFetchError"));
+        const err = data as { message?: string; detail?: string };
+        setFetchError(err.detail ?? err.message ?? t("tilesFetchError"));
         setTiles([]);
         return;
       }
-      const data = (await res.json()) as TileRecord[];
       setTiles(Array.isArray(data) ? data : []);
     } catch {
       setFetchError(t("tilesFetchError"));
       setTiles([]);
     }
-  }, [groupId, initialTiles]);
+  }, [groupId, initialTiles, t]);
 
   useEffect(() => {
     if (initialTiles !== undefined) {
@@ -505,19 +505,19 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
         const res = await fetch(`/api/groups/${encodeURIComponent(groupId!)}/tiles`, {
           credentials: "include",
         });
+        const data = await res.json();
         if (!res.ok) {
           if (res.status === 401 || res.status === 403) {
             if (!cancelled) setTiles([]);
             return;
           }
-          const data = (await res.json()) as { message?: string; detail?: string };
+          const err = data as { message?: string; detail?: string };
           if (!cancelled) {
-            setFetchError(data.detail ?? data.message ?? t("tilesFetchError"));
+            setFetchError(err.detail ?? err.message ?? t("tilesFetchError"));
             setTiles([]);
           }
           return;
         }
-        const data = (await res.json()) as TileRecord[];
         if (!cancelled) setTiles(Array.isArray(data) ? data : []);
       } catch {
         if (!cancelled) {
@@ -531,7 +531,7 @@ export function Map({ groupId, initialTiles }: MapProps = {}) {
     return () => {
       cancelled = true;
     };
-  }, [groupId, initialTiles]);
+  }, [groupId, initialTiles, t]);
 
   useEffect(() => {
     if (initialTiles !== undefined || groupId == null) return;

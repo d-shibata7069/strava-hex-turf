@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import path from "path";
 
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
