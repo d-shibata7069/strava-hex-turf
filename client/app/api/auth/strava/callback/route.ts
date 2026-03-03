@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseServer } from "@/lib/supabase";
 import {
   createSessionToken,
   getSessionCookieOptions,
@@ -88,30 +87,53 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${baseRedirect}/login?error=token_encryption`);
   }
 
-  const supabase = getSupabaseServer();
-  const { data: user, error: upsertError } = await supabase
-    .from("users")
-    .upsert(
-      {
-        strava_id: athlete.id,
-        display_name: displayName,
-        icon_url: iconUrl,
-        strava_access_token: encryptedAccess,
-        strava_refresh_token: encryptedRefresh,
-        strava_token_expires_at: expiresAt,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "strava_id" }
-    )
-    .select("id")
-    .single();
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
+  if (!backendUrl) {
+    console.error("User sync failed: BACKEND_API_URL is not configured");
+    return NextResponse.redirect(`${baseRedirect}/login?error=config`);
+  }
 
-  if (upsertError || !user?.id) {
-    console.error("Supabase users upsert error:", upsertError);
+  const syncPayload = {
+    strava_id: athlete.id,
+    display_name: displayName,
+    icon_url: iconUrl,
+    strava_access_token: encryptedAccess,
+    strava_refresh_token: encryptedRefresh,
+    strava_token_expires_at: expiresAt,
+  };
+
+  let syncRes: Response;
+  try {
+    syncRes = await fetch(`${backendUrl}/users/sync`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(syncPayload),
+    });
+  } catch (e) {
+    console.error("User sync request failed:", e);
     return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
   }
 
-  const token = await createSessionToken(user.id);
+  if (!syncRes.ok) {
+    const text = await syncRes.text();
+    console.error("User sync failed:", syncRes.status, text);
+    return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
+  }
+
+  let syncData: { id?: string };
+  try {
+    syncData = (await syncRes.json()) as { id?: string };
+  } catch {
+    console.error("User sync: invalid JSON response");
+    return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
+  }
+
+  if (!syncData?.id) {
+    console.error("User sync: response missing id");
+    return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
+  }
+
+  const token = await createSessionToken(syncData.id);
   const response = NextResponse.redirect(baseRedirect);
   response.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
   return response;
