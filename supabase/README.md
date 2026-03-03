@@ -92,8 +92,26 @@ make db-push
 | `20260228000000_initial_schema.sql`                     | 初期スキーマ（users, groups, group_members, tiles 等）       |
 | `20260228100000_tiles_score_and_users_token.sql`        | tiles の score / last_updated_at、users の Strava トークン列 |
 | `20260301000000_ensure_tiles_score_and_users_token.sql` | 上記カラムの冪等な追加（履歴未適用・手動のみ環境の救済用）   |
+| `20250303120000_enforce_rls.sql`                        | RLS 一括有効化とポリシー定義（users / tiles / group_members 等） |
 
 3 本目は `ADD COLUMN IF NOT EXISTS` のため、既にカラムがある DB では何も変わらない。**「column tiles.score does not exist」が出た場合も、`make db-push` で未適用の 3 本目が走れば解消する。**
+
+## セキュリティ・RLSポリシー
+
+Anon Key 経由の不正な読み書きを防ぐため、対象テーブルで Row Level Security（RLS）を有効化している。**Service Role Key は RLS をバイパスする**ため、バックエンドのみが書き込みを行う想定。
+
+適用内容はマイグレーション `20250303120000_enforce_rls.sql` で定義されている。
+
+| テーブル | RLS | クライアント（Anon/Authenticated）で可能な操作 | 条件・備考 |
+| -------- | --- | ---------------------------------------------- | ---------- |
+| **users** | 有効 | SELECT, UPDATE | 自分の行のみ。条件: `auth.uid() = id`。INSERT/DELETE はポリシーなし（バックエンドのみ）。 |
+| **tiles** | 有効 | SELECT のみ | 全行読み取り可（`USING (true)`）。INSERT/UPDATE/DELETE はポリシーなしで、Service Role を持つバックエンドのみ書き込み可能。 |
+| **group_members** | 有効 | SELECT のみ | 自分が所属しているレコードのみ。条件: `auth.uid() = user_id`。書き込みはバックエンドのみ。 |
+| **groups** | 有効 | なし | ポリシーを付与していないため、Anon/Authenticated では行の参照・更新不可。必要ならバックエンド経由または別マイグレーションでポリシーを追加する。 |
+| **activity_logs** | 有効 | なし | 上記と同様。クライアントからの直接アクセスは不可。 |
+
+- 認証は Supabase Auth の `auth.uid()` を前提とする。
+- クライアントからは Anon Key または Authenticated セッションで接続し、上記ポリシーの範囲内でのみアクセスできる。
 
 ## トラブルシューティング
 
