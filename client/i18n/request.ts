@@ -8,8 +8,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? (requested as string)
     : routing.defaultLocale;
 
-  // サーバー環境で安全に動的インポート
-  const messages = (await import(`../messages/${locale}.json`)).default;
+  // 変数を含めずに直接文字列でインポートする
+  let messages;
+  if (locale === "en") {
+    messages = (await import("../messages/en.json")).default;
+  } else {
+    messages = (await import("../messages/ja.json")).default;
+  }
 
   return {
     locale,
