@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
   }
 
-  let syncData: { id?: string };
+  let syncData: { id?: string; should_run_initial_backfill?: boolean };
   try {
     syncData = (await syncRes.json()) as { id?: string };
   } catch {
@@ -123,6 +123,24 @@ export async function GET(request: NextRequest) {
   if (!syncData?.id) {
     console.error("User sync: response missing id");
     return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
+  }
+
+  if (syncData.should_run_initial_backfill === true) {
+    const internalBackfillApiKey = process.env.INTERNAL_BACKFILL_API_KEY ?? "";
+    if (!internalBackfillApiKey) {
+      console.error("Initial backfill request skipped: INTERNAL_BACKFILL_API_KEY is not configured");
+    } else {
+      void fetch(`${backendUrl}/users/initial-backfill`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-backfill-key": internalBackfillApiKey,
+        },
+        body: JSON.stringify({ strava_id: athlete.id }),
+      }).catch((e) => {
+        console.error("Initial backfill request failed:", e);
+      });
+    }
   }
 
   const token = await createSessionToken(syncData.id);

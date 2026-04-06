@@ -56,8 +56,33 @@ npm run openapi:lint
   - `profile_image_url` / `icon_url` (string | null, 任意): アイコン URL
   - `strava_token_expires_at` (string | null, 任意): トークン有効期限（ISO 8601）
 - **レスポンス**
-  - 成功: `200` + `{ "ok": true }`
+  - 成功: `200` + `{ "ok": true, "id": "uuid", "should_run_initial_backfill": true|false }`
   - 失敗: `400`（必須項目不足・不正）/ `500`（暗号化失敗・DB エラー） + `{ "error": "メッセージ" }`
+
+### POST /users/initial-backfill
+
+初回連携時のみ、対象ユーザーの過去7日分の Strava アクティビティを取り込み、タイル反映を実行する。
+このエンドポイントは内部実行専用で、`x-internal-backfill-key` ヘッダーが `INTERNAL_BACKFILL_API_KEY` と一致しない場合は `403` を返す。
+
+- **リクエストボディ（JSON）**
+  - `strava_id` (number, 必須): Strava の Athlete ID
+  - `base_time` (string, 任意): 取り込み基点時刻（ISO 8601）。未指定時はサーバー現在時刻。
+- **レスポンス**
+  - 成功（初回取り込み実行）: `200` + `{ "ok": true, "processed_activity_count": number, "base_time": "..." }`
+  - 成功（既に実行済み）: `200` + `{ "ok": true, "skipped": true }`
+  - 失敗: `400`（必須項目不足・不正）/ `403`（内部キー不一致）/ `404`（ユーザー未登録）/ `500` + `{ "error": "メッセージ" }`
+
+#### 動作確認用スクリプト（内部向け）
+
+リポジトリ直下の `scripts/run-initial-backfill.sh` で、基点時刻を指定してバックフィルを実行できる。
+
+```bash
+INTERNAL_BACKFILL_API_KEY=xxxxx BACKEND_API_URL=http://localhost:3001 \
+  ./scripts/run-initial-backfill.sh 123456 2026-04-06T00:00:00Z
+```
+
+- 第2引数（基点時刻）省略時は現在時刻（UTC）を使用。
+- 実行は内部キーが必要なため、一般ユーザーからは直接実行できない。
 
 ### POST /groups
 

@@ -10,14 +10,47 @@ const validBody: UsersSyncBody = {
   strava_token_expires_at: "2025-12-31T00:00:00Z",
 };
 
+function createSupabaseMock(options?: {
+  existingUser?: { id: string; initial_backfill_done_at: string | null } | null;
+  existingUserError?: string | null;
+  upsertData?: { id?: string } | null;
+  upsertError?: string | null;
+}) {
+  const existingUser = options?.existingUser ?? null;
+  const existingUserError = options?.existingUserError ?? null;
+  const upsertData = options?.upsertData ?? { id: "user-1" };
+  const upsertError = options?.upsertError ?? null;
+
+  const mockExistingMaybeSingle = vi
+    .fn()
+    .mockResolvedValue({ data: existingUser, error: existingUserError ? { message: existingUserError } : null });
+  const mockExistingEq = vi.fn(() => ({ maybeSingle: mockExistingMaybeSingle }));
+  const mockExistingSelect = vi.fn(() => ({ eq: mockExistingEq }));
+
+  const mockUpsertSingle = vi
+    .fn()
+    .mockResolvedValue({ data: upsertData, error: upsertError ? { message: upsertError } : null });
+  const mockUpsertSelect = vi.fn(() => ({ single: mockUpsertSingle }));
+  const mockUpsert = vi.fn(() => ({ select: mockUpsertSelect }));
+
+  const mockFrom = vi.fn((_table: string) => ({
+    select: mockExistingSelect,
+    upsert: mockUpsert,
+  }));
+
+  return {
+    supabase: { from: mockFrom },
+    mocks: {
+      mockFrom,
+      mockUpsert,
+    },
+  };
+}
+
 describe("runUsersSync", () => {
   it("必須項目が欠けている場合は 400", async () => {
     const encrypt = vi.fn((s: string) => `enc:${s}`);
-    const mockSingle = vi.fn().mockResolvedValue({ data: { id: "user-1" }, error: null });
-    const mockSelect = vi.fn(() => ({ single: mockSingle }));
-    const mockUpsert = vi.fn(() => ({ select: mockSelect }));
-    const mockFrom = vi.fn(() => ({ upsert: mockUpsert }));
-    const supabase = { from: mockFrom };
+    const { supabase } = createSupabaseMock();
 
     const missingStravaId = { ...validBody, strava_id: undefined } as unknown as UsersSyncBody;
     expect(await runUsersSync(supabase as never, missingStravaId, encrypt)).toEqual({
@@ -36,11 +69,7 @@ describe("runUsersSync", () => {
 
   it("暗号化が null を返す場合は 500", async () => {
     const encrypt = vi.fn(() => null);
-    const mockSingle = vi.fn().mockResolvedValue({ data: { id: "user-1" }, error: null });
-    const mockSelect = vi.fn(() => ({ single: mockSingle }));
-    const mockUpsert = vi.fn(() => ({ select: mockSelect }));
-    const mockFrom = vi.fn(() => ({ upsert: mockUpsert }));
-    const supabase = { from: mockFrom };
+    const { supabase } = createSupabaseMock();
 
     const result = await runUsersSync(supabase as never, validBody, encrypt);
     expect(result).toEqual({ ok: false, statusCode: 500, error: "Token encryption failed" });
@@ -48,15 +77,11 @@ describe("runUsersSync", () => {
 
   it("upsert 成功時は ok: true と id を返す", async () => {
     const encrypt = vi.fn((s: string) => `enc:${s}`);
-    const mockSingle = vi.fn().mockResolvedValue({ data: { id: "user-1" }, error: null });
-    const mockSelect = vi.fn(() => ({ single: mockSingle }));
-    const mockUpsert = vi.fn(() => ({ select: mockSelect }));
-    const mockFrom = vi.fn(() => ({ upsert: mockUpsert }));
-    const supabase = { from: mockFrom };
+    const { supabase, mocks } = createSupabaseMock();
 
     const result = await runUsersSync(supabase as never, validBody, encrypt);
-    expect(result).toEqual({ ok: true, id: "user-1" });
-    expect(mockUpsert).toHaveBeenCalledWith(
+    expect(result).toEqual({ ok: true, id: "user-1", should_run_initial_backfill: true });
+    expect(mocks.mockUpsert).toHaveBeenCalledWith(
       expect.objectContaining({
         strava_id: 12345,
         display_name: "Test User",
@@ -71,15 +96,11 @@ describe("runUsersSync", () => {
 
   it("display_name が空の場合は User {strava_id} になる", async () => {
     const encrypt = vi.fn((s: string) => `enc:${s}`);
-    const mockSingle = vi.fn().mockResolvedValue({ data: { id: "user-1" }, error: null });
-    const mockSelect = vi.fn(() => ({ single: mockSingle }));
-    const mockUpsert = vi.fn(() => ({ select: mockSelect }));
-    const mockFrom = vi.fn(() => ({ upsert: mockUpsert }));
-    const supabase = { from: mockFrom };
+    const { supabase, mocks } = createSupabaseMock();
     const body = { ...validBody, display_name: "", profile_image_url: null };
 
     await runUsersSync(supabase as never, body, encrypt);
-    expect(mockUpsert).toHaveBeenCalledWith(
+    expect(mocks.mockUpsert).toHaveBeenCalledWith(
       expect.objectContaining({ display_name: "User 12345" }),
       expect.any(Object)
     );
@@ -87,11 +108,7 @@ describe("runUsersSync", () => {
 
   it("Supabase upsert がエラーの場合は 500", async () => {
     const encrypt = vi.fn((s: string) => `enc:${s}`);
-    const mockSingle = vi.fn().mockResolvedValue({ data: null, error: { message: "DB error" } });
-    const mockSelect = vi.fn(() => ({ single: mockSingle }));
-    const mockUpsert = vi.fn(() => ({ select: mockSelect }));
-    const mockFrom = vi.fn(() => ({ upsert: mockUpsert }));
-    const supabase = { from: mockFrom };
+    const { supabase } = createSupabaseMock({ upsertData: null, upsertError: "DB error" });
 
     const result = await runUsersSync(supabase as never, validBody, encrypt);
     expect(result).toEqual({ ok: false, statusCode: 500, error: "DB error" });
@@ -99,11 +116,7 @@ describe("runUsersSync", () => {
 
   it("upsert は成功したが id が無い場合は 500", async () => {
     const encrypt = vi.fn((s: string) => `enc:${s}`);
-    const mockSingle = vi.fn().mockResolvedValue({ data: {}, error: null });
-    const mockSelect = vi.fn(() => ({ single: mockSingle }));
-    const mockUpsert = vi.fn(() => ({ select: mockSelect }));
-    const mockFrom = vi.fn(() => ({ upsert: mockUpsert }));
-    const supabase = { from: mockFrom };
+    const { supabase } = createSupabaseMock({ upsertData: {}, upsertError: null });
 
     const result = await runUsersSync(supabase as never, validBody, encrypt);
     expect(result).toEqual({
@@ -111,5 +124,25 @@ describe("runUsersSync", () => {
       statusCode: 500,
       error: "users upsert succeeded but id was missing",
     });
+  });
+
+  it("既存ユーザーで initial_backfill_done_at がある場合 should_run_initial_backfill は false", async () => {
+    const encrypt = vi.fn((s: string) => `enc:${s}`);
+    const { supabase } = createSupabaseMock({
+      existingUser: { id: "user-1", initial_backfill_done_at: "2026-01-01T00:00:00Z" },
+    });
+
+    const result = await runUsersSync(supabase as never, validBody, encrypt);
+    expect(result).toEqual({ ok: true, id: "user-1", should_run_initial_backfill: false });
+  });
+
+  it("initial_backfill_done_at カラム未適用環境でも users/sync は失敗せず、初回バックフィルは無効化する", async () => {
+    const encrypt = vi.fn((s: string) => `enc:${s}`);
+    const { supabase } = createSupabaseMock({
+      existingUserError: 'column users.initial_backfill_done_at does not exist',
+    });
+
+    const result = await runUsersSync(supabase as never, validBody, encrypt);
+    expect(result).toEqual({ ok: true, id: "user-1", should_run_initial_backfill: false });
   });
 });
