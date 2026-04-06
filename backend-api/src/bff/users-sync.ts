@@ -19,6 +19,12 @@ export type UsersSyncResult =
 
 export type EncryptFn = (plaintext: string) => string | null;
 
+function isMissingInitialBackfillColumnError(err: { message?: string; details?: string; hint?: string } | null): boolean {
+  if (!err) return false;
+  const message = `${err.message ?? ""} ${err.details ?? ""} ${err.hint ?? ""}`;
+  return message.includes("initial_backfill_done_at") && message.includes("column");
+}
+
 export async function runUsersSync(
   supabase: SupabaseClient,
   body: UsersSyncBody,
@@ -69,17 +75,18 @@ export async function runUsersSync(
     .eq("strava_id", body.strava_id)
     .maybeSingle();
 
-  if (existingUserError) {
+  if (existingUserError && !isMissingInitialBackfillColumnError(existingUserError)) {
     return { ok: false, statusCode: 500, error: existingUserError.message };
   }
-  const shouldRunInitialBackfill =
-    !existingUser ||
-    !(
-      typeof (existingUser as { initial_backfill_done_at?: string | null })
-        .initial_backfill_done_at === "string" &&
-      (existingUser as { initial_backfill_done_at?: string | null })
-        .initial_backfill_done_at
-    );
+  const shouldRunInitialBackfill = isMissingInitialBackfillColumnError(existingUserError)
+    ? false
+    : !existingUser ||
+      !(
+        typeof (existingUser as { initial_backfill_done_at?: string | null })
+          .initial_backfill_done_at === "string" &&
+        (existingUser as { initial_backfill_done_at?: string | null })
+          .initial_backfill_done_at
+      );
 
   const { data, error } = await supabase
     .from("users")
