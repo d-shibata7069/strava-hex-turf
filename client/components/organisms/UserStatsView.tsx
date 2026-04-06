@@ -32,8 +32,26 @@ const RANGE_DAYS: Record<RangeKey, number> = {
 };
 
 function formatDateLabel(dateStr: string): string {
-  const d = new Date(dateStr);
+  const d = parseDateOnly(dateStr);
   return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function parseDateOnly(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map((v) => Number(v));
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function toDateOnlyString(date: Date): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function addDays(date: Date, days: number): Date {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
 }
 
 export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName }: UserStatsViewProps) {
@@ -73,12 +91,33 @@ export function UserStatsView({ groupId, userId, displayName, iconUrl, groupName
   }, [fetchStats]);
 
   const days = RANGE_DAYS[range];
-  const chartData = stats
-    .slice(-days)
-    .map((d) => ({
-      ...d,
-      dateLabel: formatDateLabel(d.record_date),
-    }));
+  const today = new Date();
+  const endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const startDate = addDays(endDate, -(days - 1));
+
+  const statByDate = new Map(stats.map((d) => [d.record_date, d]));
+  const sortedStats = [...stats].sort((a, b) => a.record_date.localeCompare(b.record_date));
+  let cursor = 0;
+  let lastKnown: UserGroupDailyStat | null = null;
+
+  const chartData: Array<UserGroupDailyStat & { dateLabel: string }> = [];
+  for (let d = startDate; d <= endDate; d = addDays(d, 1)) {
+    const key = toDateOnlyString(d);
+    const exact = statByDate.get(key);
+
+    while (cursor < sortedStats.length && sortedStats[cursor].record_date <= key) {
+      lastKnown = sortedStats[cursor];
+      cursor += 1;
+    }
+
+    const source = exact ?? lastKnown;
+    chartData.push({
+      record_date: key,
+      tile_count: source?.tile_count ?? 0,
+      total_score: source?.total_score ?? 0,
+      dateLabel: formatDateLabel(key),
+    });
+  }
 
   return (
     <div className="space-y-6">
