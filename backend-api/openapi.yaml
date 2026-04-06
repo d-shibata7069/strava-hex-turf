@@ -1,0 +1,287 @@
+openapi: 3.1.0
+info:
+  title: Strava Hex Turf Backend API
+  version: 1.0.0
+  license:
+    name: UNLICENSED
+  description: |
+    `backend-api/src/webhook-server.ts` で提供する HTTP API の仕様。
+servers:
+  - url: http://localhost:3001
+    description: Local webhook server
+paths:
+  /webhook/activity:
+    post:
+      summary: Process Strava activity webhook event
+      description: |
+        Strava から受け取ったアクティビティイベントを処理する。
+        `action=delete` の場合は削除処理、それ以外は作成/更新処理を実行する。
+      operationId: postWebhookActivity
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookActivityRequest'
+      responses:
+        '200':
+          description: Processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Processing failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/sync:
+    post:
+      summary: Upsert user profile and Strava tokens
+      operationId: postUsersSync
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersSyncRequest'
+      responses:
+        '200':
+          description: Upsert succeeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersSyncSuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /groups:
+    post:
+      summary: Create group and add owner as member
+      operationId: postGroups
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupsCreateRequest'
+      responses:
+        '200':
+          description: Group created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupsCreateSuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Invite code generation conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /groups/join:
+    post:
+      summary: Join group by invite code
+      operationId: postGroupsJoin
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupsJoinRequest'
+      responses:
+        '200':
+          description: Joined successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupsJoinSuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Group not found by invite code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Already joined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    WebhookActivityRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - object_id
+        - owner_id
+      properties:
+        object_id:
+          type: integer
+          description: Strava activity id
+        owner_id:
+          type: integer
+          description: Strava athlete id
+        action:
+          type: string
+          description: delete の場合は削除イベントとして扱う
+          enum: [create, update, delete]
+
+    UsersSyncRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - strava_id
+        - access_token
+        - refresh_token
+      properties:
+        strava_id:
+          type: integer
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        display_name:
+          type: [string, "null"]
+        profile_image_url:
+          type: [string, "null"]
+        icon_url:
+          type: [string, "null"]
+        strava_token_expires_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+
+    GroupsCreateRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - user_id
+      properties:
+        name:
+          type: string
+        user_id:
+          type: string
+          format: uuid
+
+    GroupsJoinRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - invite_code
+        - user_id
+      properties:
+        invite_code:
+          type: string
+          pattern: '^[A-Fa-f0-9]{8}$'
+        user_id:
+          type: string
+          format: uuid
+
+    OkResponse:
+      type: object
+      additionalProperties: false
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+
+    UsersSyncSuccessResponse:
+      type: object
+      additionalProperties: false
+      required: [ok, id]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        id:
+          type: string
+          format: uuid
+
+    GroupsCreateSuccessResponse:
+      type: object
+      additionalProperties: false
+      required: [ok, group_id, name, invite_code]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        group_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        invite_code:
+          type: string
+          pattern: '^[A-Fa-f0-9]{8}$'
+
+    GroupsJoinSuccessResponse:
+      type: object
+      additionalProperties: false
+      required: [ok, group_id]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        group_id:
+          type: string
+          format: uuid
+
+    ErrorResponse:
+      type: object
+      additionalProperties: true
+      required: [error]
+      properties:
+        error:
+          type: string
