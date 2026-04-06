@@ -135,7 +135,6 @@ describe("runUsersSync", () => {
     const result = await runUsersSync(supabase as never, validBody, encrypt);
     expect(result).toEqual({ ok: true, id: "user-1", should_run_initial_backfill: false });
   });
-
   it("initial_backfill_done_at カラム未適用環境でも users/sync は失敗せず、初回バックフィルは無効化する", async () => {
     const encrypt = vi.fn((s: string) => `enc:${s}`);
     const { supabase } = createSupabaseMock({
