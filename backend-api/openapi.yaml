@@ -80,6 +80,13 @@ paths:
       summary: Backfill user's activities for past 7 days only once
       operationId: postUsersInitialBackfill
       security: []
+      parameters:
+        - in: header
+          name: x-internal-backfill-key
+          required: true
+          schema:
+            type: string
+          description: INTERNAL_BACKFILL_API_KEY と一致する内部キー
       requestBody:
         required: true
         content:
@@ -101,6 +108,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -246,6 +259,12 @@ components:
       properties:
         strava_id:
           type: integer
+        base_time:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+          description: 取り込み基点時刻（未指定時はサーバ現在時刻）
 
     GroupsCreateRequest:
       type: object
@@ -309,6 +328,9 @@ components:
           type: boolean
         processed_activity_count:
           type: integer
+        base_time:
+          type: string
+          format: date-time
 
     GroupsCreateSuccessResponse:
       type: object

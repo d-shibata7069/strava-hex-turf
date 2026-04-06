@@ -116,9 +116,9 @@ async function handleUsersSync(req: IncomingMessage, res: ServerResponse): Promi
   }
 }
 
-async function fetchRecentActivityIds(accessToken: string, days: number): Promise<number[]> {
-  const nowSec = Math.floor(Date.now() / 1000);
-  const afterSec = nowSec - days * 24 * 60 * 60;
+async function fetchRecentActivityIds(accessToken: string, days: number, baseTime: Date): Promise<number[]> {
+  const baseSec = Math.floor(baseTime.getTime() / 1000);
+  const afterSec = baseSec - days * 24 * 60 * 60;
   const perPage = 200;
   let page = 1;
   const ids: number[] = [];
@@ -149,10 +149,24 @@ async function fetchRecentActivityIds(accessToken: string, days: number): Promis
 }
 
 async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerResponse): Promise<void> {
-  const body = await parseJsonBody<{ strava_id?: number }>(req);
+  const expectedKey = process.env.INTERNAL_BACKFILL_API_KEY ?? "";
+  const requestKey = req.headers["x-internal-backfill-key"];
+  if (!expectedKey || requestKey !== expectedKey) {
+    res.writeHead(403, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Forbidden" }));
+    return;
+  }
+
+  const body = await parseJsonBody<{ strava_id?: number; base_time?: string }>(req);
   if (!body || typeof body.strava_id !== "number") {
     res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Missing or invalid strava_id" }));
+    return;
+  }
+  const baseTime = body.base_time ? new Date(body.base_time) : new Date();
+  if (Number.isNaN(baseTime.getTime())) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Missing or invalid base_time" }));
     return;
   }
 
@@ -198,7 +212,7 @@ async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerRespo
   }
 
   try {
-    const activityIds = await fetchRecentActivityIds(token, 7);
+    const activityIds = await fetchRecentActivityIds(token, 7, baseTime);
     const deps = createDefaultDeps(supabase, decryptStravaToken);
     for (const activityId of activityIds) {
       const result = await processActivityEvent(activityId, body.strava_id, deps);
@@ -213,7 +227,13 @@ async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerRespo
     if (updateError) throw new Error(updateError.message);
 
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ ok: true, processed_activity_count: activityIds.length }));
+    res.end(
+      JSON.stringify({
+        ok: true,
+        processed_activity_count: activityIds.length,
+        base_time: baseTime.toISOString(),
+      })
+    );
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[webhook-server] users/initial-backfill error:", err);
