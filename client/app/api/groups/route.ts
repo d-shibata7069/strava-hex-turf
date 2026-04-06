@@ -1,19 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { randomBytes } from "crypto";
 import { getSessionUserId } from "@/lib/session";
-import { getSupabaseServer } from "@/lib/supabase";
-
-const INVITE_CODE_BYTES = 4; // 8 hex chars
-const MAX_RETRIES = 5;
-
-function generateInviteCode(): string {
-  return randomBytes(INVITE_CODE_BYTES).toString("hex");
-}
 
 /**
  * POST /api/groups
- * グループを新規作成し、作成者を group_members に追加する。
- * 招待コードはサーバーで自動生成する（Body: { name: string } のみ）。
+ * グループ新規作成をバックエンドAPI (BFF) に委譲する。
+ * Body: { name: string } のみ。BFF へは { name, user_id } を送信。
  */
 export async function POST(request: NextRequest) {
   const userId = await getSessionUserId();
@@ -43,52 +34,41 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const supabase = getSupabaseServer();
-  let lastError: unknown = null;
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
+  if (!backendUrl) {
+    console.error("POST /api/groups: BACKEND_API_URL is not configured");
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "サーバー設定エラーです" },
+      { status: 500 }
+    );
+  }
 
-  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-    const inviteCode = generateInviteCode();
-    const { data: newGroup, error: insertGroupError } = await supabase
-      .from("groups")
-      .insert({ name, invite_code: inviteCode })
-      .select("id, name, invite_code")
-      .single();
+  try {
+    const res = await fetch(`${backendUrl}/groups`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, user_id: userId }),
+    });
 
-    if (!insertGroupError) {
-      const { error: insertMemberError } = await supabase
-        .from("group_members")
-        .insert({ group_id: newGroup.id, user_id: userId });
+    const data = await res.json().catch(() => ({}));
 
-      if (insertMemberError) {
-        console.error("group_members insert error:", insertMemberError);
-        return NextResponse.json(
-          { error: "Internal Server Error", message: "メンバー登録に失敗しました" },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({
-        ok: true,
-        group_id: newGroup.id,
-        name: newGroup.name,
-        invite_code: newGroup.invite_code,
-      });
+    if (!res.ok) {
+      const message =
+        typeof data?.message === "string"
+          ? data.message
+          : "グループの作成に失敗しました";
+      return NextResponse.json(
+        { error: data?.error ?? "Internal Server Error", message },
+        { status: res.status }
+      );
     }
 
-    if (insertGroupError.code === "23505") {
-      lastError = insertGroupError;
-      continue;
-    }
-    console.error("groups insert error:", insertGroupError);
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error("POST /api/groups: BFF request failed:", e);
     return NextResponse.json(
       { error: "Internal Server Error", message: "グループの作成に失敗しました" },
       { status: 500 }
     );
   }
-
-  console.error("groups insert conflict after retries:", lastError);
-  return NextResponse.json(
-    { error: "Conflict", message: "招待コードの生成に失敗しました。しばらくしてから再試行してください。" },
-    { status: 409 }
-  );
 }
