@@ -42,6 +42,7 @@ loadEnvFromCwd();
 const PORT = Number(process.env.PORT) || 3001;
 const PATH_WEBHOOK = "/webhook/activity";
 const PATH_USERS_SYNC = "/users/sync";
+const PATH_USERS_INITIAL_BACKFILL = "/users/initial-backfill";
 const PATH_GROUPS = "/groups";
 const PATH_GROUPS_JOIN = "/groups/join";
 
@@ -96,7 +97,13 @@ async function handleUsersSync(req: IncomingMessage, res: ServerResponse): Promi
     const result = await runUsersSync(getSupabase(), body, encryptStravaToken);
     if (result.ok) {
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ ok: true, id: result.id }));
+      res.end(
+        JSON.stringify({
+          ok: true,
+          id: result.id,
+          should_run_initial_backfill: result.should_run_initial_backfill,
+        })
+      );
       return;
     }
     res.writeHead(result.statusCode, { "Content-Type": "application/json" });
@@ -104,6 +111,112 @@ async function handleUsersSync(req: IncomingMessage, res: ServerResponse): Promi
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[webhook-server] users/sync error:", err);
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: msg }));
+  }
+}
+
+async function fetchRecentActivityIds(accessToken: string, days: number): Promise<number[]> {
+  const nowSec = Math.floor(Date.now() / 1000);
+  const afterSec = nowSec - days * 24 * 60 * 60;
+  const perPage = 200;
+  let page = 1;
+  const ids: number[] = [];
+
+  while (true) {
+    const params = new URLSearchParams({
+      after: String(afterSec),
+      per_page: String(perPage),
+      page: String(page),
+    });
+    const res = await fetch(`https://www.strava.com/api/v3/athlete/activities?${params.toString()}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Strava athlete activities API ${res.status}: ${text}`);
+    }
+    const rows = (await res.json()) as Array<{ id?: number }>;
+    const pageIds = rows
+      .map((row) => row.id)
+      .filter((id): id is number => typeof id === "number");
+    ids.push(...pageIds);
+    if (rows.length < perPage) break;
+    page += 1;
+  }
+
+  return ids;
+}
+
+async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  const body = await parseJsonBody<{ strava_id?: number }>(req);
+  if (!body || typeof body.strava_id !== "number") {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Missing or invalid strava_id" }));
+    return;
+  }
+
+  const supabase = getSupabase();
+  const { data: user, error: userError } = await supabase
+    .from("users")
+    .select("id, strava_access_token, initial_backfill_done_at")
+    .eq("strava_id", body.strava_id)
+    .maybeSingle();
+
+  if (userError) {
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: userError.message }));
+    return;
+  }
+  if (!user) {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "user not found" }));
+    return;
+  }
+
+  const userRow = user as {
+    id: string;
+    strava_access_token: string | null;
+    initial_backfill_done_at: string | null;
+  };
+  if (userRow.initial_backfill_done_at) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true, skipped: true }));
+    return;
+  }
+  if (!userRow.strava_access_token) {
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "user has no strava_access_token" }));
+    return;
+  }
+
+  const token = decryptStravaToken(userRow.strava_access_token);
+  if (!token) {
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "strava_access_token decryption failed" }));
+    return;
+  }
+
+  try {
+    const activityIds = await fetchRecentActivityIds(token, 7);
+    const deps = createDefaultDeps(supabase, decryptStravaToken);
+    for (const activityId of activityIds) {
+      const result = await processActivityEvent(activityId, body.strava_id, deps);
+      if (result.ok || result.reason === "activity has no map.summary_polyline") continue;
+      throw new Error(result.reason);
+    }
+
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ initial_backfill_done_at: new Date().toISOString() })
+      .eq("id", userRow.id);
+    if (updateError) throw new Error(updateError.message);
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true, processed_activity_count: activityIds.length }));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[webhook-server] users/initial-backfill error:", err);
     res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: msg }));
   }
@@ -265,6 +378,8 @@ const server = createServer(async (req, res) => {
     await handlePost(req, res);
   } else if (req.method === "POST" && path === PATH_USERS_SYNC) {
     await handleUsersSync(req, res);
+  } else if (req.method === "POST" && path === PATH_USERS_INITIAL_BACKFILL) {
+    await handleUsersInitialBackfill(req, res);
   } else if (req.method === "POST" && path === PATH_GROUPS) {
     await handleGroupsCreate(req, res);
   } else if (req.method === "POST" && path === PATH_GROUPS_JOIN) {
@@ -277,5 +392,6 @@ const server = createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Webhook server listening on http://localhost:${PORT}${PATH_WEBHOOK}`);
   console.log(`Users sync: http://localhost:${PORT}${PATH_USERS_SYNC}`);
+  console.log(`Users initial backfill: http://localhost:${PORT}${PATH_USERS_INITIAL_BACKFILL}`);
   console.log(`Groups: http://localhost:${PORT}${PATH_GROUPS}, http://localhost:${PORT}${PATH_GROUPS_JOIN}`);
 });

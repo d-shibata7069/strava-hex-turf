@@ -75,6 +75,43 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /users/initial-backfill:
+    post:
+      summary: Backfill user's activities for past 7 days only once
+      operationId: postUsersInitialBackfill
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersInitialBackfillRequest'
+      responses:
+        '200':
+          description: Backfill processed (or skipped if already done)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersInitialBackfillSuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /groups:
     post:
       summary: Create group and add owner as member
@@ -201,6 +238,15 @@ components:
               format: date-time
             - type: "null"
 
+    UsersInitialBackfillRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - strava_id
+      properties:
+        strava_id:
+          type: integer
+
     GroupsCreateRequest:
       type: object
       additionalProperties: false
@@ -240,7 +286,7 @@ components:
     UsersSyncSuccessResponse:
       type: object
       additionalProperties: false
-      required: [ok, id]
+      required: [ok, id, should_run_initial_backfill]
       properties:
         ok:
           type: boolean
@@ -248,6 +294,21 @@ components:
         id:
           type: string
           format: uuid
+        should_run_initial_backfill:
+          type: boolean
+
+    UsersInitialBackfillSuccessResponse:
+      type: object
+      additionalProperties: true
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        skipped:
+          type: boolean
+        processed_activity_count:
+          type: integer
 
     GroupsCreateSuccessResponse:
       type: object

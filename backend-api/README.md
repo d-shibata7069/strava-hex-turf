@@ -56,8 +56,19 @@ npm run openapi:lint
   - `profile_image_url` / `icon_url` (string | null, 任意): アイコン URL
   - `strava_token_expires_at` (string | null, 任意): トークン有効期限（ISO 8601）
 - **レスポンス**
-  - 成功: `200` + `{ "ok": true }`
+  - 成功: `200` + `{ "ok": true, "id": "uuid", "should_run_initial_backfill": true|false }`
   - 失敗: `400`（必須項目不足・不正）/ `500`（暗号化失敗・DB エラー） + `{ "error": "メッセージ" }`
+
+### POST /users/initial-backfill
+
+初回連携時のみ、対象ユーザーの過去7日分の Strava アクティビティを取り込み、タイル反映を実行する。
+
+- **リクエストボディ（JSON）**
+  - `strava_id` (number, 必須): Strava の Athlete ID
+- **レスポンス**
+  - 成功（初回取り込み実行）: `200` + `{ "ok": true, "processed_activity_count": number }`
+  - 成功（既に実行済み）: `200` + `{ "ok": true, "skipped": true }`
+  - 失敗: `400`（必須項目不足・不正）/ `404`（ユーザー未登録）/ `500` + `{ "error": "メッセージ" }`
 
 ### POST /groups
 
