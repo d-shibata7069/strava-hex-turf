@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseServer } from "@/lib/supabase";
 import {
   createSessionToken,
   getSessionCookieOptions,
   SESSION_COOKIE_NAME,
 } from "@/lib/session";
-import { encryptStravaToken } from "@/lib/strava-token-crypto";
 
 const STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
 
@@ -81,37 +79,53 @@ export async function GET(request: NextRequest) {
   const iconUrl = athlete.profile ?? athlete.profile_medium ?? null;
   const expiresAt = tokenData.expires_at != null ? new Date(tokenData.expires_at * 1000).toISOString() : null;
 
-  const encryptedAccess = encryptStravaToken(tokenData.access_token);
-  const encryptedRefresh = encryptStravaToken(tokenData.refresh_token);
-  if (!encryptedAccess || !encryptedRefresh) {
-    console.error("Strava token encryption failed: STRAVA_TOKEN_ENCRYPTION_KEY is required");
-    return NextResponse.redirect(`${baseRedirect}/login?error=token_encryption`);
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
+  if (!backendUrl) {
+    console.error("User sync failed: BACKEND_API_URL is not configured");
+    return NextResponse.redirect(`${baseRedirect}/login?error=config`);
   }
 
-  const supabase = getSupabaseServer();
-  const { data: user, error: upsertError } = await supabase
-    .from("users")
-    .upsert(
-      {
-        strava_id: athlete.id,
-        display_name: displayName,
-        icon_url: iconUrl,
-        strava_access_token: encryptedAccess,
-        strava_refresh_token: encryptedRefresh,
-        strava_token_expires_at: expiresAt,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "strava_id" }
-    )
-    .select("id")
-    .single();
+  const syncPayload = {
+    strava_id: athlete.id,
+    access_token: tokenData.access_token,
+    refresh_token: tokenData.refresh_token,
+    display_name: displayName,
+    profile_image_url: iconUrl,
+    strava_token_expires_at: expiresAt,
+  };
 
-  if (upsertError || !user?.id) {
-    console.error("Supabase users upsert error:", upsertError);
+  let syncRes: Response;
+  try {
+    syncRes = await fetch(`${backendUrl}/users/sync`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(syncPayload),
+    });
+  } catch (e) {
+    console.error("User sync request failed:", e);
     return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
   }
 
-  const token = await createSessionToken(user.id);
+  if (!syncRes.ok) {
+    const text = await syncRes.text();
+    console.error("User sync failed:", syncRes.status, text);
+    return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
+  }
+
+  let syncData: { id?: string };
+  try {
+    syncData = (await syncRes.json()) as { id?: string };
+  } catch {
+    console.error("User sync: invalid JSON response");
+    return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
+  }
+
+  if (!syncData?.id) {
+    console.error("User sync: response missing id");
+    return NextResponse.redirect(`${baseRedirect}/login?error=upsert`);
+  }
+
+  const token = await createSessionToken(syncData.id);
   const response = NextResponse.redirect(baseRedirect);
   response.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
   return response;

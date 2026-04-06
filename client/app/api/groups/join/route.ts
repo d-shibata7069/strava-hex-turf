@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
-import { getSupabaseServer } from "@/lib/supabase";
 
 /**
  * POST /api/groups/join
- * 招待コードでグループに参加し、group_members にレコードを追加する。
- * Body: { invite_code: string }
+ * 招待コードでグループ参加をバックエンドAPI (BFF) に委譲する。
+ * Body: { invite_code: string }。BFF へは { invite_code, user_id } を送信。
  */
 export async function POST(request: NextRequest) {
   const userId = await getSessionUserId();
@@ -35,47 +34,41 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const supabase = getSupabaseServer();
-
-  const { data: group, error: groupError } = await supabase
-    .from("groups")
-    .select("id")
-    .eq("invite_code", inviteCode)
-    .maybeSingle();
-
-  if (groupError) {
-    console.error("groups fetch error:", groupError);
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
+  if (!backendUrl) {
+    console.error("POST /api/groups/join: BACKEND_API_URL is not configured");
     return NextResponse.json(
-      { error: "Internal Server Error", message: "グループの取得に失敗しました" },
+      { error: "Internal Server Error", message: "サーバー設定エラーです" },
       { status: 500 }
     );
   }
 
-  if (!group?.id) {
-    return NextResponse.json(
-      { error: "Not Found", message: "招待コードに一致するグループがありません" },
-      { status: 404 }
-    );
-  }
+  try {
+    const res = await fetch(`${backendUrl}/groups/join`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ invite_code: inviteCode, user_id: userId }),
+    });
 
-  const { error: insertError } = await supabase.from("group_members").insert({
-    group_id: group.id,
-    user_id: userId,
-  });
+    const data = await res.json().catch(() => ({}));
 
-  if (insertError) {
-    if (insertError.code === "23505") {
+    if (!res.ok) {
+      const message =
+        typeof data?.message === "string"
+          ? data.message
+          : "参加処理に失敗しました";
       return NextResponse.json(
-        { error: "Conflict", message: "すでにこのグループに参加しています" },
-        { status: 409 }
+        { error: data?.error ?? "Internal Server Error", message },
+        { status: res.status }
       );
     }
-    console.error("group_members insert error:", insertError);
+
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error("POST /api/groups/join: BFF request failed:", e);
     return NextResponse.json(
       { error: "Internal Server Error", message: "参加処理に失敗しました" },
       { status: 500 }
     );
   }
-
-  return NextResponse.json({ ok: true, group_id: group.id });
 }
