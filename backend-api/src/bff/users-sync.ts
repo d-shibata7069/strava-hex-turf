@@ -14,7 +14,7 @@ export interface UsersSyncBody {
 }
 
 export type UsersSyncResult =
-  | { ok: true; id: string }
+  | { ok: true; id: string; should_run_initial_backfill: boolean }
   | { ok: false; statusCode: number; error: string };
 
 export type EncryptFn = (plaintext: string) => string | null;
@@ -63,6 +63,24 @@ export async function runUsersSync(
     updated_at: new Date().toISOString(),
   };
 
+  const { data: existingUser, error: existingUserError } = await supabase
+    .from("users")
+    .select("id, initial_backfill_done_at")
+    .eq("strava_id", body.strava_id)
+    .maybeSingle();
+
+  if (existingUserError) {
+    return { ok: false, statusCode: 500, error: existingUserError.message };
+  }
+  const shouldRunInitialBackfill =
+    !existingUser ||
+    !(
+      typeof (existingUser as { initial_backfill_done_at?: string | null })
+        .initial_backfill_done_at === "string" &&
+      (existingUser as { initial_backfill_done_at?: string | null })
+        .initial_backfill_done_at
+    );
+
   const { data, error } = await supabase
     .from("users")
     .upsert(row, { onConflict: "strava_id" })
@@ -75,5 +93,5 @@ export async function runUsersSync(
   if (!data?.id || typeof data.id !== "string") {
     return { ok: false, statusCode: 500, error: "users upsert succeeded but id was missing" };
   }
-  return { ok: true, id: data.id };
+  return { ok: true, id: data.id, should_run_initial_backfill: shouldRunInitialBackfill };
 }
