@@ -25,6 +25,21 @@ npm install
 - デフォルトで `http://localhost:3001/webhook/activity` で待ち受け（`PORT` 環境変数で変更可）。
 - **環境変数:** 起動時に **backend-api 直下の `.env.local` または `.env`** を自動読み込みする。`SUPABASE_URL`（または `NEXT_PUBLIC_SUPABASE_URL`）と `SUPABASE_SERVICE_ROLE_KEY` が必須。client で Strava トークンを暗号化して保存している場合は、復号用に **`STRAVA_TOKEN_ENCRYPTION_KEY`** を client と同一の値で設定する（未設定なら DB の平文トークンをそのまま使用）。`backend-api/.env.example` をコピーして `backend-api/.env.local` を作成し、値を設定する。
 
+## OpenAPI 仕様
+
+BFF/Webhook エンドポイントの仕様は `backend-api/openapi.yaml` で管理する。
+
+### ローカルでの検証
+
+```bash
+cd backend-api
+npm install
+npm run openapi:lint
+```
+
+- 構文エラー・参照不整合がある場合は `openapi:lint` が失敗する。
+- CI でも同じコマンドを実行し、仕様ファイルの破損を防ぐ。
+
 ## BFF エンドポイント（Backend For Frontend）
 
 フロントエンドからの直接 DB 操作を廃止し、バックエンド経由で行うための API。いずれも `POST`、Content-Type: `application/json`。同一の Webhook サーバー（`npm run webhook-server`）で待ち受ける。

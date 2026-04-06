@@ -7,7 +7,8 @@
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "webhook-server": "node dist/webhook-server.js"
+    "webhook-server": "node dist/webhook-server.js",
+    "openapi:lint": "npx --yes @redocly/cli@1.27.1 lint openapi.yaml"
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",

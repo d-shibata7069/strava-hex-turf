@@ -1,0 +1,40 @@
+name: OpenAPI Lint
+
+on:
+  pull_request:
+    paths:
+      - "backend-api/openapi.yaml"
+      - "backend-api/package.json"
+      - "backend-api/package-lock.json"
+      - ".github/workflows/openapi-lint.yml"
+  push:
+    branches:
+      - develop
+    paths:
+      - "backend-api/openapi.yaml"
+      - "backend-api/package.json"
+      - "backend-api/package-lock.json"
+      - ".github/workflows/openapi-lint.yml"
+
+jobs:
+  openapi-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend-api
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: backend-api/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint OpenAPI spec
+        run: npm run openapi:lint
