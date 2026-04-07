@@ -19,11 +19,27 @@ npm install
 
 ## Webhook サーバー（Strava アクティビティ処理用）
 
-クライアント（Next.js）の `/api/strava/webhook` が Strava から POST を受信した際、本サーバーの `POST /webhook/activity` を呼び出して `processActivityEvent` を実行する。
+クライアント（Next.js）の `/api/strava/webhook` が Strava から POST を受信した際、本サーバーの `POST /webhook/activity`（アクティビティ）または `POST /webhook/deauthorization`（連携解除）を呼び出す。
+
+- **Strava アプリ設定の Callback URL:** `https://<your-domain>/api/strava/webhook`（ローカル検証時は `http://localhost:3000/api/strava/webhook`）。
 
 - **起動:** `npm run build` の後に `npm run webhook-server`（`backend-api` ディレクトリで実行すること）。
 - デフォルトで `http://localhost:3001/webhook/activity` で待ち受け（`PORT` 環境変数で変更可）。
 - **環境変数:** 起動時に **backend-api 直下の `.env.local` または `.env`** を自動読み込みする。`SUPABASE_URL`（または `NEXT_PUBLIC_SUPABASE_URL`）と `SUPABASE_SERVICE_ROLE_KEY` が必須。client で Strava トークンを暗号化して保存している場合は、復号用に **`STRAVA_TOKEN_ENCRYPTION_KEY`** を client と同一の値で設定する（未設定なら DB の平文トークンをそのまま使用）。`backend-api/.env.example` をコピーして `backend-api/.env.local` を作成し、値を設定する。
+
+
+### POST /webhook/deauthorization
+
+Strava webhook の `object_type=athlete`（`aspect_type=update` / `delete`）を受け取り、`owner_id` をキーに `users.strava_id` を検索して `users` 行を削除する。
+`users` からの削除は既存 FK の `ON DELETE CASCADE` 前提で、関連行（タイル・ログ等）も同時に削除される。
+
+- **リクエストボディ（JSON）**
+  - `owner_id` (number, 必須): Strava の Athlete ID
+- **レスポンス**
+  - 成功: `200` + `{ "ok": true }`
+  - 対象なし: `200` + `{ "ok": true, "skipped": true }`
+  - 失敗: `400`（必須項目不足・不正）/ `500`（DB エラー） + `{ "error": "メッセージ" }`
+- **リトライ方針:** `500` 時は webhook 再送で再試行可能。サーバーログには `deauthorization ... (retryable)` として `owner_id` とエラー内容を出力する。
 
 ## OpenAPI 仕様
 

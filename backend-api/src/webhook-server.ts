@@ -43,6 +43,7 @@ const PORT = Number(process.env.PORT) || 3001;
 const PATH_WEBHOOK = "/webhook/activity";
 const PATH_USERS_SYNC = "/users/sync";
 const PATH_USERS_INITIAL_BACKFILL = "/users/initial-backfill";
+const PATH_WEBHOOK_DEAUTHORIZATION = "/webhook/deauthorization";
 const PATH_GROUPS = "/groups";
 const PATH_GROUPS_JOIN = "/groups/join";
 
@@ -84,6 +85,80 @@ function parseWebhookBody(req: IncomingMessage): Promise<{ object_id: number; ow
     }
     return null;
   });
+}
+
+
+function parseDeauthorizationBody(req: IncomingMessage): Promise<{ owner_id: number } | null> {
+  return parseJsonBody(req).then((body) => {
+    if (body && typeof (body as { owner_id?: number }).owner_id === "number") {
+      return { owner_id: (body as { owner_id: number }).owner_id };
+    }
+    return null;
+  });
+}
+
+async function handleWebhookDeauthorization(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  const body = await parseDeauthorizationBody(req);
+  if (!body) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Missing or invalid owner_id" }));
+    return;
+  }
+
+  const supabase = getSupabase();
+  try {
+    const { data: user, error: userError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("strava_id", body.owner_id)
+      .maybeSingle();
+
+    if (userError) {
+      console.error("[webhook-server] deauthorization lookup failed (retryable)", {
+        owner_id: body.owner_id,
+        error: userError.message,
+      });
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: userError.message }));
+      return;
+    }
+
+    if (!user) {
+      console.log("[webhook-server] deauthorization skipped (user not found)", {
+        owner_id: body.owner_id,
+      });
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true, skipped: true }));
+      return;
+    }
+
+    const { error: deleteError } = await supabase
+      .from("users")
+      .delete()
+      .eq("id", (user as { id: string }).id);
+
+    if (deleteError) {
+      console.error("[webhook-server] deauthorization delete failed (retryable)", {
+        owner_id: body.owner_id,
+        error: deleteError.message,
+      });
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: deleteError.message }));
+      return;
+    }
+
+    console.log("[webhook-server] deauthorization delete ok", { owner_id: body.owner_id });
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true }));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[webhook-server] deauthorization unexpected error (retryable)", {
+      owner_id: body.owner_id,
+      error: msg,
+    });
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: msg }));
+  }
 }
 
 async function handleUsersSync(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -400,6 +475,8 @@ const server = createServer(async (req, res) => {
     await handleUsersSync(req, res);
   } else if (req.method === "POST" && path === PATH_USERS_INITIAL_BACKFILL) {
     await handleUsersInitialBackfill(req, res);
+  } else if (req.method === "POST" && path === PATH_WEBHOOK_DEAUTHORIZATION) {
+    await handleWebhookDeauthorization(req, res);
   } else if (req.method === "POST" && path === PATH_GROUPS) {
     await handleGroupsCreate(req, res);
   } else if (req.method === "POST" && path === PATH_GROUPS_JOIN) {
@@ -413,5 +490,6 @@ server.listen(PORT, () => {
   console.log(`Webhook server listening on http://localhost:${PORT}${PATH_WEBHOOK}`);
   console.log(`Users sync: http://localhost:${PORT}${PATH_USERS_SYNC}`);
   console.log(`Users initial backfill: http://localhost:${PORT}${PATH_USERS_INITIAL_BACKFILL}`);
+  console.log(`Webhook deauthorization: http://localhost:${PORT}${PATH_WEBHOOK_DEAUTHORIZATION}`);
   console.log(`Groups: http://localhost:${PORT}${PATH_GROUPS}, http://localhost:${PORT}${PATH_GROUPS_JOIN}`);
 });
