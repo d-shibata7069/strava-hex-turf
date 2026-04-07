@@ -126,6 +126,7 @@ async function fetchRecentActivityIds(accessToken: string, days: number, baseTim
   while (true) {
     const params = new URLSearchParams({
       after: String(afterSec),
+      before: String(baseSec),
       per_page: String(perPage),
       page: String(page),
     });
@@ -211,7 +212,22 @@ async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerRespo
     return;
   }
 
+  const lockTimestamp = new Date().toISOString();
   try {
+    const { data: claimRow, error: claimError } = await supabase
+      .from("users")
+      .update({ initial_backfill_done_at: lockTimestamp })
+      .eq("id", userRow.id)
+      .is("initial_backfill_done_at", null)
+      .select("id")
+      .maybeSingle();
+    if (claimError) throw new Error(claimError.message);
+    if (!claimRow) {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true, skipped: true }));
+      return;
+    }
+
     const activityIds = await fetchRecentActivityIds(token, 7, baseTime);
     const deps = createDefaultDeps(supabase, decryptStravaToken);
     for (const activityId of activityIds) {
@@ -220,11 +236,12 @@ async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerRespo
       throw new Error(result.reason);
     }
 
-    const { error: updateError } = await supabase
+    const { error: completeError } = await supabase
       .from("users")
       .update({ initial_backfill_done_at: new Date().toISOString() })
-      .eq("id", userRow.id);
-    if (updateError) throw new Error(updateError.message);
+      .eq("id", userRow.id)
+      .eq("initial_backfill_done_at", lockTimestamp);
+    if (completeError) throw new Error(completeError.message);
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
@@ -235,6 +252,15 @@ async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerRespo
       })
     );
   } catch (err) {
+    const { error: releaseError } = await supabase
+      .from("users")
+      .update({ initial_backfill_done_at: null })
+      .eq("id", userRow.id)
+      .eq("initial_backfill_done_at", lockTimestamp);
+    if (releaseError) {
+      console.error("[webhook-server] users/initial-backfill lock release error:", releaseError);
+    }
+
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[webhook-server] users/initial-backfill error:", err);
     res.writeHead(500, { "Content-Type": "application/json" });
