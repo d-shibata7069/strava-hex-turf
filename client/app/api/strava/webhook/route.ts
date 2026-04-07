@@ -92,13 +92,33 @@ export async function POST(request: NextRequest) {
 
   if (isDeauthorizationEvent) {
     const url = `${getBackendBaseUrl()}/webhook/deauthorization`;
-    void fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ owner_id }),
-    }).catch((err) => {
+
+    try {
+      const backendResponse = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ owner_id }),
+      });
+
+      if (!backendResponse.ok) {
+        const errorBody = await backendResponse.text();
+        console.error(
+          "[strava-webhook] backend deauthorization failed:",
+          backendResponse.status,
+          errorBody
+        );
+        return NextResponse.json(
+          { error: "Failed to process deauthorization event" },
+          { status: 500 }
+        );
+      }
+    } catch (err) {
       console.error("[strava-webhook] backend deauthorization fetch error:", err);
-    });
+      return NextResponse.json(
+        { error: "Failed to process deauthorization event" },
+        { status: 500 }
+      );
+    }
   }
 
   return new NextResponse(null, { status: 200 });
