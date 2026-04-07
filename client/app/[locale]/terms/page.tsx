@@ -7,9 +7,10 @@ import { getTranslations } from "next-intl/server";
 export default async function TermsPage({
   searchParams,
 }: {
-  searchParams: { from?: string };
+  searchParams: Promise<{ from?: string }>;
 }) {
-  const fromSettings = searchParams.from === "settings";
+  const { from } = await searchParams;
+  const fromSettings = from === "settings";
   const t = await getTranslations("terms");
   const tCommon = await getTranslations("common");
 

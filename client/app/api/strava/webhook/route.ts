@@ -40,6 +40,10 @@ interface StravaWebhookPayload {
   owner_id?: number;
 }
 
+function getBackendBaseUrl(): string {
+  return process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "http://localhost:3001";
+}
+
 /**
  * Strava Webhook アクティビティ通知（POST）
  * object_type === 'activity' かつ aspect_type === 'create' のときは processActivityEvent、
@@ -59,32 +63,62 @@ export async function POST(request: NextRequest) {
 
   const { object_type, aspect_type, object_id, owner_id } = body;
 
-  if (
-    object_type !== "activity" ||
-    typeof object_id !== "number" ||
-    typeof owner_id !== "number"
-  ) {
-    return new NextResponse(null, { status: 200 });
-  }
+  const isActivityEvent =
+    object_type === "activity" &&
+    typeof object_id === "number" &&
+    typeof owner_id === "number" &&
+    (aspect_type === "create" || aspect_type === "delete");
 
-  const isDelete = aspect_type === "delete";
-  const isCreate = aspect_type === "create";
-
-  if (isCreate || isDelete) {
-    const baseUrl =
-      process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "http://localhost:3001";
-    const url = `${baseUrl}/webhook/activity`;
+  if (isActivityEvent) {
+    const url = `${getBackendBaseUrl()}/webhook/activity`;
     void fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         object_id,
         owner_id,
-        ...(isDelete ? { action: "delete" } : {}),
+        ...(aspect_type === "delete" ? { action: "delete" } : {}),
       }),
     }).catch((err) => {
-      console.error("[strava-webhook] backend fetch error:", err);
+      console.error("[strava-webhook] backend activity fetch error:", err);
     });
+    return new NextResponse(null, { status: 200 });
+  }
+
+  const isDeauthorizationEvent =
+    object_type === "athlete" &&
+    typeof owner_id === "number" &&
+    (aspect_type === "update" || aspect_type === "delete");
+
+  if (isDeauthorizationEvent) {
+    const url = `${getBackendBaseUrl()}/webhook/deauthorization`;
+
+    try {
+      const backendResponse = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ owner_id }),
+      });
+
+      if (!backendResponse.ok) {
+        const errorBody = await backendResponse.text();
+        console.error(
+          "[strava-webhook] backend deauthorization failed:",
+          backendResponse.status,
+          errorBody
+        );
+        return NextResponse.json(
+          { error: "Failed to process deauthorization event" },
+          { status: 500 }
+        );
+      }
+    } catch (err) {
+      console.error("[strava-webhook] backend deauthorization fetch error:", err);
+      return NextResponse.json(
+        { error: "Failed to process deauthorization event" },
+        { status: 500 }
+      );
+    }
   }
 
   return new NextResponse(null, { status: 200 });
