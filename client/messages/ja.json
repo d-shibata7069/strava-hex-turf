@@ -91,7 +91,8 @@
     "errorTokenExchange": "Strava とのトークン交換に失敗しました。",
     "errorNoAthlete": "アスリート情報を取得できませんでした。",
     "errorUpsert": "アカウントの登録に失敗しました。",
-    "errorTokenEncryption": "トークンの暗号化に失敗しました。管理者に STRAVA_TOKEN_ENCRYPTION_KEY の設定を確認してください。"
+    "errorTokenEncryption": "トークンの暗号化に失敗しました。管理者に STRAVA_TOKEN_ENCRYPTION_KEY の設定を確認してください。",
+    "errorStateMismatch": "認証状態の検証に失敗しました。もう一度お試しください。"
   },
   "landing": {
     "tagline": "Run. Capture. Compete.",
