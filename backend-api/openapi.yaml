@@ -44,6 +44,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /webhook/deauthorization:
+    post:
+      summary: Process Strava deauthorization webhook event
+      description: |
+        Strava webhook の deauthorization（`object_type=athlete` + `aspect_type=update/delete`）を処理する。
+        `owner_id`（Strava athlete id）に一致する `users.strava_id` の行を削除する。
+      operationId: postWebhookDeauthorization
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookDeauthorizationRequest'
+      responses:
+        '200':
+          description: Processed successfully (or skipped when user not found)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Processing failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /users/sync:
     post:
       summary: Upsert user profile and Strava tokens
@@ -224,6 +258,17 @@ components:
           type: string
           description: delete の場合は削除イベントとして扱う
           enum: [create, update, delete]
+
+
+    WebhookDeauthorizationRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - owner_id
+      properties:
+        owner_id:
+          type: integer
+          description: Strava athlete id
 
     UsersSyncRequest:
       type: object
