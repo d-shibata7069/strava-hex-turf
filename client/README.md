@@ -36,15 +36,7 @@ npm run dev
 
 ブラウザで `http://localhost:3000` を開く。ルートは next-intl により `/ja` および `/en` のロケールプレフィックス付きで提供され、未指定時はデフォルトロケール（日本語）へリダイレクトされる。多言語辞書は `messages/ja.json` と `messages/en.json` で管理する。
 
-### 4. Storybook（UI 確認用）
-
-```bash
-npm run storybook
-```
-
-「App/Map」で地図コンポーネントと H3 六角形レイヤーの表示を確認できる。
-
-### 5. Strava Webhook のローカル確認（ngrok 等）
+### 4. Strava Webhook のローカル確認（ngrok 等）
 
 Strava は Webhook のコールバックに **公的な URL** を要求するため、ローカルで受信するには [ngrok](https://ngrok.com/) 等でトンネルを張る。
 
@@ -78,7 +70,7 @@ Strava は Webhook のコールバックに **公的な URL** を要求するた
 
 スクリプト本体は `client/scripts/strava-webhook-subscription.mjs`。未設定の必須環境変数があるとエラーメッセージで案内する。
 
-### 6. グループ（作成・参加・退会・削除）
+### 5. グループ（作成・参加・退会・削除）
 
 陣地タイルは「グループ単位」で管理される。Webhook でタイルが書き込まれるには、**そのユーザーが少なくとも 1 つのグループに所属している**必要がある（`group_members` にレコードがあること）。
 
@@ -86,7 +78,7 @@ Strava は Webhook のコールバックに **公的な URL** を要求するた
 - **参加:** ヘッダーの「参加」から `/join` に遷移し、招待コードを入力して「参加する」を押す。
 - **マイグループ:** ヘッダーの「マイグループ」から `/groups` で参加中のグループ一覧を表示できる。各グループで「退会」（自分だけメンバーから外れる）または「削除」（グループごと削除。メンバーなら誰でも実行可能。グループ内の陣地データも CASCADE で削除される）が可能。
 
-### 7. 地図表示（MapLibre）
+### 6. 地図表示（MapLibre）
 
 地図は [MapLibre GL JS](https://maplibre.org/) と [@vis.gl/react-maplibre](https://visgl.github.io/react-maplibre/) を使用している（Mapbox に依存しないオープンソース構成）。
 
