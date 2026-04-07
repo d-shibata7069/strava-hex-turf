@@ -91,7 +91,8 @@
     "errorTokenExchange": "Token exchange with Strava failed.",
     "errorNoAthlete": "Could not retrieve athlete information.",
     "errorUpsert": "Account registration failed.",
-    "errorTokenEncryption": "Token encryption failed. Please ask the administrator to verify STRAVA_TOKEN_ENCRYPTION_KEY."
+    "errorTokenEncryption": "Token encryption failed. Please ask the administrator to verify STRAVA_TOKEN_ENCRYPTION_KEY.",
+    "errorStateMismatch": "State validation failed. Please try signing in again."
   },
   "landing": {
     "tagline": "Run. Capture. Compete.",

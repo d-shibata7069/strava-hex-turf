@@ -1,7 +1,7 @@
 import { LoginView } from "@/components/organisms/LoginView";
 import { getTranslations } from "next-intl/server";
 
-const STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize";
+const STRAVA_LOGIN_ROUTE = "/api/auth/strava/login";
 
 const LOGIN_ERROR_KEYS: Record<string, string> = {
   denied: "errorDenied",
@@ -11,6 +11,7 @@ const LOGIN_ERROR_KEYS: Record<string, string> = {
   no_athlete: "errorNoAthlete",
   upsert: "errorUpsert",
   token_encryption: "errorTokenEncryption",
+  state_mismatch: "errorStateMismatch",
 };
 
 function buildStravaAuthUrl(): string {
@@ -34,9 +35,8 @@ export default async function LoginPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
-  const authUrl = buildStravaAuthUrl();
   const t = await getTranslations("login");
   const errorMessage =
     error && LOGIN_ERROR_KEYS[error] ? t(LOGIN_ERROR_KEYS[error]) : null;
-  return <LoginView authUrl={authUrl} errorMessage={errorMessage} />;
+  return <LoginView authUrl={STRAVA_LOGIN_ROUTE} errorMessage={errorMessage} />;
 }
