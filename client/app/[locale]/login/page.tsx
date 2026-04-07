@@ -2,6 +2,7 @@ import { LoginView } from "@/components/organisms/LoginView";
 import { getTranslations } from "next-intl/server";
 
 const STRAVA_LOGIN_ROUTE = "/api/auth/strava/login";
+const STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize";
 
 const LOGIN_ERROR_KEYS: Record<string, string> = {
   denied: "errorDenied",
