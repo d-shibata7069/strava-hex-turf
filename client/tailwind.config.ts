@@ -8,7 +8,13 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-noto-sans-jp)", "sans-serif"],
+        sans: [
+          "Hiragino Sans",
+          "Hiragino Kaku Gothic ProN",
+          "Yu Gothic UI",
+          "Meiryo",
+          "sans-serif",
+        ],
       },
     },
   },

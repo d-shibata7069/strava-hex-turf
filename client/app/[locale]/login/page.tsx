@@ -31,9 +31,9 @@ function buildStravaAuthUrl(): string {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: { error?: string };
+  searchParams: Promise<{ error?: string }>;
 }) {
-  const { error } = searchParams;
+  const { error } = await searchParams;
   const authUrl = buildStravaAuthUrl();
   const t = await getTranslations("login");
   const errorMessage =
