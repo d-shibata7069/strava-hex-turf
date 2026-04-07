@@ -14,6 +14,21 @@ const LOGIN_ERROR_KEYS: Record<string, string> = {
   state_mismatch: "errorStateMismatch",
 };
 
+function buildStravaAuthUrl(): string {
+  const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "") || "http://localhost:3000";
+  const redirectUri = `${appUrl}/api/auth/strava/callback`;
+  const scope = "read,activity:read";
+  const params = new URLSearchParams({
+    client_id: clientId ?? "",
+    redirect_uri: redirectUri,
+    response_type: "code",
+    scope,
+    approval_prompt: "auto",
+  });
+  return `${STRAVA_AUTH_URL}?${params.toString()}`;
+}
+
 export default async function LoginPage({
   searchParams,
 }: {
