@@ -12,31 +12,24 @@ const LOGIN_ERROR_KEYS: Record<string, string> = {
   upsert: "errorUpsert",
   token_encryption: "errorTokenEncryption",
   state_mismatch: "errorStateMismatch",
+  initial_backfill: "errorInitialBackfill",
 };
 
-function buildStravaAuthUrl(): string {
-  const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "") || "http://localhost:3000";
-  const redirectUri = `${appUrl}/api/auth/strava/callback`;
-  const scope = "read,activity:read";
-  const params = new URLSearchParams({
-    client_id: clientId ?? "",
-    redirect_uri: redirectUri,
-    response_type: "code",
-    scope,
-    approval_prompt: "auto",
-  });
-  return `${STRAVA_AUTH_URL}?${params.toString()}`;
-}
-
 export default async function LoginPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ error?: string }>;
 }) {
-  const { error } = await searchParams;
+  const [{ locale }, { error }] = await Promise.all([params, searchParams]);
   const t = await getTranslations("login");
   const errorMessage =
     error && LOGIN_ERROR_KEYS[error] ? t(LOGIN_ERROR_KEYS[error]) : null;
-  return <LoginView authUrl={STRAVA_LOGIN_ROUTE} errorMessage={errorMessage} />;
+  return (
+    <LoginView
+      authUrl={`${STRAVA_LOGIN_ROUTE}?locale=${encodeURIComponent(locale)}`}
+      errorMessage={errorMessage}
+    />
+  );
 }
