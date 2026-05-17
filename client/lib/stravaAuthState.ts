@@ -1,4 +1,5 @@
 const STRAVA_AUTH_STATE_COOKIE_NAME = "strava_oauth_state";
+const STRAVA_AUTH_LOCALE_COOKIE_NAME = "strava_oauth_locale";
 const STRAVA_AUTH_STATE_MAX_AGE_SEC = 60 * 10; // 10分
 
 export function generateStravaAuthState(): string {
@@ -37,4 +38,4 @@ export function getStravaAuthStateDestroyOptions(): {
   };
 }
 
-export { STRAVA_AUTH_STATE_COOKIE_NAME };
+export { STRAVA_AUTH_LOCALE_COOKIE_NAME, STRAVA_AUTH_STATE_COOKIE_NAME };

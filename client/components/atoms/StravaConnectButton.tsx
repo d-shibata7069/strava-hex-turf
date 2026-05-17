@@ -51,15 +51,27 @@ export function StravaConnectButton({
   className = "",
   "data-testid": dataTestId,
 }: StravaConnectButtonProps) {
-  return (
-    <Link
-      href={href}
-      className={`${baseClass} ${variantClasses[variant]} ${className}`.trim()}
-      data-testid={dataTestId ?? "connect-strava"}
-    >
+  const buttonClassName = `${baseClass} ${variantClasses[variant]} ${className}`.trim();
+  const testId = dataTestId ?? "connect-strava";
+  const content = (
+    <>
       <StravaLogoIcon className="h-5 w-5 shrink-0" />
       <span>{children}</span>
       {rightIcon}
+    </>
+  );
+
+  if (href.startsWith("/api/") || href.startsWith("http://") || href.startsWith("https://")) {
+    return (
+      <a href={href} className={buttonClassName} data-testid={testId}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={buttonClassName} data-testid={testId}>
+      {content}
     </Link>
   );
 }

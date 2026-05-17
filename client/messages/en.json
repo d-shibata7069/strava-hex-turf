@@ -92,7 +92,8 @@
     "errorNoAthlete": "Could not retrieve athlete information.",
     "errorUpsert": "Account registration failed.",
     "errorTokenEncryption": "Token encryption failed. Please ask the administrator to verify STRAVA_TOKEN_ENCRYPTION_KEY.",
-    "errorStateMismatch": "State validation failed. Please try signing in again."
+    "errorStateMismatch": "State validation failed. Please try signing in again.",
+    "errorInitialBackfill": "Initial data import failed. Please try again later."
   },
   "landing": {
     "tagline": "Run. Capture. Compete.",

@@ -1,14 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {
   generateStravaAuthState,
   getStravaAuthStateCookieOptions,
+  STRAVA_AUTH_LOCALE_COOKIE_NAME,
   STRAVA_AUTH_STATE_COOKIE_NAME,
 } from "@/lib/stravaAuthState";
+import { routing } from "@/i18n/routing";
 
 const STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const state = generateStravaAuthState();
+  const requestedLocale = request.nextUrl.searchParams.get("locale");
+  const locale =
+    requestedLocale && routing.locales.includes(requestedLocale as any)
+      ? requestedLocale
+      : routing.defaultLocale;
   const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
   const appUrl =
     (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "") ||
@@ -26,10 +33,8 @@ export async function GET() {
   });
 
   const response = NextResponse.redirect(`${STRAVA_AUTH_URL}?${params.toString()}`);
-  response.cookies.set(
-    STRAVA_AUTH_STATE_COOKIE_NAME,
-    state,
-    getStravaAuthStateCookieOptions(),
-  );
+  const cookieOptions = getStravaAuthStateCookieOptions();
+  response.cookies.set(STRAVA_AUTH_STATE_COOKIE_NAME, state, cookieOptions);
+  response.cookies.set(STRAVA_AUTH_LOCALE_COOKIE_NAME, locale, cookieOptions);
   return response;
 }
