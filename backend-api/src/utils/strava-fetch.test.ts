@@ -1,1 +1,100 @@
-aW1wb3J0IHsgZGVzY3JpYmUsIGl0LCBleHBlY3QsIHZpIH0gZnJvbSAidml0ZXN0IjsKaW1wb3J0IHsgZmV0Y2hXaXRoQmFja29mZiB9IGZyb20gIi4vc3RyYXZhLWZldGNoLmpzIjsKCmZ1bmN0aW9uIGZha2VSZXNwb25zZShzdGF0dXM6IG51bWJlciwgaGVhZGVyczogUmVjb3JkPHN0cmluZywgc3RyaW5nPiA9IHt9KTogUmVzcG9uc2UgewogIHJldHVybiB7CiAgICBzdGF0dXMsCiAgICBvazogc3RhdHVzID49IDIwMCAmJiBzdGF0dXMgPCAzMDAsCiAgICBoZWFkZXJzOiB7CiAgICAgIGdldDogKG5hbWU6IHN0cmluZykgPT4gaGVhZGVyc1tuYW1lLnRvTG93ZXJDYXNlKCldID8/IG51bGwsCiAgICB9LAogIH0gYXMgdW5rbm93biBhcyBSZXNwb25zZTsKfQoKZGVzY3JpYmUoImZldGNoV2l0aEJhY2tvZmYiLCAoKSA9PiB7CiAgaXQoIjQyOSDjga7lvozjgavmiJDlip/jgZfjgZ/loLTlkIjjga/jg6rjg4jjg6njgqTjgZfjgabmiJDlip/jg6zjgrnjg53jg7PjgrnjgpLov5TjgZkiLCBhc3luYyAoKSA9PiB7CiAgICBjb25zdCBmZXRjaEZuID0gdmkKICAgICAgLmZuKCkKICAgICAgLm1vY2tSZXNvbHZlZFZhbHVlT25jZShmYWtlUmVzcG9uc2UoNDI5KSkKICAgICAgLm1vY2tSZXNvbHZlZFZhbHVlT25jZShmYWtlUmVzcG9uc2UoMjAwKSk7CiAgICBjb25zdCBzbGVlcCA9IHZpLmZuKCkubW9ja1Jlc29sdmVkVmFsdWUodW5kZWZpbmVkKTsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoV2l0aEJhY2tvZmYoImh0dHBzOi8vd3d3LnN0cmF2YS5jb20vYXBpL3YzL2FjdGl2aXRpZXMvMSIsIHt9LCB7CiAgICAgIGZldGNoRm46IGZldGNoRm4gYXMgdW5rbm93biBhcyB0eXBlb2YgZmV0Y2gsCiAgICAgIHNsZWVwLAogICAgICBiYXNlRGVsYXlNczogMTAwLAogICAgfSk7CiAgICBleHBlY3QocmVzLnN0YXR1cykudG9CZSgyMDApOwogICAgZXhwZWN0KGZldGNoRm4pLnRvSGF2ZUJlZW5DYWxsZWRUaW1lcygyKTsKICAgIGV4cGVjdChzbGVlcCkudG9IYXZlQmVlbkNhbGxlZFRpbWVzKDEpOwogIH0pOwoKICBpdCgiNXh4IOOBruWgtOWQiOOCguODquODiOODqeOCpOOBmeOCiyIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IGZldGNoRm4gPSB2aQogICAgICAuZm4oKQogICAgICAubW9ja1Jlc29sdmVkVmFsdWVPbmNlKGZha2VSZXNwb25zZSg1MDMpKQogICAgICAubW9ja1Jlc29sdmVkVmFsdWVPbmNlKGZha2VSZXNwb25zZSgyMDApKTsKICAgIGNvbnN0IHNsZWVwID0gdmkuZm4oKS5tb2NrUmVzb2x2ZWRWYWx1ZSh1bmRlZmluZWQpOwogICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2hXaXRoQmFja29mZigiaHR0cHM6Ly9leGFtcGxlLmNvbSIsIHt9LCB7CiAgICAgIGZldGNoRm46IGZldGNoRm4gYXMgdW5rbm93biBhcyB0eXBlb2YgZmV0Y2gsCiAgICAgIHNsZWVwLAogICAgfSk7CiAgICBleHBlY3QocmVzLnN0YXR1cykudG9CZSgyMDApOwogICAgZXhwZWN0KGZldGNoRm4pLnRvSGF2ZUJlZW5DYWxsZWRUaW1lcygyKTsKICB9KTsKCiAgaXQoIlJldHJ5LUFmdGVyIOODmOODg+ODgOOCkuWwiumHjeOBl+OBpuW+heapn+OBmeOCiyIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IGZldGNoRm4gPSB2aQogICAgICAuZm4oKQogICAgICAubW9ja1Jlc29sdmVkVmFsdWVPbmNlKGZha2VSZXNwb25zZSg0MjksIHsgInJldHJ5LWFmdGVyIjogIjIiIH0pKQogICAgICAubW9ja1Jlc29sdmVkVmFsdWVPbmNlKGZha2VSZXNwb25zZSgyMDApKTsKICAgIGNvbnN0IHNsZWVwID0gdmkuZm4oKS5tb2NrUmVzb2x2ZWRWYWx1ZSh1bmRlZmluZWQpOwogICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2hXaXRoQmFja29mZigiaHR0cHM6Ly9leGFtcGxlLmNvbSIsIHt9LCB7CiAgICAgIGZldGNoRm46IGZldGNoRm4gYXMgdW5rbm93biBhcyB0eXBlb2YgZmV0Y2gsCiAgICAgIHNsZWVwLAogICAgICBiYXNlRGVsYXlNczogMTAwLAogICAgfSk7CiAgICBleHBlY3QocmVzLnN0YXR1cykudG9CZSgyMDApOwogICAgZXhwZWN0KHNsZWVwKS50b0hhdmVCZWVuQ2FsbGVkV2l0aCgyMDAwKTsKICB9KTsKCiAgaXQoIjQwNCDjgarjganjg6rjg4jjg6njgqTlr77osaHlpJbjga7jgrnjg4bjg7zjgr/jgrnjga/jg6rjg4jjg6njgqTjgZfjgarjgYQiLCBhc3luYyAoKSA9PiB7CiAgICBjb25zdCBmZXRjaEZuID0gdmkuZm4oKS5tb2NrUmVzb2x2ZWRWYWx1ZShmYWtlUmVzcG9uc2UoNDA0KSk7CiAgICBjb25zdCBzbGVlcCA9IHZpLmZuKCkubW9ja1Jlc29sdmVkVmFsdWUodW5kZWZpbmVkKTsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoV2l0aEJhY2tvZmYoImh0dHBzOi8vZXhhbXBsZS5jb20iLCB7fSwgewogICAgICBmZXRjaEZuOiBmZXRjaEZuIGFzIHVua25vd24gYXMgdHlwZW9mIGZldGNoLAogICAgICBzbGVlcCwKICAgIH0pOwogICAgZXhwZWN0KHJlcy5zdGF0dXMpLnRvQmUoNDA0KTsKICAgIGV4cGVjdChmZXRjaEZuKS50b0hhdmVCZWVuQ2FsbGVkVGltZXMoMSk7CiAgICBleHBlY3Qoc2xlZXApLm5vdC50b0hhdmVCZWVuQ2FsbGVkKCk7CiAgfSk7CgogIGl0KCLjg6rjg4jjg6njgqTkuIrpmZDjgavpgZTjgZfjgZ/loLTlkIjjga/mnIDlvozjga7jg6zjgrnjg53jg7PjgrnjgpLov5TjgZkiLCBhc3luYyAoKSA9PiB7CiAgICBjb25zdCBmZXRjaEZuID0gdmkuZm4oKS5tb2NrUmVzb2x2ZWRWYWx1ZShmYWtlUmVzcG9uc2UoNDI5KSk7CiAgICBjb25zdCBzbGVlcCA9IHZpLmZuKCkubW9ja1Jlc29sdmVkVmFsdWUodW5kZWZpbmVkKTsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoV2l0aEJhY2tvZmYoImh0dHBzOi8vZXhhbXBsZS5jb20iLCB7fSwgewogICAgICBmZXRjaEZuOiBmZXRjaEZuIGFzIHVua25vd24gYXMgdHlwZW9mIGZldGNoLAogICAgICBzbGVlcCwKICAgICAgbWF4UmV0cmllczogMywKICAgICAgYmFzZURlbGF5TXM6IDEwLAogICAgfSk7CiAgICBleHBlY3QocmVzLnN0YXR1cykudG9CZSg0MjkpOwogICAgLy8g5Yid5ZueICsgMyDlm57jg6rjg4jjg6njgqQKICAgIGV4cGVjdChmZXRjaEZuKS50b0hhdmVCZWVuQ2FsbGVkVGltZXMoNCk7CiAgICBleHBlY3Qoc2xlZXApLnRvSGF2ZUJlZW5DYWxsZWRUaW1lcygzKTsKICB9KTsKCiAgaXQoIuW+heapn+aZgumWk+OBryBtYXhEZWxheU1zIOOBp+mgreaJk+OBoeOBq+OBquOCiyIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IGZldGNoRm4gPSB2aQogICAgICAuZm4oKQogICAgICAubW9ja1Jlc29sdmVkVmFsdWVPbmNlKGZha2VSZXNwb25zZSg0MjksIHsgInJldHJ5LWFmdGVyIjogIjEyMCIgfSkpCiAgICAgIC5tb2NrUmVzb2x2ZWRWYWx1ZU9uY2UoZmFrZVJlc3BvbnNlKDIwMCkpOwogICAgY29uc3Qgc2xlZXAgPSB2aS5mbigpLm1vY2tSZXNvbHZlZFZhbHVlKHVuZGVmaW5lZCk7CiAgICBhd2FpdCBmZXRjaFdpdGhCYWNrb2ZmKCJodHRwczovL2V4YW1wbGUuY29tIiwge30sIHsKICAgICAgZmV0Y2hGbjogZmV0Y2hGbiBhcyB1bmtub3duIGFzIHR5cGVvZiBmZXRjaCwKICAgICAgc2xlZXAsCiAgICAgIG1heERlbGF5TXM6IDUwMDAsCiAgICB9KTsKICAgIGV4cGVjdChzbGVlcCkudG9IYXZlQmVlbkNhbGxlZFdpdGgoNTAwMCk7CiAgfSk7Cn0pOwo=
+import { describe, it, expect, vi } from "vitest";
+import { fetchWithBackoff } from "./strava-fetch.js";
+
+function fakeResponse(status: number, headers: Record<string, string> = {}): Response {
+  return {
+    status,
+    ok: status >= 200 && status < 300,
+    headers: {
+      get: (name: string) => headers[name.toLowerCase()] ?? null,
+    },
+  } as unknown as Response;
+}
+
+describe("fetchWithBackoff", () => {
+  it("429 の後に成功した場合はリトライして成功レスポンスを返す", async () => {
+    const fetchFn = vi
+      .fn()
+      .mockResolvedValueOnce(fakeResponse(429))
+      .mockResolvedValueOnce(fakeResponse(200));
+    const sleep = vi.fn().mockResolvedValue(undefined);
+    const res = await fetchWithBackoff("https://www.strava.com/api/v3/activities/1", {}, {
+      fetchFn: fetchFn as unknown as typeof fetch,
+      sleep,
+      baseDelayMs: 100,
+    });
+    expect(res.status).toBe(200);
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+    expect(sleep).toHaveBeenCalledTimes(1);
+  });
+
+  it("5xx の場合もリトライする", async () => {
+    const fetchFn = vi
+      .fn()
+      .mockResolvedValueOnce(fakeResponse(503))
+      .mockResolvedValueOnce(fakeResponse(200));
+    const sleep = vi.fn().mockResolvedValue(undefined);
+    const res = await fetchWithBackoff("https://example.com", {}, {
+      fetchFn: fetchFn as unknown as typeof fetch,
+      sleep,
+    });
+    expect(res.status).toBe(200);
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+  });
+
+  it("Retry-After ヘッダを尊重して待機する", async () => {
+    const fetchFn = vi
+      .fn()
+      .mockResolvedValueOnce(fakeResponse(429, { "retry-after": "2" }))
+      .mockResolvedValueOnce(fakeResponse(200));
+    const sleep = vi.fn().mockResolvedValue(undefined);
+    const res = await fetchWithBackoff("https://example.com", {}, {
+      fetchFn: fetchFn as unknown as typeof fetch,
+      sleep,
+      baseDelayMs: 100,
+    });
+    expect(res.status).toBe(200);
+    expect(sleep).toHaveBeenCalledWith(2000);
+  });
+
+  it("404 などリトライ対象外のステータスはリトライしない", async () => {
+    const fetchFn = vi.fn().mockResolvedValue(fakeResponse(404));
+    const sleep = vi.fn().mockResolvedValue(undefined);
+    const res = await fetchWithBackoff("https://example.com", {}, {
+      fetchFn: fetchFn as unknown as typeof fetch,
+      sleep,
+    });
+    expect(res.status).toBe(404);
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+    expect(sleep).not.toHaveBeenCalled();
+  });
+
+  it("リトライ上限に達した場合は最後のレスポンスを返す", async () => {
+    const fetchFn = vi.fn().mockResolvedValue(fakeResponse(429));
+    const sleep = vi.fn().mockResolvedValue(undefined);
+    const res = await fetchWithBackoff("https://example.com", {}, {
+      fetchFn: fetchFn as unknown as typeof fetch,
+      sleep,
+      maxRetries: 3,
+      baseDelayMs: 10,
+    });
+    expect(res.status).toBe(429);
+    // 初回 + 3 回リトライ
+    expect(fetchFn).toHaveBeenCalledTimes(4);
+    expect(sleep).toHaveBeenCalledTimes(3);
+  });
+
+  it("待機時間は maxDelayMs で頭打ちになる", async () => {
+    const fetchFn = vi
+      .fn()
+      .mockResolvedValueOnce(fakeResponse(429, { "retry-after": "120" }))
+      .mockResolvedValueOnce(fakeResponse(200));
+    const sleep = vi.fn().mockResolvedValue(undefined);
+    await fetchWithBackoff("https://example.com", {}, {
+      fetchFn: fetchFn as unknown as typeof fetch,
+      sleep,
+      maxDelayMs: 5000,
+    });
+    expect(sleep).toHaveBeenCalledWith(5000);
+  });
+});
