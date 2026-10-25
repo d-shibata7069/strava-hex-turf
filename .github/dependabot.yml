@@ -1,1 +1,27 @@
-IyDkvp3lrZjplqLkv4Ljga7lrprmnJ/mm7TmlrDvvIjpgLHmrKHjgadQUuOCkuS9nOaIkO+8iQojIOmWi+eZuuWBnOatouacn+mWk+S4reOBq+iEhuW8seaAp+OCouODieODkOOCpOOCtuODquOBjOe0r+epjeOBmeOCi+OBruOCkumYsuOBkOOBn+OCgQp2ZXJzaW9uOiAyCnVwZGF0ZXM6CiAgLSBwYWNrYWdlLWVjb3N5c3RlbTogIm5wbSIKICAgIGRpcmVjdG9yeTogIi9jbGllbnQiCiAgICBzY2hlZHVsZToKICAgICAgaW50ZXJ2YWw6ICJ3ZWVrbHkiCiAgICBvcGVuLXB1bGwtcmVxdWVzdHMtbGltaXQ6IDUKCiAgLSBwYWNrYWdlLWVjb3N5c3RlbTogIm5wbSIKICAgIGRpcmVjdG9yeTogIi9iYWNrZW5kLWFwaSIKICAgIHNjaGVkdWxlOgogICAgICBpbnRlcnZhbDogIndlZWtseSIKICAgIG9wZW4tcHVsbC1yZXF1ZXN0cy1saW1pdDogNQoKICAtIHBhY2thZ2UtZWNvc3lzdGVtOiAibnBtIgogICAgZGlyZWN0b3J5OiAiL2JhdGNoIgogICAgc2NoZWR1bGU6CiAgICAgIGludGVydmFsOiAid2Vla2x5IgogICAgb3Blbi1wdWxsLXJlcXVlc3RzLWxpbWl0OiA1CgogIC0gcGFja2FnZS1lY29zeXN0ZW06ICJnaXRodWItYWN0aW9ucyIKICAgIGRpcmVjdG9yeTogIi8iCiAgICBzY2hlZHVsZToKICAgICAgaW50ZXJ2YWw6ICJ3ZWVrbHkiCiAgICBvcGVuLXB1bGwtcmVxdWVzdHMtbGltaXQ6IDUK
+# 依存関係の定期更新（週次でPRを作成）
+# 開発停止期間中に脆弱性アドバイザリが累積するのを防ぐため
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "npm"
+    directory: "/backend-api"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "npm"
+    directory: "/batch"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
