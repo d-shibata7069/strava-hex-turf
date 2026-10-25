@@ -16,7 +16,10 @@ on:
       - "backend-api/package-lock.json"
       - ".github/workflows/openapi-lint.yml"
 
-jobs:
+permissions:
+  contents: read
+  
+  jobs:
   openapi-lint:
     runs-on: ubuntu-latest
     defaults:
