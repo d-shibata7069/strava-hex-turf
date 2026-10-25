@@ -18,8 +18,8 @@ on:
 
 permissions:
   contents: read
-  
-  jobs:
+
+jobs:
   openapi-lint:
     runs-on: ubuntu-latest
     defaults:
