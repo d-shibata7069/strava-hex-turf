@@ -1,1 +1,67 @@
-aW1wb3J0IHsgZGVzY3JpYmUsIGl0LCBleHBlY3QsIGJlZm9yZUVhY2gsIGFmdGVyRWFjaCB9IGZyb20gInZpdGVzdCI7CmltcG9ydCB7CiAgaXNWYWxpZEludGVybmFsQXBpS2V5LAogIGlzVmFsaWRCYWNrZmlsbEFwaUtleSwKICBzYWZlRXF1YWxTdHJpbmcsCn0gZnJvbSAiLi9pbnRlcm5hbC1hdXRoLmpzIjsKCmRlc2NyaWJlKCJpbnRlcm5hbC1hdXRoIiwgKCkgPT4gewogIGNvbnN0IG9yaWdpbmFsSW50ZXJuYWwgPSBwcm9jZXNzLmVudi5JTlRFUk5BTF9BUElfS0VZOwogIGNvbnN0IG9yaWdpbmFsQmFja2ZpbGwgPSBwcm9jZXNzLmVudi5JTlRFUk5BTF9CQUNLRklMTF9BUElfS0VZOwoKICBiZWZvcmVFYWNoKCgpID0+IHsKICAgIHByb2Nlc3MuZW52LklOVEVSTkFMX0FQSV9LRVkgPSAidGVzdC1pbnRlcm5hbC1rZXkiOwogICAgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQkFDS0ZJTExfQVBJX0tFWSA9ICJ0ZXN0LWJhY2tmaWxsLWtleSI7CiAgfSk7CgogIGFmdGVyRWFjaCgoKSA9PiB7CiAgICBpZiAob3JpZ2luYWxJbnRlcm5hbCA9PT0gdW5kZWZpbmVkKSBkZWxldGUgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQVBJX0tFWTsKICAgIGVsc2UgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQVBJX0tFWSA9IG9yaWdpbmFsSW50ZXJuYWw7CiAgICBpZiAob3JpZ2luYWxCYWNrZmlsbCA9PT0gdW5kZWZpbmVkKSBkZWxldGUgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQkFDS0ZJTExfQVBJX0tFWTsKICAgIGVsc2UgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQkFDS0ZJTExfQVBJX0tFWSA9IG9yaWdpbmFsQmFja2ZpbGw7CiAgfSk7CgogIGl0KCLjgq3jg7zjgYzkuIDoh7TjgZnjgozjgbAgdHJ1ZSIsICgpID0+IHsKICAgIGV4cGVjdChpc1ZhbGlkSW50ZXJuYWxBcGlLZXkoInRlc3QtaW50ZXJuYWwta2V5IikpLnRvQmUodHJ1ZSk7CiAgfSk7CgogIGl0KCLjgq3jg7zjgYzkuI3kuIDoh7TjgarjgokgZmFsc2UiLCAoKSA9PiB7CiAgICBleHBlY3QoaXNWYWxpZEludGVybmFsQXBpS2V5KCJ3cm9uZy1rZXktdmFsdWUhIikpLnRvQmUoZmFsc2UpOwogIH0pOwoKICBpdCgi55Kw5aKD5aSJ5pWw44GM5pyq6Kit5a6a44Gq44KJ5LiA6Ie044GZ44KL5YCk44Gn44KCIGZhbHNl77yIZmFpbCBjbG9zZWTvvIkiLCAoKSA9PiB7CiAgICBkZWxldGUgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQVBJX0tFWTsKICAgIGV4cGVjdChpc1ZhbGlkSW50ZXJuYWxBcGlLZXkoInRlc3QtaW50ZXJuYWwta2V5IikpLnRvQmUoZmFsc2UpOwogICAgZXhwZWN0KGlzVmFsaWRJbnRlcm5hbEFwaUtleSgiIikpLnRvQmUoZmFsc2UpOwogICAgZXhwZWN0KGlzVmFsaWRJbnRlcm5hbEFwaUtleSh1bmRlZmluZWQpKS50b0JlKGZhbHNlKTsKICB9KTsKCiAgaXQoIueSsOWig+WkieaVsOOBjOepuuaWh+Wtl+OBquOCiSBmYWxzZe+8iGZhaWwgY2xvc2Vk77yJIiwgKCkgPT4gewogICAgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQVBJX0tFWSA9ICIiOwogICAgZXhwZWN0KGlzVmFsaWRJbnRlcm5hbEFwaUtleSgiIikpLnRvQmUoZmFsc2UpOwogIH0pOwoKICBpdCgi6ZW344GV44GM6YGV44GG44Kt44O844GvIGZhbHNl77yI5L6L5aSW44KS5oqV44GS44Gq44GE77yJIiwgKCkgPT4gewogICAgZXhwZWN0KGlzVmFsaWRJbnRlcm5hbEFwaUtleSgic2hvcnQiKSkudG9CZShmYWxzZSk7CiAgICBleHBlY3QoaXNWYWxpZEludGVybmFsQXBpS2V5KCJ0ZXN0LWludGVybmFsLWtleS13aXRoLWV4dHJhLXN1ZmZpeCIpKS50b0JlKGZhbHNlKTsKICB9KTsKCiAgaXQoIuacquaPkOS+m++8iHVuZGVmaW5lZCAvIOmFjeWIl++8ieOBryBmYWxzZSIsICgpID0+IHsKICAgIGV4cGVjdChpc1ZhbGlkSW50ZXJuYWxBcGlLZXkodW5kZWZpbmVkKSkudG9CZShmYWxzZSk7CiAgICBleHBlY3QoaXNWYWxpZEludGVybmFsQXBpS2V5KG51bGwpKS50b0JlKGZhbHNlKTsKICAgIGV4cGVjdChpc1ZhbGlkSW50ZXJuYWxBcGlLZXkoWyJ0ZXN0LWludGVybmFsLWtleSJdKSkudG9CZShmYWxzZSk7CiAgfSk7CgogIGl0KCLjg5Djg4Pjgq/jg5XjgqPjg6vjgq3jg7zjgoLlkIzmp5jjgavnhaflkIjjgZnjgosiLCAoKSA9PiB7CiAgICBleHBlY3QoaXNWYWxpZEJhY2tmaWxsQXBpS2V5KCJ0ZXN0LWJhY2tmaWxsLWtleSIpKS50b0JlKHRydWUpOwogICAgZXhwZWN0KGlzVmFsaWRCYWNrZmlsbEFwaUtleSgidGVzdC1pbnRlcm5hbC1rZXkiKSkudG9CZShmYWxzZSk7CiAgICBkZWxldGUgcHJvY2Vzcy5lbnYuSU5URVJOQUxfQkFDS0ZJTExfQVBJX0tFWTsKICAgIGV4cGVjdChpc1ZhbGlkQmFja2ZpbGxBcGlLZXkoInRlc3QtYmFja2ZpbGwta2V5IikpLnRvQmUoZmFsc2UpOwogIH0pOwoKICBpdCgic2FmZUVxdWFsU3RyaW5nIOOBr+WQjOWApOOBruOBvyB0cnVlIiwgKCkgPT4gewogICAgZXhwZWN0KHNhZmVFcXVhbFN0cmluZygiYWJjIiwgImFiYyIpKS50b0JlKHRydWUpOwogICAgZXhwZWN0KHNhZmVFcXVhbFN0cmluZygiYWJjIiwgImFiZCIpKS50b0JlKGZhbHNlKTsKICAgIGV4cGVjdChzYWZlRXF1YWxTdHJpbmcoImFiYyIsICJhYmNkIikpLnRvQmUoZmFsc2UpOwogIH0pOwp9KTsK
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import {
+  isValidInternalApiKey,
+  isValidBackfillApiKey,
+  safeEqualString,
+} from "./internal-auth.js";
+
+describe("internal-auth", () => {
+  const originalInternal = process.env.INTERNAL_API_KEY;
+  const originalBackfill = process.env.INTERNAL_BACKFILL_API_KEY;
+
+  beforeEach(() => {
+    process.env.INTERNAL_API_KEY = "test-internal-key";
+    process.env.INTERNAL_BACKFILL_API_KEY = "test-backfill-key";
+  });
+
+  afterEach(() => {
+    if (originalInternal === undefined) delete process.env.INTERNAL_API_KEY;
+    else process.env.INTERNAL_API_KEY = originalInternal;
+    if (originalBackfill === undefined) delete process.env.INTERNAL_BACKFILL_API_KEY;
+    else process.env.INTERNAL_BACKFILL_API_KEY = originalBackfill;
+  });
+
+  it("キーが一致すれば true", () => {
+    expect(isValidInternalApiKey("test-internal-key")).toBe(true);
+  });
+
+  it("キーが不一致なら false", () => {
+    expect(isValidInternalApiKey("wrong-key-value!")).toBe(false);
+  });
+
+  it("環境変数が未設定なら一致する値でも false（fail closed）", () => {
+    delete process.env.INTERNAL_API_KEY;
+    expect(isValidInternalApiKey("test-internal-key")).toBe(false);
+    expect(isValidInternalApiKey("")).toBe(false);
+    expect(isValidInternalApiKey(undefined)).toBe(false);
+  });
+
+  it("環境変数が空文字なら false（fail closed）", () => {
+    process.env.INTERNAL_API_KEY = "";
+    expect(isValidInternalApiKey("")).toBe(false);
+  });
+
+  it("長さが違うキーは false（例外を投げない）", () => {
+    expect(isValidInternalApiKey("short")).toBe(false);
+    expect(isValidInternalApiKey("test-internal-key-with-extra-suffix")).toBe(false);
+  });
+
+  it("未提供（undefined / 配列）は false", () => {
+    expect(isValidInternalApiKey(undefined)).toBe(false);
+    expect(isValidInternalApiKey(null)).toBe(false);
+    expect(isValidInternalApiKey(["test-internal-key"])).toBe(false);
+  });
+
+  it("バックフィルキーも同様に照合する", () => {
+    expect(isValidBackfillApiKey("test-backfill-key")).toBe(true);
+    expect(isValidBackfillApiKey("test-internal-key")).toBe(false);
+    delete process.env.INTERNAL_BACKFILL_API_KEY;
+    expect(isValidBackfillApiKey("test-backfill-key")).toBe(false);
+  });
+
+  it("safeEqualString は同値のみ true", () => {
+    expect(safeEqualString("abc", "abc")).toBe(true);
+    expect(safeEqualString("abc", "abd")).toBe(false);
+    expect(safeEqualString("abc", "abcd")).toBe(false);
+  });
+});
