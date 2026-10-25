@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",
-    "@supabase/supabase-js": "^2.98.0",
+    "@supabase/supabase-js": "^2.118.0",
     "h3-js": "^4.4.0"
   },
   "devDependencies": {
