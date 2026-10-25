@@ -1,1 +1,121 @@
-aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKCi8qKgogKiBHRVQgL2FwaS9wcm94eS1pbWFnZT91cmw9Li4uCiAqIOWklumDqOeUu+WDj1VSTO+8iFN0cmF2YSBDRE7jg7tHb29nbGUg44OX44Ot44OV44Kj44O844Or55S75YOP562J77yJ44KS44K144O844OQ44O85YG044Gn5Y+W5b6X44GX44CB5ZCM5LiA44Kq44Oq44K444Oz44Go44GX44Gm6L+U44GZ44CCCiAqIOODluODqeOCpuOCtuOBriBtYXAubG9hZEltYWdlKCkg44GvIGZldGNoIOOCkuS9v+OBhuOBn+OCgSBDT1JTIOOBp+ODluODreODg+OCr+OBleOCjOOCi+OBn+OCgeOAgQogKiDjgZPjga7jg5fjg63jgq3jgrfntYznlLHjgaflj5blvpfjgZnjgovjgZPjgajjgacgQ09SUyDjgpLlm57pgb/jgZnjgovjgIIKICoKICog6Kix5Y+v44GZ44KLVVJMOgogKiAtIEhUVFBTIOOBi+OBpCBTdHJhdmEg57O7IENETu+8iCouY2xvdWRmcm9udC5uZXQg44GuIC9waWN0dXJlcy8g44KS5ZCr44KA44OR44K577yJCiAqIC0gSFRUUFMg44GL44GkIEdvb2dsZSDjg6bjg7zjgrbjg7zjgrPjg7Pjg4bjg7Pjg4TvvIgqLmdvb2dsZXVzZXJjb250ZW50LmNvbeOAgeODl+ODreODleOCo+ODvOODq+eUu+WDj+etie+8iQogKiDjg6rjg4DjgqTjg6zjgq/jg4jjgoLoh6rli5Xov73lvpPjgZvjgZrjgIHpgbfnp7vlhYjjgpLmr47lm57lkIzjgZjmnaHku7bjgaflho3mpJzoqLzjgZnjgovvvIjmnIDlpKcz44Ob44OD44OX77yJ44CCCiAqLwpjb25zdCBBTExPV0VEX09SSUdJTlM6IEFycmF5PHsgaG9zdFBhdHRlcm46IFJlZ0V4cDsgcGF0aFBhdHRlcm4/OiBSZWdFeHAgfT4gPSBbCiAgeyBob3N0UGF0dGVybjogL15odHRwczpcL1wvKFthLXowLTktXStcLikqY2xvdWRmcm9udFwubmV0XC8vaSwgcGF0aFBhdHRlcm46IC9cL3BpY3R1cmVzXC8vaSB9LAogIHsgaG9zdFBhdHRlcm46IC9eaHR0cHM6XC9cLyhbYS16MC05LV0rXC4pKmdvb2dsZXVzZXJjb250ZW50XC5jb21cLy9pIH0sCl07CgpmdW5jdGlvbiBpc0FsbG93ZWRVcmwodXJsU3RyOiBzdHJpbmcpOiBib29sZWFuIHsKICB0cnkgewogICAgY29uc3QgdXJsID0gbmV3IFVSTCh1cmxTdHIpOwogICAgaWYgKHVybC5wcm90b2NvbCAhPT0gImh0dHBzOiIpIHJldHVybiBmYWxzZTsKICAgIGNvbnN0IGZ1bGxVcmwgPSB1cmwudG9TdHJpbmcoKTsKICAgIHJldHVybiBBTExPV0VEX09SSUdJTlMuc29tZSgKICAgICAgKHsgaG9zdFBhdHRlcm4sIHBhdGhQYXR0ZXJuIH0pID0+CiAgICAgICAgaG9zdFBhdHRlcm4udGVzdChmdWxsVXJsKSAmJiAocGF0aFBhdHRlcm4gPT0gbnVsbCB8fCBwYXRoUGF0dGVybi50ZXN0KHVybC5wYXRobmFtZSkpCiAgICApOwogIH0gY2F0Y2ggewogICAgcmV0dXJuIGZhbHNlOwogIH0KfQoKLy8g44Oq44OA44Kk44Os44Kv44OI44Gv6Ieq5YuV6L+95b6T44Gb44Ga44CB44Ob44OD44OX44GU44Go44GrIExvY2F0aW9uIOOCkuioseWPr1VSTOOBi+WGjeaknOiovOOBmeOCi++8iEEtMTDvvInjgIIKLy8g6Kix5Y+v44Ob44K544OI5LiK44Gr44Oq44OA44Kk44Os44Kv44OI44KS55So5oSP44GX44Gm6Kix5Y+v5aSW44Ob44K544OI44G45Yiw6YGU44GZ44KLIFNTUkYg44KS6Ziy44GQ44CCCmNvbnN0IE1BWF9SRURJUkVDVFMgPSAzOwpjb25zdCBSRURJUkVDVF9TVEFUVVNFUyA9IG5ldyBTZXQoWzMwMSwgMzAyLCAzMDMsIDMwNywgMzA4XSk7CgpjbGFzcyBEaXNhbGxvd2VkUmVkaXJlY3RFcnJvciBleHRlbmRzIEVycm9yIHt9CmNsYXNzIFRvb01hbnlSZWRpcmVjdHNFcnJvciBleHRlbmRzIEVycm9yIHt9Cgphc3luYyBmdW5jdGlvbiBmZXRjaFdpdGhWYWxpZGF0ZWRSZWRpcmVjdHMoaW5pdGlhbFVybDogc3RyaW5nKTogUHJvbWlzZTxSZXNwb25zZT4gewogIGxldCBjdXJyZW50VXJsID0gaW5pdGlhbFVybDsKICBmb3IgKGxldCBob3AgPSAwOyA7IGhvcCsrKSB7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaChjdXJyZW50VXJsLCB7CiAgICAgIGhlYWRlcnM6IHsKICAgICAgICAiVXNlci1BZ2VudCI6ICJTdHJhdmFIZXhUdXJmLzEuMCAoSW1hZ2UgUHJveHkpIiwKICAgICAgfSwKICAgICAgcmVkaXJlY3Q6ICJtYW51YWwiLAogICAgICBuZXh0OiB7IHJldmFsaWRhdGU6IDM2MDAgfSwKICAgIH0pOwoKICAgIGlmICghUkVESVJFQ1RfU1RBVFVTRVMuaGFzKHJlcy5zdGF0dXMpKSB7CiAgICAgIHJldHVybiByZXM7CiAgICB9CgogICAgaWYgKGhvcCA+PSBNQVhfUkVESVJFQ1RTKSB7CiAgICAgIHRocm93IG5ldyBUb29NYW55UmVkaXJlY3RzRXJyb3IoIuODquODgOOCpOODrOOCr+ODiOWbnuaVsOOBruS4iumZkOOCkui2heOBiOOBvuOBl+OBnyIpOwogICAgfQogICAgY29uc3QgbG9jYXRpb24gPSByZXMuaGVhZGVycy5nZXQoImxvY2F0aW9uIik7CiAgICBpZiAoIWxvY2F0aW9uKSB7CiAgICAgIC8vIExvY2F0aW9uIOOBruOBquOBhOODquODgOOCpOODrOOCr+ODiOW/nOetlOOBr+OBneOBruOBvuOBvui/lOOBme+8iOWRvOOBs+WHuuOBl+WBtOOBpyAhb2sg44Go44GX44Gm5omx44GG77yJCiAgICAgIHJldHVybiByZXM7CiAgICB9CiAgICBjb25zdCBuZXh0VXJsID0gbmV3IFVSTChsb2NhdGlvbiwgY3VycmVudFVybCkudG9TdHJpbmcoKTsKICAgIGlmICghaXNBbGxvd2VkVXJsKG5leHRVcmwpKSB7CiAgICAgIHRocm93IG5ldyBEaXNhbGxvd2VkUmVkaXJlY3RFcnJvcigi44Oq44OA44Kk44Os44Kv44OI5YWI44GM6Kix5Y+v44GV44KM44Gm44GE44Gq44GEVVJM44Gn44GZIik7CiAgICB9CiAgICBjdXJyZW50VXJsID0gbmV4dFVybDsKICB9Cn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBHRVQocmVxdWVzdDogTmV4dFJlcXVlc3QpIHsKICBjb25zdCB1cmxQYXJhbSA9IHJlcXVlc3QubmV4dFVybC5zZWFyY2hQYXJhbXMuZ2V0KCJ1cmwiKTsKICBpZiAoIXVybFBhcmFtIHx8IHR5cGVvZiB1cmxQYXJhbSAhPT0gInN0cmluZyIpIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgeyBlcnJvcjogIkJhZCBSZXF1ZXN0IiwgbWVzc2FnZTogInVybCDjgq/jgqjjg6rjgYzlv4XopoHjgafjgZkiIH0sCiAgICAgIHsgc3RhdHVzOiA0MDAgfQogICAgKTsKICB9CgogIGlmICghaXNBbGxvd2VkVXJsKHVybFBhcmFtKSkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiRm9yYmlkZGVuIiwgbWVzc2FnZTogIuioseWPr+OBleOCjOOBpuOBhOOBquOBhOeUu+WDj1VSTOOBp+OBmSIgfSwKICAgICAgeyBzdGF0dXM6IDQwMyB9CiAgICApOwogIH0KCiAgdHJ5IHsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoV2l0aFZhbGlkYXRlZFJlZGlyZWN0cyh1cmxQYXJhbSk7CgogICAgaWYgKCFyZXMub2spIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICAgIHsgZXJyb3I6ICJVcHN0cmVhbSBFcnJvciIsIG1lc3NhZ2U6ICLnlLvlg4/jga7lj5blvpfjgavlpLHmlZfjgZfjgb7jgZfjgZ8iIH0sCiAgICAgICAgeyBzdGF0dXM6IDUwMiB9CiAgICAgICk7CiAgICB9CgogICAgY29uc3QgY29udGVudFR5cGUgPSByZXMuaGVhZGVycy5nZXQoImNvbnRlbnQtdHlwZSIpID8/ICJpbWFnZS9qcGVnIjsKICAgIGNvbnN0IGJ1ZmZlciA9IGF3YWl0IHJlcy5hcnJheUJ1ZmZlcigpOwoKICAgIHJldHVybiBuZXcgTmV4dFJlc3BvbnNlKGJ1ZmZlciwgewogICAgICBzdGF0dXM6IDIwMCwKICAgICAgaGVhZGVyczogewogICAgICAgICJDb250ZW50LVR5cGUiOiBjb250ZW50VHlwZSwKICAgICAgICAiQ2FjaGUtQ29udHJvbCI6ICJwdWJsaWMsIG1heC1hZ2U9MzYwMCwgcy1tYXhhZ2U9MzYwMCIsCiAgICAgIH0sCiAgICB9KTsKICB9IGNhdGNoIChlKSB7CiAgICBpZiAoZSBpbnN0YW5jZW9mIERpc2FsbG93ZWRSZWRpcmVjdEVycm9yKSB7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgICB7IGVycm9yOiAiRm9yYmlkZGVuIiwgbWVzc2FnZTogIuioseWPr+OBleOCjOOBpuOBhOOBquOBhOeUu+WDj1VSTOOBp+OBmSIgfSwKICAgICAgICB7IHN0YXR1czogNDAzIH0KICAgICAgKTsKICAgIH0KICAgIGNvbnNvbGUuZXJyb3IoInByb3h5LWltYWdlIGZldGNoIGVycm9yOiIsIGUpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiSW50ZXJuYWwgU2VydmVyIEVycm9yIiwgbWVzc2FnZTogIueUu+WDj+OBruWPluW+l+OBq+WkseaVl+OBl+OBvuOBl+OBnyIgfSwKICAgICAgeyBzdGF0dXM6IDUwMiB9CiAgICApOwogIH0KfQo=
+import { NextRequest, NextResponse } from "next/server";
+
+/**
+ * GET /api/proxy-image?url=...
+ * 外部画像URL（Strava CDN・Google プロフィール画像等）をサーバー側で取得し、同一オリジンとして返す。
+ * ブラウザの map.loadImage() は fetch を使うため CORS でブロックされるため、
+ * このプロキシ経由で取得することで CORS を回避する。
+ *
+ * 許可するURL:
+ * - HTTPS かつ Strava 系 CDN（*.cloudfront.net の /pictures/ を含むパス）
+ * - HTTPS かつ Google ユーザーコンテンツ（*.googleusercontent.com、プロフィール画像等）
+ * リダイレクトも自動追従せず、遷移先を毎回同じ条件で再検証する（最大3ホップ）。
+ */
+const ALLOWED_ORIGINS: Array<{ hostPattern: RegExp; pathPattern?: RegExp }> = [
+  { hostPattern: /^https:\/\/([a-z0-9-]+\.)*cloudfront\.net\//i, pathPattern: /\/pictures\//i },
+  { hostPattern: /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com\//i },
+];
+
+function isAllowedUrl(urlStr: string): boolean {
+  try {
+    const url = new URL(urlStr);
+    if (url.protocol !== "https:") return false;
+    const fullUrl = url.toString();
+    return ALLOWED_ORIGINS.some(
+      ({ hostPattern, pathPattern }) =>
+        hostPattern.test(fullUrl) && (pathPattern == null || pathPattern.test(url.pathname))
+    );
+  } catch {
+    return false;
+  }
+}
+
+// リダイレクトは自動追従せず、ホップごとに Location を許可URLか再検証する（A-10）。
+// 許可ホスト上にリダイレクトを用意して許可外ホストへ到達する SSRF を防ぐ。
+const MAX_REDIRECTS = 3;
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
+class DisallowedRedirectError extends Error {}
+class TooManyRedirectsError extends Error {}
+
+async function fetchWithValidatedRedirects(initialUrl: string): Promise<Response> {
+  let currentUrl = initialUrl;
+  for (let hop = 0; ; hop++) {
+    const res = await fetch(currentUrl, {
+      headers: {
+        "User-Agent": "StravaHexTurf/1.0 (Image Proxy)",
+      },
+      redirect: "manual",
+      next: { revalidate: 3600 },
+    });
+
+    if (!REDIRECT_STATUSES.has(res.status)) {
+      return res;
+    }
+
+    if (hop >= MAX_REDIRECTS) {
+      throw new TooManyRedirectsError("リダイレクト回数の上限を超えました");
+    }
+    const location = res.headers.get("location");
+    if (!location) {
+      // Location のないリダイレクト応答はそのまま返す（呼び出し側で !ok として扱う）
+      return res;
+    }
+    const nextUrl = new URL(location, currentUrl).toString();
+    if (!isAllowedUrl(nextUrl)) {
+      throw new DisallowedRedirectError("リダイレクト先が許可されていないURLです");
+    }
+    currentUrl = nextUrl;
+  }
+}
+
+export async function GET(request: NextRequest) {
+  const urlParam = request.nextUrl.searchParams.get("url");
+  if (!urlParam || typeof urlParam !== "string") {
+    return NextResponse.json(
+      { error: "Bad Request", message: "url クエリが必要です" },
+      { status: 400 }
+    );
+  }
+
+  if (!isAllowedUrl(urlParam)) {
+    return NextResponse.json(
+      { error: "Forbidden", message: "許可されていない画像URLです" },
+      { status: 403 }
+    );
+  }
+
+  try {
+    const res = await fetchWithValidatedRedirects(urlParam);
+
+    if (!res.ok) {
+      return NextResponse.json(
+        { error: "Upstream Error", message: "画像の取得に失敗しました" },
+        { status: 502 }
+      );
+    }
+
+    const contentType = res.headers.get("content-type") ?? "image/jpeg";
+    const buffer = await res.arrayBuffer();
+
+    return new NextResponse(buffer, {
+      status: 200,
+      headers: {
+        "Content-Type": contentType,
+        "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      },
+    });
+  } catch (e) {
+    if (e instanceof DisallowedRedirectError) {
+      return NextResponse.json(
+        { error: "Forbidden", message: "許可されていない画像URLです" },
+        { status: 403 }
+      );
+    }
+    console.error("proxy-image fetch error:", e);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "画像の取得に失敗しました" },
+      { status: 502 }
+    );
+  }
+}
