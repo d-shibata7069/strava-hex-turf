@@ -1,1 +1,87 @@
-LyoqCiAqIFN0cmF2YSBBUEkg5ZCR44GRIGZldGNo77yINDI5IC8gNXh4IOOBuOOBruODkOODg+OCr+OCquODleS7mOOBje+8iQogKiAtIEItMTA6IFN0cmF2YSDjga7jg6zjg7zjg4jliLbpmZDvvIg0MjnvvInjgoTkuIDmmYLnmoTjgaogNXh4IOOBp+WNs+W6p+OBq+WkseaVl+OBm+OBmuOAgQogKiAgIFJldHJ5LUFmdGVyIOOCkuWwiumHjeOBl+OBquOBjOOCieaMh+aVsOODkOODg+OCr+OCquODleOBp+WGjeippuihjOOBmeOCi+OAggogKiAtIOODhuOCueODiOOBp+OBryBzbGVlcCDjgaggZmV0Y2hGbiDjgpLlt67jgZfmm7/jgYjjgablvoXjgZ/jgZrjgavmpJzoqLzjgafjgY3jgovjgojjgYbjgavjgZnjgovjgIIKICovCgovKiogZmV0Y2hXaXRoQmFja29mZiDjga7jgqrjg5fjgrfjg6fjg7MgKi8KZXhwb3J0IGludGVyZmFjZSBGZXRjaFdpdGhCYWNrb2ZmT3B0aW9ucyB7CiAgLyoqIOODquODiOODqeOCpOWbnuaVsOOBruS4iumZkO+8iOWIneWbnuippuihjOOBr+WQq+OBvuOBquOBhO+8ieOAguODh+ODleOCqeODq+ODiCAzIOWbniAqLwogIG1heFJldHJpZXM/OiBudW1iZXI7CiAgLyoqIOaMh+aVsOODkOODg+OCr+OCquODleOBruWIneWbnuW+heapn+aZgumWk++8iOODn+ODquenku+8ieOAguODh+ODleOCqeODq+ODiCA1MDBtcyAqLwogIGJhc2VEZWxheU1zPzogbnVtYmVyOwogIC8qKiDlvoXmqZ/mmYLplpPjga7kuIrpmZDvvIjjg5/jg6rnp5LvvInjgIJSZXRyeS1BZnRlciDjgYzjgZPjgozjgpLotoXjgYjjgovloLTlkIjjgoLjgZPjga7lgKTjgafpoK3miZPjgaHjgavjgZnjgovjgILjg4fjg5Xjgqnjg6vjg4ggMzAsMDAwbXMgKi8KICBtYXhEZWxheU1zPzogbnVtYmVyOwogIC8qKiDlvoXmqZ/lrp/oo4XvvIjjg4bjgrnjg4jjgaflt67jgZfmm7/jgYjlj6/og73vvIkgKi8KICBzbGVlcD86IChtczogbnVtYmVyKSA9PiBQcm9taXNlPHZvaWQ+OwogIC8qKiBmZXRjaCDlrp/oo4XvvIjjg4bjgrnjg4jjgaflt67jgZfmm7/jgYjlj6/og73vvIkgKi8KICBmZXRjaEZuPzogdHlwZW9mIGZldGNoOwp9Cgpjb25zdCBERUZBVUxUX01BWF9SRVRSSUVTID0gMzsKY29uc3QgREVGQVVMVF9CQVNFX0RFTEFZX01TID0gNTAwOwpjb25zdCBERUZBVUxUX01BWF9ERUxBWV9NUyA9IDMwXzAwMDsKCmZ1bmN0aW9uIGRlZmF1bHRTbGVlcChtczogbnVtYmVyKTogUHJvbWlzZTx2b2lkPiB7CiAgcmV0dXJuIG5ldyBQcm9taXNlKChyZXNvbHZlKSA9PiBzZXRUaW1lb3V0KHJlc29sdmUsIG1zKSk7Cn0KCi8qKiBSZXRyeS1BZnRlciDjg5jjg4Pjg4DvvIjnp5LmlbDjgb7jgZ/jga8gSFRUUCDml6Xku5jvvInjgpLjg5/jg6rnp5LjgavlpInmj5vjgZnjgovjgILop6Pph4jjgafjgY3jgarjgZHjgozjgbAgbnVsbCAqLwpmdW5jdGlvbiBwYXJzZVJldHJ5QWZ0ZXJNcyhoZWFkZXJWYWx1ZTogc3RyaW5nIHwgbnVsbCwgbm93OiBudW1iZXIpOiBudW1iZXIgfCBudWxsIHsKICBpZiAoIWhlYWRlclZhbHVlKSByZXR1cm4gbnVsbDsKICBjb25zdCB0cmltbWVkID0gaGVhZGVyVmFsdWUudHJpbSgpOwogIGlmICh0cmltbWVkID09PSAiIikgcmV0dXJuIG51bGw7CiAgY29uc3Qgc2Vjb25kcyA9IE51bWJlcih0cmltbWVkKTsKICBpZiAoTnVtYmVyLmlzRmluaXRlKHNlY29uZHMpICYmIHNlY29uZHMgPj0gMCkgewogICAgcmV0dXJuIHNlY29uZHMgKiAxMDAwOwogIH0KICBjb25zdCBkYXRlTXMgPSBEYXRlLnBhcnNlKHRyaW1tZWQpOwogIGlmICghTnVtYmVyLmlzTmFOKGRhdGVNcykpIHsKICAgIHJldHVybiBNYXRoLm1heCgwLCBkYXRlTXMgLSBub3cpOwogIH0KICByZXR1cm4gbnVsbDsKfQoKLyoqIOODquODiOODqeOCpOWvvuixoeOBi+OBqeOBhuOBi++8iDQyOSDjgb7jgZ/jga8gNXh477yJICovCmZ1bmN0aW9uIGlzUmV0cnlhYmxlU3RhdHVzKHN0YXR1czogbnVtYmVyKTogYm9vbGVhbiB7CiAgcmV0dXJuIHN0YXR1cyA9PT0gNDI5IHx8IChzdGF0dXMgPj0gNTAwICYmIHN0YXR1cyA8PSA1OTkpOwp9CgovKioKICogNDI5IC8gNXh4IOOBruWgtOWQiOOBq+acgOWkpyBtYXhSZXRyaWVzIOWbnuOBvuOBp+ODquODiOODqeOCpOOBmeOCiyBmZXRjaOOAggogKiAtIFJldHJ5LUFmdGVyIOODmOODg+ODgOOBjOOBguOCjOOBsOOBneOCjOOCkuWEquWFiOOBl+OAgeOBquOBkeOCjOOBsOaMh+aVsOODkOODg+OCr+OCquODleOCkuS9v+OBhuOAggogKiAtIOODquODiOODqeOCpOS4iumZkOOBq+mBlOOBl+OBn+WgtOWQiOOBr+acgOW+jOOBruODrOOCueODneODs+OCueOCkuOBneOBruOBvuOBvui/lOOBme+8iHRocm93IOOBl+OBquOBhO+8ieOAggogKiAgIOWRvOOBs+WHuuOBl+WBtOOBr+W+k+adpeOBqeOBiuOCiiByZXMub2sg44KS5Yik5a6a44GZ44KL44GT44Go44CCCiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZmV0Y2hXaXRoQmFja29mZigKICB1cmw6IHN0cmluZyB8IFVSTCwKICBpbml0PzogUmVxdWVzdEluaXQsCiAgb3B0aW9ucz86IEZldGNoV2l0aEJhY2tvZmZPcHRpb25zCik6IFByb21pc2U8UmVzcG9uc2U+IHsKICBjb25zdCBtYXhSZXRyaWVzID0gb3B0aW9ucz8ubWF4UmV0cmllcyA/PyBERUZBVUxUX01BWF9SRVRSSUVTOwogIGNvbnN0IGJhc2VEZWxheU1zID0gb3B0aW9ucz8uYmFzZURlbGF5TXMgPz8gREVGQVVMVF9CQVNFX0RFTEFZX01TOwogIGNvbnN0IG1heERlbGF5TXMgPSBvcHRpb25zPy5tYXhEZWxheU1zID8/IERFRkFVTFRfTUFYX0RFTEFZX01TOwogIGNvbnN0IHNsZWVwID0gb3B0aW9ucz8uc2xlZXAgPz8gZGVmYXVsdFNsZWVwOwogIGNvbnN0IGZldGNoRm4gPSBvcHRpb25zPy5mZXRjaEZuID8/IGZldGNoOwoKICBsZXQgbGFzdFJlc3BvbnNlOiBSZXNwb25zZSB8IG51bGwgPSBudWxsOwogIGZvciAobGV0IGF0dGVtcHQgPSAwOyBhdHRlbXB0IDw9IG1heFJldHJpZXM7IGF0dGVtcHQrKykgewogICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2hGbih1cmwsIGluaXQpOwogICAgbGFzdFJlc3BvbnNlID0gcmVzOwogICAgaWYgKCFpc1JldHJ5YWJsZVN0YXR1cyhyZXMuc3RhdHVzKSB8fCBhdHRlbXB0ID09PSBtYXhSZXRyaWVzKSB7CiAgICAgIHJldHVybiByZXM7CiAgICB9CiAgICBjb25zdCByZXRyeUFmdGVyTXMgPSBwYXJzZVJldHJ5QWZ0ZXJNcygKICAgICAgdHlwZW9mIHJlcy5oZWFkZXJzPy5nZXQgPT09ICJmdW5jdGlvbiIgPyByZXMuaGVhZGVycy5nZXQoInJldHJ5LWFmdGVyIikgOiBudWxsLAogICAgICBEYXRlLm5vdygpCiAgICApOwogICAgY29uc3QgZXhwb25lbnRpYWxNcyA9IGJhc2VEZWxheU1zICogMiAqKiBhdHRlbXB0OwogICAgY29uc3QgZGVsYXlNcyA9IE1hdGgubWluKG1heERlbGF5TXMsIHJldHJ5QWZ0ZXJNcyA/PyBleHBvbmVudGlhbE1zKTsKICAgIGlmIChkZWxheU1zID4gMCkgewogICAgICBhd2FpdCBzbGVlcChkZWxheU1zKTsKICAgIH0KICB9CiAgLy8g5Yiw6YGU44GX44Gq44GE44Gv44Ga44Gg44GM44CB5Z6L44Gu44Gf44KB44Gr5pyA5b6M44Gu44Os44K544Od44Oz44K544KS6L+U44GZCiAgcmV0dXJuIGxhc3RSZXNwb25zZSBhcyBSZXNwb25zZTsKfQo=
+/**
+ * Strava API 向け fetch（429 / 5xx へのバックオフ付き）
+ * - B-10: Strava のレート制限（429）や一時的な 5xx で即座に失敗せず、
+ *   Retry-After を尊重しながら指数バックオフで再試行する。
+ * - テストでは sleep と fetchFn を差し替えて待たずに検証できるようにする。
+ */
+
+/** fetchWithBackoff のオプション */
+export interface FetchWithBackoffOptions {
+  /** リトライ回数の上限（初回試行は含まない）。デフォルト 3 回 */
+  maxRetries?: number;
+  /** 指数バックオフの初回待機時間（ミリ秒）。デフォルト 500ms */
+  baseDelayMs?: number;
+  /** 待機時間の上限（ミリ秒）。Retry-After がこれを超える場合もこの値で頭打ちにする。デフォルト 30,000ms */
+  maxDelayMs?: number;
+  /** 待機実装（テストで差し替え可能） */
+  sleep?: (ms: number) => Promise<void>;
+  /** fetch 実装（テストで差し替え可能） */
+  fetchFn?: typeof fetch;
+}
+
+const DEFAULT_MAX_RETRIES = 3;
+const DEFAULT_BASE_DELAY_MS = 500;
+const DEFAULT_MAX_DELAY_MS = 30_000;
+
+function defaultSleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Retry-After ヘッダ（秒数または HTTP 日付）をミリ秒に変換する。解釈できなければ null */
+function parseRetryAfterMs(headerValue: string | null, now: number): number | null {
+  if (!headerValue) return null;
+  const trimmed = headerValue.trim();
+  if (trimmed === "") return null;
+  const seconds = Number(trimmed);
+  if (Number.isFinite(seconds) && seconds >= 0) {
+    return seconds * 1000;
+  }
+  const dateMs = Date.parse(trimmed);
+  if (!Number.isNaN(dateMs)) {
+    return Math.max(0, dateMs - now);
+  }
+  return null;
+}
+
+/** リトライ対象かどうか（429 または 5xx） */
+function isRetryableStatus(status: number): boolean {
+  return status === 429 || (status >= 500 && status <= 599);
+}
+
+/**
+ * 429 / 5xx の場合に最大 maxRetries 回までリトライする fetch。
+ * - Retry-After ヘッダがあればそれを優先し、なければ指数バックオフを使う。
+ * - リトライ上限に達した場合は最後のレスポンスをそのまま返す（throw しない）。
+ *   呼び出し側は従来どおり res.ok を判定すること。
+ */
+export async function fetchWithBackoff(
+  url: string | URL,
+  init?: RequestInit,
+  options?: FetchWithBackoffOptions
+): Promise<Response> {
+  const maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES;
+  const baseDelayMs = options?.baseDelayMs ?? DEFAULT_BASE_DELAY_MS;
+  const maxDelayMs = options?.maxDelayMs ?? DEFAULT_MAX_DELAY_MS;
+  const sleep = options?.sleep ?? defaultSleep;
+  const fetchFn = options?.fetchFn ?? fetch;
+
+  let lastResponse: Response | null = null;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const res = await fetchFn(url, init);
+    lastResponse = res;
+    if (!isRetryableStatus(res.status) || attempt === maxRetries) {
+      return res;
+    }
+    const retryAfterMs = parseRetryAfterMs(
+      typeof res.headers?.get === "function" ? res.headers.get("retry-after") : null,
+      Date.now()
+    );
+    const exponentialMs = baseDelayMs * 2 ** attempt;
+    const delayMs = Math.min(maxDelayMs, retryAfterMs ?? exponentialMs);
+    if (delayMs > 0) {
+      await sleep(delayMs);
+    }
+  }
+  // 到達しないはずだが、型のために最後のレスポンスを返す
+  return lastResponse as Response;
+}
