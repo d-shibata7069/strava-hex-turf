@@ -27,6 +27,8 @@ export interface StravaConnectButtonProps {
   rightIcon?: React.ReactNode;
   className?: string;
   "data-testid"?: string;
+  /** API ルートなど、next-intl の対象外パスへ遷移する場合に通常のアンカーを使う */
+  nativeAnchor?: boolean;
 }
 
 const baseClass =
@@ -50,16 +52,37 @@ export function StravaConnectButton({
   rightIcon,
   className = "",
   "data-testid": dataTestId,
+  nativeAnchor = false,
 }: StravaConnectButtonProps) {
-  return (
-    <Link
-      href={href}
-      className={`${baseClass} ${variantClasses[variant]} ${className}`.trim()}
-      data-testid={dataTestId ?? "connect-strava"}
-    >
+  const buttonClassName =
+    `${baseClass} ${variantClasses[variant]} ${className}`.trim();
+  const content = (
+    <>
       <StravaLogoIcon className="h-5 w-5 shrink-0" />
       <span>{children}</span>
       {rightIcon}
+    </>
+  );
+
+  if (nativeAnchor) {
+    return (
+      <a
+        href={href}
+        className={buttonClassName}
+        data-testid={dataTestId ?? "connect-strava"}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={buttonClassName}
+      data-testid={dataTestId ?? "connect-strava"}
+    >
+      {content}
     </Link>
   );
 }

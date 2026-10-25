@@ -37,6 +37,7 @@ export function LoginView({ authUrl, errorMessage }: LoginViewProps) {
             href={authUrl}
             variant="compact"
             className="w-full justify-center rounded-lg px-4 py-3 text-sm"
+            nativeAnchor
           />
         </div>
         <IntlLink
