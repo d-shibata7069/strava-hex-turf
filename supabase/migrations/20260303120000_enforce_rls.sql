@@ -1,3 +1,11 @@
+-- 【改名履歴】本ファイルは旧名 20250303120000_enforce_rls.sql（2025 年の日付）で、
+-- ファイル名順では初期スキーマ（20260228000000）より前に並び、新規環境で
+-- テーブル未作成のまま失敗する問題があったため、20260303120000 へ改名した（A-11）。
+-- 既存 DB では schema_migrations に旧バージョンが残るため、適用時に
+-- `supabase migration repair --status reverted 20250303120000` と
+-- `supabase migration repair --status applied 20260303120000` で履歴を付け替えること。
+-- 内容自体は同一であり、ポリシーの最終状態は 20260407000000_security_hardening.sql が保証する。
+--
 -- Enforce RLS on all target tables to prevent unauthorized read/write via Anon Key.
 -- Service Role Key (backend) bypasses RLS; only intended client access is allowed.
 

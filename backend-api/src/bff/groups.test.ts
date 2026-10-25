@@ -66,6 +66,35 @@ describe("createGroup", () => {
     expect(mockMembersInsert).toHaveBeenCalledWith({ group_id: "g1", user_id: validUserId });
   });
 
+  it("招待コードは 18 桁 hex で生成され、created_by に作成者が記録される", async () => {
+    let insertedGroup: Record<string, unknown> | null = null;
+    const mockGroupsInsert = vi.fn((row: Record<string, unknown>) => {
+      insertedGroup = row;
+      return {
+        select: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({
+            data: { id: "g1", name: "My Group", invite_code: row.invite_code },
+            error: null,
+          }),
+        }),
+      };
+    });
+    const mockMembersInsert = vi.fn().mockResolvedValue({ error: null });
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "groups") return { insert: mockGroupsInsert };
+      if (table === "group_members") return { insert: mockMembersInsert };
+      return {};
+    });
+    const supabase = { from: mockFrom };
+
+    const result = await createGroup(supabase as never, { name: "My Group", user_id: validUserId });
+    expect(result.ok).toBe(true);
+    expect(insertedGroup).not.toBeNull();
+    // 72bit = 18 桁 hex（旧仕様の 8 桁ではないこと）
+    expect(insertedGroup!.invite_code).toMatch(/^[0-9a-f]{18}$/);
+    expect(insertedGroup!.created_by).toBe(validUserId);
+  });
+
   it("groups insert が 23505 の場合はリトライし、最終的に全て衝突なら 409", async () => {
     const mockGroupsInsert = vi.fn().mockReturnValue({
       select: vi.fn().mockReturnValue({
@@ -174,6 +203,96 @@ describe("joinGroup", () => {
       user_id: validUserId,
     });
     expect(result).toEqual({ ok: false, statusCode: 409, error: "Already a member" });
+  });
+
+  it("同一ユーザーの参加失敗が 5 回続くとロックされ、以降は DB を叩かず 429", async () => {
+    const throttleUserId = "660e8400-e29b-41d4-a716-446655440001";
+    const mockMaybeSingle = vi.fn().mockResolvedValue({ data: null, error: null });
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "groups")
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({ maybeSingle: mockMaybeSingle }),
+          }),
+        };
+      return {};
+    });
+    const supabase = { from: mockFrom };
+
+    for (let i = 0; i < 5; i++) {
+      const result = await joinGroup(supabase as never, {
+        invite_code: "wrong-code",
+        user_id: throttleUserId,
+      });
+      expect(result).toEqual({ ok: false, statusCode: 404, error: "Group not found" });
+    }
+    expect(mockMaybeSingle).toHaveBeenCalledTimes(5);
+
+    const locked = await joinGroup(supabase as never, {
+      invite_code: "wrong-code",
+      user_id: throttleUserId,
+    });
+    expect(locked).toEqual({
+      ok: false,
+      statusCode: 429,
+      error: "Too many failed attempts. Try again later.",
+    });
+    // ロック中はグループ検索自体を行わない
+    expect(mockMaybeSingle).toHaveBeenCalledTimes(5);
+  });
+
+  it("参加成功で失敗カウントがリセットされる", async () => {
+    const resetUserId = "660e8400-e29b-41d4-a716-446655440002";
+    let groupData: { id: string } | null = null;
+    const mockFrom = vi.fn((table: string) => {
+      if (table === "groups")
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              maybeSingle: vi.fn().mockImplementation(async () => ({
+                data: groupData,
+                error: null,
+              })),
+            }),
+          }),
+        };
+      if (table === "group_members")
+        return { insert: vi.fn().mockResolvedValue({ error: null }) };
+      return {};
+    });
+    const supabase = { from: mockFrom };
+
+    // 4 回失敗（ロック閾値 5 の手前）
+    for (let i = 0; i < 4; i++) {
+      const result = await joinGroup(supabase as never, {
+        invite_code: "wrong-code",
+        user_id: resetUserId,
+      });
+      expect(result.statusCode).toBe(404);
+    }
+
+    // 成功するとカウントがリセットされる
+    groupData = { id: "g1" };
+    const success = await joinGroup(supabase as never, {
+      invite_code: "valid-code",
+      user_id: resetUserId,
+    });
+    expect(success).toEqual({ ok: true, group_id: "g1" });
+
+    // リセット後は 4 回失敗してもロックされない（5 回目の失敗で初めてロック）
+    groupData = null;
+    for (let i = 0; i < 5; i++) {
+      const result = await joinGroup(supabase as never, {
+        invite_code: "wrong-code",
+        user_id: resetUserId,
+      });
+      expect(result.statusCode).toBe(404);
+    }
+    const locked = await joinGroup(supabase as never, {
+      invite_code: "wrong-code",
+      user_id: resetUserId,
+    });
+    expect(locked.statusCode).toBe(429);
   });
 
   it("参加成功時は ok: true と group_id を返す", async () => {

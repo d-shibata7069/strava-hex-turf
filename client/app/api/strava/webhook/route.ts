@@ -38,10 +38,39 @@ interface StravaWebhookPayload {
   aspect_type?: string;
   object_id?: number;
   owner_id?: number;
+  subscription_id?: number;
+  updates?: {
+    authorized?: string | boolean;
+  };
 }
 
 function getBackendBaseUrl(): string {
   return process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "http://localhost:3001";
+}
+
+/** backend-api への内部呼び出し用ヘッダ */
+function getInternalApiHeaders(): Record<string, string> {
+  return {
+    "Content-Type": "application/json",
+    "x-internal-api-key": process.env.INTERNAL_API_KEY ?? "",
+  };
+}
+
+/**
+ * A-2 / B-03: subscription_id の真正性検証。
+ * Strava Webhook の POST には署名がないため、購読 ID の照合が実質的な防御線になる。
+ * 環境変数未設定の場合も転送しない（fail closed）。
+ */
+function isValidSubscriptionId(subscriptionId: number | undefined): boolean {
+  const expected = process.env.STRAVA_WEBHOOK_SUBSCRIPTION_ID;
+  if (!expected) {
+    console.error(
+      "[strava-webhook] STRAVA_WEBHOOK_SUBSCRIPTION_ID is not configured; rejecting webhook event (fail closed)"
+    );
+    return false;
+  }
+  if (typeof subscriptionId !== "number") return false;
+  return String(subscriptionId) === expected;
 }
 
 /**
@@ -61,23 +90,35 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // subscription_id が一致しないイベントは backend へ転送しない
+  if (!isValidSubscriptionId(body.subscription_id)) {
+    return NextResponse.json(
+      { error: "Invalid subscription_id" },
+      { status: 403 }
+    );
+  }
+
   const { object_type, aspect_type, object_id, owner_id } = body;
 
   const isActivityEvent =
     object_type === "activity" &&
     typeof object_id === "number" &&
     typeof owner_id === "number" &&
-    (aspect_type === "create" || aspect_type === "delete");
+    (aspect_type === "create" || aspect_type === "delete" || aspect_type === "update");
 
   if (isActivityEvent) {
     const url = `${getBackendBaseUrl()}/webhook/activity`;
     void fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getInternalApiHeaders(),
       body: JSON.stringify({
         object_id,
         owner_id,
-        ...(aspect_type === "delete" ? { action: "delete" } : {}),
+        ...(aspect_type === "delete"
+          ? { action: "delete" }
+          : aspect_type === "update"
+            ? { action: "update" }
+            : {}),
       }),
     }).catch((err) => {
       console.error("[strava-webhook] backend activity fetch error:", err);
@@ -96,8 +137,9 @@ export async function POST(request: NextRequest) {
     try {
       const backendResponse = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ owner_id }),
+        headers: getInternalApiHeaders(),
+        // A-1: Strava ペイロードの updates.authorized をそのまま転送する（backend 側で false を確認する）
+        body: JSON.stringify({ owner_id, authorized: body.updates?.authorized }),
       });
 
       if (!backendResponse.ok) {

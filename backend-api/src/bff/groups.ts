@@ -4,11 +4,46 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { randomBytes } from "node:crypto";
 
-const INVITE_CODE_BYTES = 4;
+// 招待コードは 72bit（9 バイト → 18 桁 hex）。旧仕様の 32bit（8 桁）では
+// 試行回数制限と組み合わせても総当たりの余地があったため拡張した（A-7 / B-12）。
+// 照合は文字列一致のみのため、既存発行済みの 8 桁コードもそのまま参加に使える。
+const INVITE_CODE_BYTES = 9;
 const MAX_RETRIES = 5;
 
 function generateInviteCode(): string {
   return randomBytes(INVITE_CODE_BYTES).toString("hex");
+}
+
+// 招待コード総当たり対策の簡易スロットリング（メモリ内）。
+// 同一 user_id の参加失敗（コード不一致）が JOIN_MAX_FAILURES 回に達したら
+// JOIN_LOCK_MS の間ロックする。プロセス再起動でリセットされる簡易実装であり、
+// 永続化や複数プロセス間での共有は行わない。
+const JOIN_MAX_FAILURES = 5;
+const JOIN_LOCK_MS = 15 * 60 * 1000;
+
+interface JoinFailureState {
+  count: number;
+  lockedUntil: number | null;
+}
+
+const joinFailures = new Map<string, JoinFailureState>();
+
+function isJoinLocked(userId: string, now: number): boolean {
+  const state = joinFailures.get(userId);
+  if (!state || state.lockedUntil == null) return false;
+  if (now < state.lockedUntil) return true;
+  // ロック期限切れのため状態を破棄する
+  joinFailures.delete(userId);
+  return false;
+}
+
+function recordJoinFailure(userId: string, now: number): void {
+  const state = joinFailures.get(userId) ?? { count: 0, lockedUntil: null };
+  state.count += 1;
+  if (state.count >= JOIN_MAX_FAILURES) {
+    state.lockedUntil = now + JOIN_LOCK_MS;
+  }
+  joinFailures.set(userId, state);
 }
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -42,7 +77,8 @@ export async function createGroup(
     const inviteCode = generateInviteCode();
     const { data: newGroup, error: insertGroupError } = await supabase
       .from("groups")
-      .insert({ name, invite_code: inviteCode })
+      // created_by に作成者を記録する（グループ削除の権限判定に使う。A-8）
+      .insert({ name, invite_code: inviteCode, created_by: body.user_id })
       .select("id, name, invite_code")
       .single();
 
@@ -98,6 +134,14 @@ export async function joinGroup(
     return { ok: false, statusCode: 400, error: "Missing or invalid user_id" };
   }
 
+  if (isJoinLocked(body.user_id, Date.now())) {
+    return {
+      ok: false,
+      statusCode: 429,
+      error: "Too many failed attempts. Try again later.",
+    };
+  }
+
   const { data: group, error: groupError } = await supabase
     .from("groups")
     .select("id")
@@ -108,6 +152,8 @@ export async function joinGroup(
     return { ok: false, statusCode: 500, error: groupError.message };
   }
   if (!group?.id) {
+    // コード不一致のみを失敗として数える（DB エラー等は数えない）
+    recordJoinFailure(body.user_id, Date.now());
     return { ok: false, statusCode: 404, error: "Group not found" };
   }
 
@@ -122,5 +168,7 @@ export async function joinGroup(
     }
     return { ok: false, statusCode: 500, error: insertError.message };
   }
+  // 参加成功時は失敗カウントをリセットする
+  joinFailures.delete(body.user_id);
   return { ok: true, group_id: group.id };
 }

@@ -123,7 +123,10 @@ export async function GET(request: NextRequest) {
   try {
     syncRes = await fetch(`${backendUrl}/users/sync`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-api-key": process.env.INTERNAL_API_KEY ?? "",
+      },
       body: JSON.stringify(syncPayload),
     });
   } catch (e) {
@@ -163,6 +166,7 @@ export async function GET(request: NextRequest) {
         headers: {
           "Content-Type": "application/json",
           "x-internal-backfill-key": internalBackfillApiKey,
+          "x-internal-api-key": process.env.INTERNAL_API_KEY ?? "",
         },
         body: JSON.stringify({ strava_id: athlete.id }),
       });

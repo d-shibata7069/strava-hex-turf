@@ -25,7 +25,7 @@ npm install
 
 - **起動:** `npm run build` の後に `npm run webhook-server`（`backend-api` ディレクトリで実行すること）。
 - デフォルトで `http://localhost:3001/webhook/activity` で待ち受け（`PORT` 環境変数で変更可）。
-- **環境変数:** 起動時に **backend-api 直下の `.env.local` または `.env`** を自動読み込みする。`SUPABASE_URL`（または `NEXT_PUBLIC_SUPABASE_URL`）と `SUPABASE_SERVICE_ROLE_KEY` が必須。client で Strava トークンを暗号化して保存している場合は、復号用に **`STRAVA_TOKEN_ENCRYPTION_KEY`** を client と同一の値で設定する（未設定なら DB の平文トークンをそのまま使用）。`backend-api/.env.example` をコピーして `backend-api/.env.local` を作成し、値を設定する。
+- **環境変数:** 起動時に **backend-api 直下の `.env.local` または `.env`** を自動読み込みする。`SUPABASE_URL`（または `NEXT_PUBLIC_SUPABASE_URL`）と `SUPABASE_SERVICE_ROLE_KEY` が必須。Strava トークンの暗号化・復号用に **`STRAVA_TOKEN_ENCRYPTION_KEY`** を client と同一の値で設定すること。平文トークンの保存・使用経路は存在せず、キー未設定時は暗号化に失敗するため `POST /users/sync` が 500 を返して保存を拒否し、復号に失敗した場合は Webhook 処理を停止する。`backend-api/.env.example` をコピーして `backend-api/.env.local` を作成し、値を設定する。
 
 
 ### POST /webhook/deauthorization
@@ -108,7 +108,7 @@ INTERNAL_BACKFILL_API_KEY=xxxxx BACKEND_API_URL=http://localhost:3001 \
   - `name` (string, 必須): グループ名
   - `user_id` (string, 必須): 作成者ユーザーの UUID（フロントのセッション等で取得した id）
 - **レスポンス**
-  - 成功: `200` + `{ "ok": true, "group_id": "uuid", "name": "グループ名", "invite_code": "8文字16進" }`
+  - 成功: `200` + `{ "ok": true, "group_id": "uuid", "name": "グループ名", "invite_code": "18文字16進" }`
   - 失敗: `400`（name 空・user_id 不正）/ `409`（招待コード衝突がリトライ上限超過）/ `500` + `{ "error": "メッセージ" }`
 
 ### POST /groups/join
@@ -116,8 +116,8 @@ INTERNAL_BACKFILL_API_KEY=xxxxx BACKEND_API_URL=http://localhost:3001 \
 招待コードを受け取り、対象グループを検索して `group_members` に insert する。
 
 - **リクエストボディ（JSON）**
-  - `invite_code` (string, 必須): 招待コード（8 文字 16 進）
+  - `invite_code` (string, 必須): 招待コード（照合は文字列一致のみ。旧仕様の 8 文字のコードも引き続き有効）
   - `user_id` (string, 必須): 参加するユーザーの UUID
 - **レスポンス**
   - 成功: `200` + `{ "ok": true, "group_id": "uuid" }`
-  - 失敗: `400`（招待コード空・user_id 不正）/ `404`（招待コードに一致するグループなし）/ `409`（既に参加済み）/ `500` + `{ "error": "メッセージ" }`
+  - 失敗: `400`（招待コード空・user_id 不正）/ `404`（招待コードに一致するグループなし）/ `409`（既に参加済み）/ `429`（同一ユーザーの参加失敗が 5 回続いてロック中。15 分経過後に解除）/ `500` + `{ "error": "メッセージ" }`

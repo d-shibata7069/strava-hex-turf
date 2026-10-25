@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
  * 許可するURL:
  * - HTTPS かつ Strava 系 CDN（*.cloudfront.net の /pictures/ を含むパス）
  * - HTTPS かつ Google ユーザーコンテンツ（*.googleusercontent.com、プロフィール画像等）
+ * リダイレクトも自動追従せず、遷移先を毎回同じ条件で再検証する（最大3ホップ）。
  */
 const ALLOWED_ORIGINS: Array<{ hostPattern: RegExp; pathPattern?: RegExp }> = [
   { hostPattern: /^https:\/\/([a-z0-9-]+\.)*cloudfront\.net\//i, pathPattern: /\/pictures\//i },
@@ -29,6 +30,45 @@ function isAllowedUrl(urlStr: string): boolean {
   }
 }
 
+// リダイレクトは自動追従せず、ホップごとに Location を許可URLか再検証する（A-10）。
+// 許可ホスト上にリダイレクトを用意して許可外ホストへ到達する SSRF を防ぐ。
+const MAX_REDIRECTS = 3;
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
+class DisallowedRedirectError extends Error {}
+class TooManyRedirectsError extends Error {}
+
+async function fetchWithValidatedRedirects(initialUrl: string): Promise<Response> {
+  let currentUrl = initialUrl;
+  for (let hop = 0; ; hop++) {
+    const res = await fetch(currentUrl, {
+      headers: {
+        "User-Agent": "StravaHexTurf/1.0 (Image Proxy)",
+      },
+      redirect: "manual",
+      next: { revalidate: 3600 },
+    });
+
+    if (!REDIRECT_STATUSES.has(res.status)) {
+      return res;
+    }
+
+    if (hop >= MAX_REDIRECTS) {
+      throw new TooManyRedirectsError("リダイレクト回数の上限を超えました");
+    }
+    const location = res.headers.get("location");
+    if (!location) {
+      // Location のないリダイレクト応答はそのまま返す（呼び出し側で !ok として扱う）
+      return res;
+    }
+    const nextUrl = new URL(location, currentUrl).toString();
+    if (!isAllowedUrl(nextUrl)) {
+      throw new DisallowedRedirectError("リダイレクト先が許可されていないURLです");
+    }
+    currentUrl = nextUrl;
+  }
+}
+
 export async function GET(request: NextRequest) {
   const urlParam = request.nextUrl.searchParams.get("url");
   if (!urlParam || typeof urlParam !== "string") {
@@ -46,12 +86,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const res = await fetch(urlParam, {
-      headers: {
-        "User-Agent": "StravaHexTurf/1.0 (Image Proxy)",
-      },
-      next: { revalidate: 3600 },
-    });
+    const res = await fetchWithValidatedRedirects(urlParam);
 
     if (!res.ok) {
       return NextResponse.json(
@@ -71,6 +106,12 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (e) {
+    if (e instanceof DisallowedRedirectError) {
+      return NextResponse.json(
+        { error: "Forbidden", message: "許可されていない画像URLです" },
+        { status: 403 }
+      );
+    }
     console.error("proxy-image fetch error:", e);
     return NextResponse.json(
       { error: "Internal Server Error", message: "画像の取得に失敗しました" },

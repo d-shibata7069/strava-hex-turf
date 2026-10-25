@@ -13,6 +13,13 @@ import {
   createDefaultDeps,
 } from "./services/strava-webhook.js";
 import { decryptStravaToken, encryptStravaToken } from "./utils/token-crypto.js";
+import {
+  isValidInternalApiKey,
+  isValidBackfillApiKey,
+  INTERNAL_API_KEY_HEADER,
+  INTERNAL_BACKFILL_API_KEY_HEADER,
+} from "./utils/internal-auth.js";
+import { fetchWithBackoff } from "./utils/strava-fetch.js";
 import { createGroup, joinGroup } from "./bff/groups.js";
 import { runUsersSync, type UsersSyncBody } from "./bff/users-sync.js";
 
@@ -88,10 +95,18 @@ function parseWebhookBody(req: IncomingMessage): Promise<{ object_id: number; ow
 }
 
 
-function parseDeauthorizationBody(req: IncomingMessage): Promise<{ owner_id: number } | null> {
+type DeauthorizationBody = {
+  owner_id: number;
+  authorized?: boolean | string;
+};
+
+function parseDeauthorizationBody(req: IncomingMessage): Promise<DeauthorizationBody | null> {
   return parseJsonBody(req).then((body) => {
     if (body && typeof (body as { owner_id?: number }).owner_id === "number") {
-      return { owner_id: (body as { owner_id: number }).owner_id };
+      return {
+        owner_id: (body as { owner_id: number }).owner_id,
+        authorized: (body as { authorized?: boolean | string }).authorized,
+      };
     }
     return null;
   });
@@ -102,6 +117,15 @@ async function handleWebhookDeauthorization(req: IncomingMessage, res: ServerRes
   if (!body) {
     res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Missing or invalid owner_id" }));
+    return;
+  }
+
+  // A-1: 真正性確認。本物の連携解除では authorized が false（boolean / 文字列）になる。
+  // それ以外（未指定・true 等）では削除を実行しない。
+  const isDeauthorized = body.authorized === false || body.authorized === "false";
+  if (!isDeauthorized) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Missing or invalid authorized flag" }));
     return;
   }
 
@@ -191,21 +215,23 @@ async function handleUsersSync(req: IncomingMessage, res: ServerResponse): Promi
   }
 }
 
+/** B-09: バックフィルのページング上限（最大5ページ = 1000件） */
+const BACKFILL_MAX_PAGES = 5;
+
 async function fetchRecentActivityIds(accessToken: string, days: number, baseTime: Date): Promise<number[]> {
   const baseSec = Math.floor(baseTime.getTime() / 1000);
   const afterSec = baseSec - days * 24 * 60 * 60;
   const perPage = 200;
-  let page = 1;
   const ids: number[] = [];
 
-  while (true) {
+  for (let page = 1; page <= BACKFILL_MAX_PAGES; page += 1) {
     const params = new URLSearchParams({
       after: String(afterSec),
       before: String(baseSec),
       per_page: String(perPage),
       page: String(page),
     });
-    const res = await fetch(`https://www.strava.com/api/v3/athlete/activities?${params.toString()}`, {
+    const res = await fetchWithBackoff(`https://www.strava.com/api/v3/athlete/activities?${params.toString()}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     if (!res.ok) {
@@ -218,18 +244,26 @@ async function fetchRecentActivityIds(accessToken: string, days: number, baseTim
       .filter((id): id is number => typeof id === "number");
     ids.push(...pageIds);
     if (rows.length < perPage) break;
-    page += 1;
+    if (page === BACKFILL_MAX_PAGES) {
+      // 上限で打ち切ったことを明示する（残りのアクティビティは取り込まれない）
+      console.warn(
+        `[webhook-server] initial backfill: ページング上限（${BACKFILL_MAX_PAGES}ページ = ${BACKFILL_MAX_PAGES * perPage}件）に達したため打ち切りました`
+      );
+    }
   }
 
   return ids;
 }
 
 async function handleUsersInitialBackfill(req: IncomingMessage, res: ServerResponse): Promise<void> {
-  const expectedKey = process.env.INTERNAL_BACKFILL_API_KEY ?? "";
-  const requestKey = req.headers["x-internal-backfill-key"];
-  if (!expectedKey || requestKey !== expectedKey) {
-    res.writeHead(403, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Forbidden" }));
+  // 後方互換: 従来の x-internal-backfill-key でも、新しい x-internal-api-key でも通す。
+  // （ルーティング側でも検証するが、ハンドラ単体でも fail closed にしておく）
+  if (
+    !isValidBackfillApiKey(req.headers[INTERNAL_BACKFILL_API_KEY_HEADER]) &&
+    !isValidInternalApiKey(req.headers[INTERNAL_API_KEY_HEADER])
+  ) {
+    res.writeHead(401, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Unauthorized" }));
     return;
   }
 
@@ -415,13 +449,30 @@ async function handlePost(
     return;
   }
   const isDelete = body.action === "delete";
+  const isUpdate = body.action === "update";
   console.log("[webhook-server] received activity event", {
     object_id: body.object_id,
     owner_id: body.owner_id,
-    action: isDelete ? "delete" : "create",
+    action: isDelete ? "delete" : isUpdate ? "update" : "create",
   });
 
   const supabase = getSupabase();
+
+  if (isUpdate) {
+    // B-15: 事後編集に追随する。まず既存タイルを復元（削除相当）してから再取り込みする。
+    const restoreResult = await processActivityDelete(
+      body.object_id,
+      body.owner_id,
+      { supabase }
+    );
+    if (restoreResult.ok === false) {
+      console.error("[webhook-server] processActivityDelete (update restore) failed:", restoreResult.reason);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: restoreResult.reason }));
+      return;
+    }
+    console.log("[webhook-server] processActivityDelete ok (update restore)", { object_id: body.object_id });
+  }
 
   if (isDelete) {
     const result = await processActivityDelete(
@@ -493,22 +544,64 @@ function getPath(url: string | undefined): string {
   return i === -1 ? url : url.slice(0, i);
 }
 
+/**
+ * 内部認証チェック（A-3 / B-02）。
+ * 不一致なら 401 JSON を返して false を返す。
+ * /users/initial-backfill のみ、後方互換として x-internal-backfill-key でも通す。
+ */
+function requireInternalAuth(req: IncomingMessage, res: ServerResponse, path: string): boolean {
+  if (isValidInternalApiKey(req.headers[INTERNAL_API_KEY_HEADER])) return true;
+  if (
+    path === PATH_USERS_INITIAL_BACKFILL &&
+    isValidBackfillApiKey(req.headers[INTERNAL_BACKFILL_API_KEY_HEADER])
+  ) {
+    return true;
+  }
+  res.writeHead(401, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ error: "Unauthorized" }));
+  return false;
+}
+
+const POST_PATHS = new Set([
+  PATH_WEBHOOK,
+  PATH_USERS_SYNC,
+  PATH_USERS_INITIAL_BACKFILL,
+  PATH_WEBHOOK_DEAUTHORIZATION,
+  PATH_GROUPS,
+  PATH_GROUPS_JOIN,
+]);
+
 const server = createServer(async (req, res) => {
-  const path = getPath(req.url);
-  if (req.method === "POST" && path === PATH_WEBHOOK) {
-    await handlePost(req, res);
-  } else if (req.method === "POST" && path === PATH_USERS_SYNC) {
-    await handleUsersSync(req, res);
-  } else if (req.method === "POST" && path === PATH_USERS_INITIAL_BACKFILL) {
-    await handleUsersInitialBackfill(req, res);
-  } else if (req.method === "POST" && path === PATH_WEBHOOK_DEAUTHORIZATION) {
-    await handleWebhookDeauthorization(req, res);
-  } else if (req.method === "POST" && path === PATH_GROUPS) {
-    await handleGroupsCreate(req, res);
-  } else if (req.method === "POST" && path === PATH_GROUPS_JOIN) {
-    await handleGroupsJoin(req, res);
-  } else {
-    notFound(res);
+  // B-06: コールバック全体を try/catch で包み、例外でプロセスを落とさない
+  try {
+    const path = getPath(req.url);
+    if (req.method === "POST" && POST_PATHS.has(path)) {
+      if (!requireInternalAuth(req, res, path)) return;
+    }
+    if (req.method === "POST" && path === PATH_WEBHOOK) {
+      await handlePost(req, res);
+    } else if (req.method === "POST" && path === PATH_USERS_SYNC) {
+      await handleUsersSync(req, res);
+    } else if (req.method === "POST" && path === PATH_USERS_INITIAL_BACKFILL) {
+      await handleUsersInitialBackfill(req, res);
+    } else if (req.method === "POST" && path === PATH_WEBHOOK_DEAUTHORIZATION) {
+      await handleWebhookDeauthorization(req, res);
+    } else if (req.method === "POST" && path === PATH_GROUPS) {
+      await handleGroupsCreate(req, res);
+    } else if (req.method === "POST" && path === PATH_GROUPS_JOIN) {
+      await handleGroupsJoin(req, res);
+    } else {
+      notFound(res);
+    }
+  } catch (err) {
+    console.error("[webhook-server] unhandled error:", err);
+    if (!res.headersSent) {
+      const msg = err instanceof Error ? err.message : String(err);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: msg }));
+    } else if (!res.writableEnded) {
+      res.end();
+    }
   }
 });
 
