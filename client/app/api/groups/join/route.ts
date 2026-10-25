@@ -1,1 +1,77 @@
-aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgZ2V0U2Vzc2lvblVzZXJJZCB9IGZyb20gIkAvbGliL3Nlc3Npb24iOwoKLyoqCiAqIFBPU1QgL2FwaS9ncm91cHMvam9pbgogKiDmi5vlvoXjgrPjg7zjg4njgafjgrDjg6vjg7zjg5flj4LliqDjgpLjg5Djg4Pjgq/jgqjjg7Pjg4lBUEkgKEJGRikg44Gr5aeU6K2y44GZ44KL44CCCiAqIEJvZHk6IHsgaW52aXRlX2NvZGU6IHN0cmluZyB944CCQkZGIOOBuOOBryB7IGludml0ZV9jb2RlLCB1c2VyX2lkIH0g44KS6YCB5L+h44CCCiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXF1ZXN0OiBOZXh0UmVxdWVzdCkgewogIGNvbnN0IHVzZXJJZCA9IGF3YWl0IGdldFNlc3Npb25Vc2VySWQoKTsKICBpZiAoIXVzZXJJZCkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiVW5hdXRob3JpemVkIiwgbWVzc2FnZTogIuODreOCsOOCpOODs+OBjOW/heimgeOBp+OBmSIgfSwKICAgICAgeyBzdGF0dXM6IDQwMSB9CiAgICApOwogIH0KCiAgbGV0IGJvZHk6IHsgaW52aXRlX2NvZGU/OiBzdHJpbmcgfTsKICB0cnkgewogICAgYm9keSA9IChhd2FpdCByZXF1ZXN0Lmpzb24oKSkgYXMgeyBpbnZpdGVfY29kZT86IHN0cmluZyB9OwogIH0gY2F0Y2ggewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiQmFkIFJlcXVlc3QiLCBtZXNzYWdlOiAiSlNPTiDjga7lvaLlvI/jgYzkuI3mraPjgafjgZkiIH0sCiAgICAgIHsgc3RhdHVzOiA0MDAgfQogICAgKTsKICB9CgogIGNvbnN0IGludml0ZUNvZGUgPQogICAgdHlwZW9mIGJvZHkuaW52aXRlX2NvZGUgPT09ICJzdHJpbmciID8gYm9keS5pbnZpdGVfY29kZS50cmltKCkgOiAiIjsKICBpZiAoIWludml0ZUNvZGUpIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgeyBlcnJvcjogIkJhZCBSZXF1ZXN0IiwgbWVzc2FnZTogIuaLm+W+heOCs+ODvOODieOCkuWFpeWKm+OBl+OBpuOBj+OBoOOBleOBhCIgfSwKICAgICAgeyBzdGF0dXM6IDQwMCB9CiAgICApOwogIH0KCiAgY29uc3QgYmFja2VuZFVybCA9IHByb2Nlc3MuZW52LkJBQ0tFTkRfQVBJX1VSTD8ucmVwbGFjZSgvXC8kLywgIiIpID8/ICIiOwogIGlmICghYmFja2VuZFVybCkgewogICAgY29uc29sZS5lcnJvcigiUE9TVCAvYXBpL2dyb3Vwcy9qb2luOiBCQUNLRU5EX0FQSV9VUkwgaXMgbm90IGNvbmZpZ3VyZWQiKTsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgeyBlcnJvcjogIkludGVybmFsIFNlcnZlciBFcnJvciIsIG1lc3NhZ2U6ICLjgrXjg7zjg5Djg7zoqK3lrprjgqjjg6njg7zjgafjgZkiIH0sCiAgICAgIHsgc3RhdHVzOiA1MDAgfQogICAgKTsKICB9CgogIHRyeSB7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaChgJHtiYWNrZW5kVXJsfS9ncm91cHMvam9pbmAsIHsKICAgICAgbWV0aG9kOiAiUE9TVCIsCiAgICAgIGhlYWRlcnM6IHsKICAgICAgICAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iLAogICAgICAgICJ4LWludGVybmFsLWFwaS1rZXkiOiBwcm9jZXNzLmVudi5JTlRFUk5BTF9BUElfS0VZID8/ICIiLAogICAgICB9LAogICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7IGludml0ZV9jb2RlOiBpbnZpdGVDb2RlLCB1c2VyX2lkOiB1c2VySWQgfSksCiAgICB9KTsKCiAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzLmpzb24oKS5jYXRjaCgoKSA9PiAoe30pKTsKCiAgICBpZiAoIXJlcy5vaykgewogICAgICBjb25zdCBtZXNzYWdlID0KICAgICAgICB0eXBlb2YgZGF0YT8ubWVzc2FnZSA9PT0gInN0cmluZyIKICAgICAgICAgID8gZGF0YS5tZXNzYWdlCiAgICAgICAgICA6ICLlj4LliqDlh6bnkIbjgavlpLHmlZfjgZfjgb7jgZfjgZ8iOwogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oCiAgICAgICAgeyBlcnJvcjogZGF0YT8uZXJyb3IgPz8gIkludGVybmFsIFNlcnZlciBFcnJvciIsIG1lc3NhZ2UgfSwKICAgICAgICB7IHN0YXR1czogcmVzLnN0YXR1cyB9CiAgICAgICk7CiAgICB9CgogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKGRhdGEpOwogIH0gY2F0Y2ggKGUpIHsKICAgIGNvbnNvbGUuZXJyb3IoIlBPU1QgL2FwaS9ncm91cHMvam9pbjogQkZGIHJlcXVlc3QgZmFpbGVkOiIsIGUpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiSW50ZXJuYWwgU2VydmVyIEVycm9yIiwgbWVzc2FnZTogIuWPguWKoOWHpueQhuOBq+WkseaVl+OBl+OBvuOBl+OBnyIgfSwKICAgICAgeyBzdGF0dXM6IDUwMCB9CiAgICApOwogIH0KfQo=
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionUserId } from "@/lib/session";
+
+/**
+ * POST /api/groups/join
+ * 招待コードでグループ参加をバックエンドAPI (BFF) に委譲する。
+ * Body: { invite_code: string }。BFF へは { invite_code, user_id } を送信。
+ */
+export async function POST(request: NextRequest) {
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Unauthorized", message: "ログインが必要です" },
+      { status: 401 }
+    );
+  }
+
+  let body: { invite_code?: string };
+  try {
+    body = (await request.json()) as { invite_code?: string };
+  } catch {
+    return NextResponse.json(
+      { error: "Bad Request", message: "JSON の形式が不正です" },
+      { status: 400 }
+    );
+  }
+
+  const inviteCode =
+    typeof body.invite_code === "string" ? body.invite_code.trim() : "";
+  if (!inviteCode) {
+    return NextResponse.json(
+      { error: "Bad Request", message: "招待コードを入力してください" },
+      { status: 400 }
+    );
+  }
+
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
+  if (!backendUrl) {
+    console.error("POST /api/groups/join: BACKEND_API_URL is not configured");
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "サーバー設定エラーです" },
+      { status: 500 }
+    );
+  }
+
+  try {
+    const res = await fetch(`${backendUrl}/groups/join`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-api-key": process.env.INTERNAL_API_KEY ?? "",
+      },
+      body: JSON.stringify({ invite_code: inviteCode, user_id: userId }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      const message =
+        typeof data?.message === "string"
+          ? data.message
+          : "参加処理に失敗しました";
+      return NextResponse.json(
+        { error: data?.error ?? "Internal Server Error", message },
+        { status: res.status }
+      );
+    }
+
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error("POST /api/groups/join: BFF request failed:", e);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "参加処理に失敗しました" },
+      { status: 500 }
+    );
+  }
+}
