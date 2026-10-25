@@ -1,1 +1,77 @@
-aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgZ2V0U2Vzc2lvblVzZXJJZCB9IGZyb20gIkAvbGliL3Nlc3Npb24iOwoKLyoqCiAqIFBPU1QgL2FwaS9ncm91cHMKICog44Kw44Or44O844OX5paw6KaP5L2c5oiQ44KS44OQ44OD44Kv44Ko44Oz44OJQVBJIChCRkYpIOOBq+WnlOitsuOBmeOCi+OAggogKiBCb2R5OiB7IG5hbWU6IHN0cmluZyB9IOOBruOBv+OAgkJGRiDjgbjjga8geyBuYW1lLCB1c2VyX2lkIH0g44KS6YCB5L+h44CCCiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXF1ZXN0OiBOZXh0UmVxdWVzdCkgewogIGNvbnN0IHVzZXJJZCA9IGF3YWl0IGdldFNlc3Npb25Vc2VySWQoKTsKICBpZiAoIXVzZXJJZCkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiVW5hdXRob3JpemVkIiwgbWVzc2FnZTogIuODreOCsOOCpOODs+OBjOW/heimgeOBp+OBmSIgfSwKICAgICAgeyBzdGF0dXM6IDQwMSB9CiAgICApOwogIH0KCiAgbGV0IGJvZHk6IHsgbmFtZT86IHN0cmluZyB9OwogIHRyeSB7CiAgICBib2R5ID0gKGF3YWl0IHJlcXVlc3QuanNvbigpKSBhcyB7IG5hbWU/OiBzdHJpbmcgfTsKICB9IGNhdGNoIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgeyBlcnJvcjogIkJhZCBSZXF1ZXN0IiwgbWVzc2FnZTogIkpTT04g44Gu5b2i5byP44GM5LiN5q2j44Gn44GZIiB9LAogICAgICB7IHN0YXR1czogNDAwIH0KICAgICk7CiAgfQoKICBjb25zdCBuYW1lID0gdHlwZW9mIGJvZHkubmFtZSA9PT0gInN0cmluZyIgPyBib2R5Lm5hbWUudHJpbSgpIDogIiI7CgogIGlmICghbmFtZSkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiQmFkIFJlcXVlc3QiLCBtZXNzYWdlOiAi44Kw44Or44O844OX5ZCN44KS5YWl5Yqb44GX44Gm44GP44Gg44GV44GEIiB9LAogICAgICB7IHN0YXR1czogNDAwIH0KICAgICk7CiAgfQoKICBjb25zdCBiYWNrZW5kVXJsID0gcHJvY2Vzcy5lbnYuQkFDS0VORF9BUElfVVJMPy5yZXBsYWNlKC9cLyQvLCAiIikgPz8gIiI7CiAgaWYgKCFiYWNrZW5kVXJsKSB7CiAgICBjb25zb2xlLmVycm9yKCJQT1NUIC9hcGkvZ3JvdXBzOiBCQUNLRU5EX0FQSV9VUkwgaXMgbm90IGNvbmZpZ3VyZWQiKTsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgeyBlcnJvcjogIkludGVybmFsIFNlcnZlciBFcnJvciIsIG1lc3NhZ2U6ICLjgrXjg7zjg5Djg7zoqK3lrprjgqjjg6njg7zjgafjgZkiIH0sCiAgICAgIHsgc3RhdHVzOiA1MDAgfQogICAgKTsKICB9CgogIHRyeSB7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaChgJHtiYWNrZW5kVXJsfS9ncm91cHNgLCB7CiAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICBoZWFkZXJzOiB7CiAgICAgICAgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9qc29uIiwKICAgICAgICAieC1pbnRlcm5hbC1hcGkta2V5IjogcHJvY2Vzcy5lbnYuSU5URVJOQUxfQVBJX0tFWSA/PyAiIiwKICAgICAgfSwKICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoeyBuYW1lLCB1c2VyX2lkOiB1c2VySWQgfSksCiAgICB9KTsKCiAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzLmpzb24oKS5jYXRjaCgoKSA9PiAoe30pKTsKCiAgICBpZiAoIXJlcy5vaykgewogICAgICBjb25zdCBtZXNzYWdlID0KICAgICAgICB0eXBlb2YgZGF0YT8ubWVzc2FnZSA9PT0gInN0cmluZyIKICAgICAgICAgID8gZGF0YS5tZXNzYWdlCiAgICAgICAgICA6ICLjgrDjg6vjg7zjg5fjga7kvZzmiJDjgavlpLHmlZfjgZfjgb7jgZfjgZ8iOwogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oCiAgICAgICAgeyBlcnJvcjogZGF0YT8uZXJyb3IgPz8gIkludGVybmFsIFNlcnZlciBFcnJvciIsIG1lc3NhZ2UgfSwKICAgICAgICB7IHN0YXR1czogcmVzLnN0YXR1cyB9CiAgICAgICk7CiAgICB9CgogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKGRhdGEpOwogIH0gY2F0Y2ggKGUpIHsKICAgIGNvbnNvbGUuZXJyb3IoIlBPU1QgL2FwaS9ncm91cHM6IEJGRiByZXF1ZXN0IGZhaWxlZDoiLCBlKTsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgeyBlcnJvcjogIkludGVybmFsIFNlcnZlciBFcnJvciIsIG1lc3NhZ2U6ICLjgrDjg6vjg7zjg5fjga7kvZzmiJDjgavlpLHmlZfjgZfjgb7jgZfjgZ8iIH0sCiAgICAgIHsgc3RhdHVzOiA1MDAgfQogICAgKTsKICB9Cn0K
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionUserId } from "@/lib/session";
+
+/**
+ * POST /api/groups
+ * グループ新規作成をバックエンドAPI (BFF) に委譲する。
+ * Body: { name: string } のみ。BFF へは { name, user_id } を送信。
+ */
+export async function POST(request: NextRequest) {
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Unauthorized", message: "ログインが必要です" },
+      { status: 401 }
+    );
+  }
+
+  let body: { name?: string };
+  try {
+    body = (await request.json()) as { name?: string };
+  } catch {
+    return NextResponse.json(
+      { error: "Bad Request", message: "JSON の形式が不正です" },
+      { status: 400 }
+    );
+  }
+
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+
+  if (!name) {
+    return NextResponse.json(
+      { error: "Bad Request", message: "グループ名を入力してください" },
+      { status: 400 }
+    );
+  }
+
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
+  if (!backendUrl) {
+    console.error("POST /api/groups: BACKEND_API_URL is not configured");
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "サーバー設定エラーです" },
+      { status: 500 }
+    );
+  }
+
+  try {
+    const res = await fetch(`${backendUrl}/groups`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-api-key": process.env.INTERNAL_API_KEY ?? "",
+      },
+      body: JSON.stringify({ name, user_id: userId }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      const message =
+        typeof data?.message === "string"
+          ? data.message
+          : "グループの作成に失敗しました";
+      return NextResponse.json(
+        { error: data?.error ?? "Internal Server Error", message },
+        { status: res.status }
+      );
+    }
+
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error("POST /api/groups: BFF request failed:", e);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "グループの作成に失敗しました" },
+      { status: 500 }
+    );
+  }
+}
