@@ -1,1 +1,319 @@
-LyoqCiAqIFNFQ1VSSVRZIFJFR1JFU1NJT04gdGVzdHMgKFBoYXNlIDIgcmUtdmVyaWZpY2F0aW9uKS4KICoKICog5YWD44GuIHJlZHRlYW0udGVzdC50cyDjga/jgIzmlLvmkoPjgYzmiJDlip/jgZnjgovjgZPjgajjgI3jgpLmnJ/lvoXjgZnjgovmlLvmkoPoqLzmmI7jg4/jg7zjg43jgrkKICog44Gg44Gj44Gf44CC5pys44OV44Kh44Kk44Or44Gv44Gd44Gu5pS75pKD44K344OK44Oq44Kq576k77yI44Os44OD44OJ44OB44O844Og5aCx5ZGKIEMg54+tIFM044CcUzYg562J77yJ44KSCiAqIOOAjOaUu+aSg+OBjOmYsuW+oeOBleOCjOOCi+OBk+OBqOOAjeOCkuaknOiovOOBmeOCi+WbnuW4sOODhuOCueODiOOBq+abuOOBjeaPm+OBiOOBn+OCguOBruOAggogKiDlrp/nianjga4gcHJvY2Vzc0FjdGl2aXR5RXZlbnQgLyBwcm9jZXNzQWN0aXZpdHlEZWxldGUg44KS44CB44Kk44Oz44Oh44Oi44Oq44GuCiAqIFN1cGFiYXNlIOODleOCp+OCpOOCryArIOODouODg+OCryBTdHJhdmEg44Oa44Kk44Ot44O844OJ44Gn6aeG5YuV44GZ44KL77yI5a6fIEFQSSDjga/kvb/jgo/jgarjgYTvvInjgIIKICovCmltcG9ydCB7IGRlc2NyaWJlLCBpdCwgZXhwZWN0IH0gZnJvbSAidml0ZXN0IjsKaW1wb3J0IHsgY3JlYXRlUmVxdWlyZSB9IGZyb20gIm5vZGU6bW9kdWxlIjsKaW1wb3J0IHsKICBwcm9jZXNzQWN0aXZpdHlFdmVudCwKICBwcm9jZXNzQWN0aXZpdHlEZWxldGUsCiAgdHlwZSBTdHJhdmFXZWJob29rRGVwcywKICB0eXBlIFN0cmF2YUFjdGl2aXR5UmVzcG9uc2UsCn0gZnJvbSAiLi9zZXJ2aWNlcy9zdHJhdmEtd2ViaG9vay5qcyI7CmltcG9ydCB7IGdldEgzSW5kZXhlc0Zyb21Qb2ludHMgfSBmcm9tICIuL3V0aWxzL2gzLXV0aWxzLmpzIjsKCmNvbnN0IHJlcXVpcmUgPSBjcmVhdGVSZXF1aXJlKGltcG9ydC5tZXRhLnVybCk7CmNvbnN0IHBvbHlsaW5lTGliID0gcmVxdWlyZSgiQG1hcGJveC9wb2x5bGluZSIpIGFzIHsKICBlbmNvZGU6IChwdHM6IFtudW1iZXIsIG51bWJlcl1bXSwgcHJlY2lzaW9uPzogbnVtYmVyKSA9PiBzdHJpbmc7Cn07Cgpjb25zdCBHUk9VUCA9ICJncm91cC0xIjsKY29uc3QgVVNFUl9BID0gInVzZXItYSI7CmNvbnN0IFVTRVJfQiA9ICJ1c2VyLWIiOwpjb25zdCBTVFJBVkFfQSA9IDkwMDAwMTsKY29uc3QgU1RSQVZBX0IgPSA5MDAwMDI7CgovLyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KLy8g54q25oWL44KS5oyB44Gk44Kk44Oz44Oh44Oi44OqIFN1cGFiYXNlIOODleOCp+OCpOOCrwovLyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCnR5cGUgUm93ID0gUmVjb3JkPHN0cmluZywgdW5rbm93bj47CgpjbGFzcyBRQiB7CiAgcHJpdmF0ZSBvcDogInNlbGVjdCIgfCAiaW5zZXJ0IiB8ICJ1cHNlcnQiIHwgInVwZGF0ZSIgfCAiZGVsZXRlIiA9ICJzZWxlY3QiOwogIHByaXZhdGUgZmlsdGVyczogQXJyYXk8W3N0cmluZywgc3RyaW5nLCB1bmtub3duXT4gPSBbXTsKICBwcml2YXRlIHBheWxvYWQ6IHVua25vd24gPSBudWxsOwogIHByaXZhdGUgY29uZmxpY3QgPSAiIjsKICBwcml2YXRlIG9yZGVyU3BlYzogeyBjb2w6IHN0cmluZzsgYXNjOiBib29sZWFuIH0gfCBudWxsID0gbnVsbDsKICBwcml2YXRlIGxpbWl0TjogbnVtYmVyIHwgbnVsbCA9IG51bGw7CiAgcHJpdmF0ZSBtb2RlOiAibGlzdCIgfCAic2luZ2xlIiB8ICJtYXliZSIgPSAibGlzdCI7CiAgY29uc3RydWN0b3IoCiAgICBwcml2YXRlIHN0b3JlOiBSZWNvcmQ8c3RyaW5nLCBSb3dbXT4sCiAgICBwcml2YXRlIHRhYmxlOiBzdHJpbmcKICApIHt9CiAgc2VsZWN0KCkgeyByZXR1cm4gdGhpczsgfQogIGVxKGM6IHN0cmluZywgdjogdW5rbm93bikgeyB0aGlzLmZpbHRlcnMucHVzaChbYywgImVxIiwgdl0pOyByZXR1cm4gdGhpczsgfQogIG5lcShjOiBzdHJpbmcsIHY6IHVua25vd24pIHsgdGhpcy5maWx0ZXJzLnB1c2goW2MsICJuZXEiLCB2XSk7IHJldHVybiB0aGlzOyB9CiAgaW4oYzogc3RyaW5nLCB2OiB1bmtub3duW10pIHsgdGhpcy5maWx0ZXJzLnB1c2goW2MsICJpbiIsIHZdKTsgcmV0dXJuIHRoaXM7IH0KICBpcyhjOiBzdHJpbmcsIHY6IHVua25vd24pIHsgdGhpcy5maWx0ZXJzLnB1c2goW2MsICJpcyIsIHZdKTsgcmV0dXJuIHRoaXM7IH0KICBvcmRlcihjOiBzdHJpbmcsIG86IHsgYXNjZW5kaW5nOiBib29sZWFuIH0pIHsgdGhpcy5vcmRlclNwZWMgPSB7IGNvbDogYywgYXNjOiBvLmFzY2VuZGluZyB9OyByZXR1cm4gdGhpczsgfQogIGxpbWl0KG46IG51bWJlcikgeyB0aGlzLmxpbWl0TiA9IG47IHJldHVybiB0aGlzOyB9CiAgaW5zZXJ0KHJvd3M6IFJvdyB8IFJvd1tdKSB7IHRoaXMub3AgPSAiaW5zZXJ0IjsgdGhpcy5wYXlsb2FkID0gcm93czsgcmV0dXJuIHRoaXM7IH0KICB1cHNlcnQocm93czogUm93IHwgUm93W10sIG9wdHM/OiB7IG9uQ29uZmxpY3Q/OiBzdHJpbmcgfSkgeyB0aGlzLm9wID0gInVwc2VydCI7IHRoaXMucGF5bG9hZCA9IHJvd3M7IHRoaXMuY29uZmxpY3QgPSBvcHRzPy5vbkNvbmZsaWN0ID8/ICIiOyByZXR1cm4gdGhpczsgfQogIHVwZGF0ZShvYmo6IFJvdykgeyB0aGlzLm9wID0gInVwZGF0ZSI7IHRoaXMucGF5bG9hZCA9IG9iajsgcmV0dXJuIHRoaXM7IH0KICBkZWxldGUoKSB7IHRoaXMub3AgPSAiZGVsZXRlIjsgcmV0dXJuIHRoaXM7IH0KICBzaW5nbGUoKSB7IHRoaXMubW9kZSA9ICJzaW5nbGUiOyByZXR1cm4gdGhpczsgfQogIG1heWJlU2luZ2xlKCkgeyB0aGlzLm1vZGUgPSAibWF5YmUiOyByZXR1cm4gdGhpczsgfQogIHByaXZhdGUgbWF0Y2gocjogUm93KSB7CiAgICByZXR1cm4gdGhpcy5maWx0ZXJzLmV2ZXJ5KChbYywgb3AsIHZdKSA9PiB7CiAgICAgIGNvbnN0IHJ2ID0gcltjXTsKICAgICAgaWYgKG9wID09PSAiZXEiKSByZXR1cm4gU3RyaW5nKHJ2KSA9PT0gU3RyaW5nKHYpOwogICAgICBpZiAob3AgPT09ICJuZXEiKSByZXR1cm4gU3RyaW5nKHJ2KSAhPT0gU3RyaW5nKHYpOwogICAgICBpZiAob3AgPT09ICJpbiIpIHJldHVybiAodiBhcyB1bmtub3duW10pLm1hcChTdHJpbmcpLmluY2x1ZGVzKFN0cmluZyhydikpOwogICAgICBpZiAob3AgPT09ICJpcyIpIHJldHVybiAocnYgPz8gbnVsbCkgPT09IHY7CiAgICAgIHJldHVybiB0cnVlOwogICAgfSk7CiAgfQogIHByaXZhdGUgZXhlYygpOiB7IGRhdGE6IHVua25vd247IGVycm9yOiB1bmtub3duIH0gewogICAgY29uc3Qgcm93cyA9IHRoaXMuc3RvcmVbdGhpcy50YWJsZV0gPz8gKHRoaXMuc3RvcmVbdGhpcy50YWJsZV0gPSBbXSk7CiAgICBpZiAodGhpcy5vcCA9PT0gInNlbGVjdCIpIHsKICAgICAgbGV0IG91dCA9IHJvd3MuZmlsdGVyKChyKSA9PiB0aGlzLm1hdGNoKHIpKTsKICAgICAgaWYgKHRoaXMub3JkZXJTcGVjKSB7CiAgICAgICAgY29uc3QgeyBjb2wsIGFzYyB9ID0gdGhpcy5vcmRlclNwZWM7CiAgICAgICAgb3V0ID0gWy4uLm91dF0uc29ydCgoYSwgYikgPT4gKFN0cmluZyhhW2NvbF0gPz8gIiIpIDwgU3RyaW5nKGJbY29sXSA/PyAiIikgPyAtMSA6IDEpICogKGFzYyA/IDEgOiAtMSkpOwogICAgICB9CiAgICAgIGlmICh0aGlzLmxpbWl0TiAhPSBudWxsKSBvdXQgPSBvdXQuc2xpY2UoMCwgdGhpcy5saW1pdE4pOwogICAgICBpZiAodGhpcy5tb2RlID09PSAic2luZ2xlIikKICAgICAgICByZXR1cm4gb3V0Lmxlbmd0aCA9PT0gMSA/IHsgZGF0YTogb3V0WzBdLCBlcnJvcjogbnVsbCB9IDogeyBkYXRhOiBudWxsLCBlcnJvcjogeyBtZXNzYWdlOiAic2luZ2xlOiBub3QgZXhhY3RseSBvbmUgcm93IiB9IH07CiAgICAgIGlmICh0aGlzLm1vZGUgPT09ICJtYXliZSIpCiAgICAgICAgcmV0dXJuIG91dC5sZW5ndGggPD0gMSA/IHsgZGF0YTogb3V0WzBdID8/IG51bGwsIGVycm9yOiBudWxsIH0gOiB7IGRhdGE6IG51bGwsIGVycm9yOiB7IG1lc3NhZ2U6ICJtYXliZVNpbmdsZTogbXVsdGlwbGUgcm93cyIgfSB9OwogICAgICByZXR1cm4geyBkYXRhOiBvdXQsIGVycm9yOiBudWxsIH07CiAgICB9CiAgICBpZiAodGhpcy5vcCA9PT0gImluc2VydCIgfHwgdGhpcy5vcCA9PT0gInVwc2VydCIpIHsKICAgICAgY29uc3QgaW5jb21pbmcgPSAoQXJyYXkuaXNBcnJheSh0aGlzLnBheWxvYWQpID8gdGhpcy5wYXlsb2FkIDogW3RoaXMucGF5bG9hZF0pIGFzIFJvd1tdOwogICAgICBjb25zdCByZXN1bHQ6IFJvd1tdID0gW107CiAgICAgIGZvciAoY29uc3QgaW5jIG9mIGluY29taW5nKSB7CiAgICAgICAgaWYgKHRoaXMub3AgPT09ICJ1cHNlcnQiICYmIHRoaXMuY29uZmxpY3QpIHsKICAgICAgICAgIGNvbnN0IGNvbHMgPSB0aGlzLmNvbmZsaWN0LnNwbGl0KCIsIik7CiAgICAgICAgICBjb25zdCBpZHggPSByb3dzLmZpbmRJbmRleCgocikgPT4gY29scy5ldmVyeSgoYykgPT4gU3RyaW5nKHJbY10pID09PSBTdHJpbmcoaW5jW2NdKSkpOwogICAgICAgICAgaWYgKGlkeCA+PSAwKSB7IHJvd3NbaWR4XSA9IHsgLi4ucm93c1tpZHhdLCAuLi5pbmMgfTsgcmVzdWx0LnB1c2gocm93c1tpZHhdKTsgY29udGludWU7IH0KICAgICAgICB9CiAgICAgICAgY29uc3QgbnIgPSB7IC4uLmluYyB9OwogICAgICAgIHJvd3MucHVzaChucik7CiAgICAgICAgcmVzdWx0LnB1c2gobnIpOwogICAgICB9CiAgICAgIGlmICh0aGlzLm1vZGUgPT09ICJzaW5nbGUiKSByZXR1cm4geyBkYXRhOiByZXN1bHRbMF0sIGVycm9yOiBudWxsIH07CiAgICAgIHJldHVybiB7IGRhdGE6IHJlc3VsdCwgZXJyb3I6IG51bGwgfTsKICAgIH0KICAgIGlmICh0aGlzLm9wID09PSAidXBkYXRlIikgewogICAgICBjb25zdCBvdXQ6IFJvd1tdID0gW107CiAgICAgIGZvciAoY29uc3QgciBvZiByb3dzKSBpZiAodGhpcy5tYXRjaChyKSkgeyBPYmplY3QuYXNzaWduKHIsIHRoaXMucGF5bG9hZCBhcyBSb3cpOyBvdXQucHVzaChyKTsgfQogICAgICByZXR1cm4geyBkYXRhOiBvdXQsIGVycm9yOiBudWxsIH07CiAgICB9CiAgICB0aGlzLnN0b3JlW3RoaXMudGFibGVdID0gcm93cy5maWx0ZXIoKHIpID0+ICF0aGlzLm1hdGNoKHIpKTsKICAgIHJldHVybiB7IGRhdGE6IG51bGwsIGVycm9yOiBudWxsIH07CiAgfQogIHRoZW4ocmVzb2x2ZTogKHY6IHsgZGF0YTogdW5rbm93bjsgZXJyb3I6IHVua25vd24gfSkgPT4gdm9pZCkgeyByZXNvbHZlKHRoaXMuZXhlYygpKTsgfQp9CgovLyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KLy8g44Oi44OD44KvIFN0cmF2YSDjgqLjgq/jg4bjgqPjg5Pjg4bjgqMKLy8gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgpjb25zdCBQVFMgPSB7CiAgcnVuQTogW1szNS42OCwgMTM5LjddLCBbMzUuNzAyLCAxMzkuN10sIFszNS43MjQsIDEzOS43XV0gYXMgW251bWJlciwgbnVtYmVyXVtdLAogIHJ1bkI6IFtbMzUuNzAyLCAxMzkuN10sIFszNS43MDIsIDEzOS43MjddXSBhcyBbbnVtYmVyLCBudW1iZXJdW10sCiAgdGVsZXBvcnQ6IFtbMzUuNjkzOCwgMTM5LjcwMzRdLCBbMzQuNjkzNywgMTM1LjUwMjNdLCBbMzUuMTgxNSwgMTM2LjkwNjZdLCBbMzUuNzAyLCAxMzkuNzI3XV0gYXMgW251bWJlciwgbnVtYmVyXVtdLAp9OwoKLyoqCiAqIOOCouOCr+ODhuOCo+ODk+ODhuOCo+Wumue+qeOAggogKiAtIDkwMDE6IEEg44Gu5q2j5b2T44GqIFJ1bu+8iDIwMjYtMTAtMTDjgIHntYzot6/plbcg57SENC45a20gLyBkaXN0YW5jZSA0OTAwbSDjgafmlbTlkIjvvIkKICogLSA5MDAyOiBCIOOBruato+W9k+OBqiBSdW7vvIgyMDI2LTEwLTIw44CB57WM6Lev6ZW3IOe0hDIuNGttIC8gZGlzdGFuY2UgMjQwMG0g44Gn5pW05ZCI77yJCiAqIC0gOTAwMzogQSDjga7jg4bjg6zjg53jg7zjg4jlgb3oo4XvvIjntYzot6/plbcgNTAwa20g6LaF44Gr5a++44GXIGRpc3RhbmNlIDUwMDBtIOKGkiDkuZbpm6LlpKfvvIkKICogLSA5MDA0OiBhdGhsZXRlIOOBjCBCIOOBquOBruOBqyBvd25lciDjga8gQSDjgajjgYTjgYbkuI3kuIDoh7TjgqTjg5njg7Pjg4gKICovCmNvbnN0IEFDVElWSVRJRVM6IFJlY29yZDxudW1iZXIsIFN0cmF2YUFjdGl2aXR5UmVzcG9uc2U+ID0gewogIDkwMDE6IHsKICAgIG1hcDogeyBzdW1tYXJ5X3BvbHlsaW5lOiBwb2x5bGluZUxpYi5lbmNvZGUoUFRTLnJ1bkEpIH0sCiAgICBzdGFydF9kYXRlOiAiMjAyNi0xMC0xMFQwOTowMDowMFoiLAogICAgYXRobGV0ZTogeyBpZDogU1RSQVZBX0EgfSwKICAgIHNwb3J0X3R5cGU6ICJSdW4iLAogICAgbWFudWFsOiBmYWxzZSwKICAgIHRyYWluZXI6IGZhbHNlLAogICAgYXZlcmFnZV9zcGVlZDogMi43LAogICAgbWF4X3NwZWVkOiA1LAogICAgZGlzdGFuY2U6IDQ5MDAsCiAgICBlbGFwc2VkX3RpbWU6IDE4MDAsCiAgfSwKICA5MDAyOiB7CiAgICBtYXA6IHsgc3VtbWFyeV9wb2x5bGluZTogcG9seWxpbmVMaWIuZW5jb2RlKFBUUy5ydW5CKSB9LAogICAgc3RhcnRfZGF0ZTogIjIwMjYtMTAtMjBUMDk6MDA6MDBaIiwKICAgIGF0aGxldGU6IHsgaWQ6IFNUUkFWQV9CIH0sCiAgICBzcG9ydF90eXBlOiAiUnVuIiwKICAgIG1hbnVhbDogZmFsc2UsCiAgICB0cmFpbmVyOiBmYWxzZSwKICAgIGF2ZXJhZ2Vfc3BlZWQ6IDIuNywKICAgIG1heF9zcGVlZDogNSwKICAgIGRpc3RhbmNlOiAyNDAwLAogICAgZWxhcHNlZF90aW1lOiA5MDAsCiAgfSwKICA5MDAzOiB7CiAgICBtYXA6IHsgc3VtbWFyeV9wb2x5bGluZTogcG9seWxpbmVMaWIuZW5jb2RlKFBUUy50ZWxlcG9ydCkgfSwKICAgIHN0YXJ0X2RhdGU6ICIyMDI2LTEwLTIxVDA5OjAwOjAwWiIsCiAgICBhdGhsZXRlOiB7IGlkOiBTVFJBVkFfQSB9LAogICAgc3BvcnRfdHlwZTogIlJ1biIsCiAgICBtYW51YWw6IGZhbHNlLAogICAgdHJhaW5lcjogZmFsc2UsCiAgICBhdmVyYWdlX3NwZWVkOiAyLjcsCiAgICBtYXhfc3BlZWQ6IDUsCiAgICBkaXN0YW5jZTogNTAwMCwKICAgIGVsYXBzZWRfdGltZTogMTgwMCwKICB9LAogIDkwMDQ6IHsKICAgIG1hcDogeyBzdW1tYXJ5X3BvbHlsaW5lOiBwb2x5bGluZUxpYi5lbmNvZGUoUFRTLnJ1bkEpIH0sCiAgICBzdGFydF9kYXRlOiAiMjAyNi0xMC0yMlQwOTowMDowMFoiLAogICAgYXRobGV0ZTogeyBpZDogU1RSQVZBX0IgfSwgLy8gb3duZXIgKEEpIOOBqOS4jeS4gOiHtAogICAgc3BvcnRfdHlwZTogIlJ1biIsCiAgICBtYW51YWw6IGZhbHNlLAogICAgdHJhaW5lcjogZmFsc2UsCiAgICBhdmVyYWdlX3NwZWVkOiAyLjcsCiAgICBtYXhfc3BlZWQ6IDUsCiAgICBkaXN0YW5jZTogNDkwMCwKICAgIGVsYXBzZWRfdGltZTogMTgwMCwKICB9LAp9OwoKZnVuY3Rpb24gY3JlYXRlSGFybmVzcygpIHsKICBjb25zdCBzdG9yZTogUmVjb3JkPHN0cmluZywgUm93W10+ID0gewogICAgdXNlcnM6IFsKICAgICAgeyBpZDogVVNFUl9BLCBzdHJhdmFfaWQ6IFNUUkFWQV9BLCBkaXNwbGF5X25hbWU6ICJSdW5uZXIgQSIsIHN0cmF2YV9hY2Nlc3NfdG9rZW46ICJ0b2stYSIgfSwKICAgICAgeyBpZDogVVNFUl9CLCBzdHJhdmFfaWQ6IFNUUkFWQV9CLCBkaXNwbGF5X25hbWU6ICJSdW5uZXIgQiIsIHN0cmF2YV9hY2Nlc3NfdG9rZW46ICJ0b2stYiIgfSwKICAgIF0sCiAgICBncm91cF9tZW1iZXJzOiBbCiAgICAgIHsgZ3JvdXBfaWQ6IEdST1VQLCB1c2VyX2lkOiBVU0VSX0EgfSwKICAgICAgeyBncm91cF9pZDogR1JPVVAsIHVzZXJfaWQ6IFVTRVJfQiB9LAogICAgXSwKICAgIHRpbGVzOiBbXSwKICAgIGFjdGl2aXR5X3RpbGVzOiBbXSwKICAgIGFjdGl2aXR5X2xvZ3M6IFtdLAogIH07CiAgY29uc3QgZmFrZVN1cGFiYXNlID0geyBmcm9tOiAodDogc3RyaW5nKSA9PiBuZXcgUUIoc3RvcmUsIHQpIH0gYXMgdW5rbm93biBhcyBTdHJhdmFXZWJob29rRGVwc1sic3VwYWJhc2UiXTsKICBjb25zdCBkZXBzOiBTdHJhdmFXZWJob29rRGVwcyA9IHsKICAgIHN1cGFiYXNlOiBmYWtlU3VwYWJhc2UsCiAgICBmZXRjaFN0cmF2YUFjdGl2aXR5OiBhc3luYyAoaWQ6IG51bWJlcikgPT4gewogICAgICBjb25zdCBhID0gQUNUSVZJVElFU1tpZF07CiAgICAgIGlmICghYSkgdGhyb3cgbmV3IEVycm9yKCJTdHJhdmEgQVBJIDQwNDogUmVjb3JkIE5vdCBGb3VuZCIpOwogICAgICByZXR1cm4gYTsKICAgIH0sCiAgICBnZXRIM0luZGV4ZXNGcm9tUG9pbnRzLAogICAgZGVjcnlwdFN0cmF2YVRva2VuOiAoZW5jOiBzdHJpbmcpID0+IGVuYywKICB9OwogIGNvbnN0IHRpbGVPZiA9IChjZWxsOiBzdHJpbmcpID0+IHN0b3JlLnRpbGVzLmZpbmQoKHQpID0+IHQuaDNfaW5kZXggPT09IGNlbGwgJiYgdC5ncm91cF9pZCA9PT0gR1JPVVApOwogIGNvbnN0IGNlbGxPZiA9IChwOiBbbnVtYmVyLCBudW1iZXJdKSA9PiBnZXRIM0luZGV4ZXNGcm9tUG9pbnRzKFtwXSlbMF07CiAgcmV0dXJuIHsgc3RvcmUsIGRlcHMsIGZha2VTdXBhYmFzZSwgdGlsZU9mLCBjZWxsT2YgfTsKfQoKZGVzY3JpYmUoIlNFQ1VSSVRZIFJFR1JFU1NJT046IOaUu+aSg+OBjOmYsuW+oeOBleOCjOOCi+OBk+OBqCIsICgpID0+IHsKICBpdCgi5q2j5bi457O744Kz44Oz44OI44Ot44O844OrOiDmraPlvZPjgaogUnVuIOOCouOCr+ODhuOCo+ODk+ODhuOCo+OBr+S7iuOBvuOBp+mAmuOCiuOCv+OCpOODq+OCkueNsuW+l+OBp+OBjeOCiyIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IHsgc3RvcmUsIGRlcHMsIHRpbGVPZiwgY2VsbE9mIH0gPSBjcmVhdGVIYXJuZXNzKCk7CiAgICBjb25zdCByID0gYXdhaXQgcHJvY2Vzc0FjdGl2aXR5RXZlbnQoOTAwMSwgU1RSQVZBX0EsIGRlcHMpOwogICAgZXhwZWN0KHIub2spLnRvQmUodHJ1ZSk7CiAgICBleHBlY3Qoc3RvcmUudGlsZXMpLnRvSGF2ZUxlbmd0aCgzKTsKICAgIGV4cGVjdChzdG9yZS50aWxlcy5ldmVyeSgodCkgPT4gdC5vd25lcl9pZCA9PT0gVVNFUl9BKSkudG9CZSh0cnVlKTsKICAgIGV4cGVjdCh0aWxlT2YoY2VsbE9mKFBUUy5ydW5BWzBdKSk/LnNjb3JlKS50b0JlKDEwMCk7CiAgICBleHBlY3Qoc3RvcmUuYWN0aXZpdHlfdGlsZXMuZmlsdGVyKCh0KSA9PiBOdW1iZXIodC5hY3Rpdml0eV9pZCkgPT09IDkwMDEpKS50b0hhdmVMZW5ndGgoMyk7CiAgICBleHBlY3Qoc3RvcmUuYWN0aXZpdHlfbG9ncy5maWx0ZXIoKGwpID0+IGwudXNlcl9pZCA9PT0gVVNFUl9BKSkudG9IYXZlTGVuZ3RoKDEpOwogIH0pOwoKICBpdCgiUzQg44Oq44OX44Os44Kk6Ziy5b6hOiBBIOOBruWPpOOBhOOCpOODmeODs+ODiOOBruODquODl+ODrOOCpOOBp+aJgOacieiAheODu+OCueOCs+OCouODu2NhcHR1cmVkX2F0IOOBjOW3u+OBjeaIu+OCieOBmuOAgeODreOCsOOBjOS6jOmHjeWMluOBl+OBquOBhCIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IHsgc3RvcmUsIGRlcHMsIHRpbGVPZiwgY2VsbE9mIH0gPSBjcmVhdGVIYXJuZXNzKCk7CiAgICAvLyBBIOOBjOato+W9k+OBq+eNsuW+lyDihpIgQiDjgYzlvozjgYvjgonlkIzjgZjjgr/jgqTjg6vjgpLlparlj5YKICAgIGV4cGVjdCgoYXdhaXQgcHJvY2Vzc0FjdGl2aXR5RXZlbnQoOTAwMSwgU1RSQVZBX0EsIGRlcHMpKS5vaykudG9CZSh0cnVlKTsKICAgIGV4cGVjdCgoYXdhaXQgcHJvY2Vzc0FjdGl2aXR5RXZlbnQoOTAwMiwgU1RSQVZBX0IsIGRlcHMpKS5vaykudG9CZSh0cnVlKTsKICAgIGNvbnN0IHNoYXJlZCA9IGNlbGxPZihQVFMucnVuQVsxXSk7CiAgICBleHBlY3QodGlsZU9mKHNoYXJlZCk/Lm93bmVyX2lkKS50b0JlKFVTRVJfQik7CiAgICAvLyBCIOS/neacieS4reOBq+a4m+ihsOOBl+OBn+eKtuaFi+OCkuWGjeePvgogICAgdGlsZU9mKHNoYXJlZCkhLnNjb3JlID0gMzU7CiAgICBjb25zdCB0aWxlc0JlZm9yZSA9IHN0b3JlLnRpbGVzLmxlbmd0aDsKICAgIGNvbnN0IGxvZ3NCZWZvcmUgPSBzdG9yZS5hY3Rpdml0eV9sb2dzLmZpbHRlcigobCkgPT4gbC51c2VyX2lkID09PSBVU0VSX0EpLmxlbmd0aDsKICAgIGNvbnN0IGFjdGl2aXR5VGlsZXNCZWZvcmUgPSBzdG9yZS5hY3Rpdml0eV90aWxlcy5sZW5ndGg7CgogICAgLy8g5pS75pKDOiBBIOOBruWPpOOBhOOCpOODmeODs+ODiO+8iDIwMjYtMTAtMTDvvInjgpLjgZ3jga7jgb7jgb7jg6rjg5fjg6zjgqQKICAgIGNvbnN0IHIgPSBhd2FpdCBwcm9jZXNzQWN0aXZpdHlFdmVudCg5MDAxLCBTVFJBVkFfQSwgZGVwcyk7CiAgICBleHBlY3Qoci5vaykudG9CZSh0cnVlKTsgLy8g5Yaq562J44Gq5YaN5Yem55CG44Go44GX44Gm5Y+X55CG44Gv44GV44KM44KL44GM44CB54q25oWL44Gv5be744GN5oi744KJ44Gq44GECgogICAgY29uc3QgYWZ0ZXIgPSB0aWxlT2Yoc2hhcmVkKSE7CiAgICBleHBlY3QoYWZ0ZXIub3duZXJfaWQpLnRvQmUoVVNFUl9CKTsgLy8g5be744GN5oi744GX5aWq5Y+W44GV44KM44Gq44GECiAgICBleHBlY3QoYWZ0ZXIuc2NvcmUpLnRvQmUoMzUpOyAvLyDmuJvoobDjgYzjg6rjgrvjg4Pjg4jjgZXjgozjgarjgYQKICAgIGV4cGVjdChhZnRlci5jYXB0dXJlZF9hdCkudG9CZSgiMjAyNi0xMC0yMFQwOTowMDowMFoiKTsgLy8gQiDjga7ml6XmmYLjga7jgb7jgb4KICAgIGV4cGVjdChzdG9yZS50aWxlcykudG9IYXZlTGVuZ3RoKHRpbGVzQmVmb3JlKTsKICAgIGV4cGVjdChzdG9yZS5hY3Rpdml0eV90aWxlcykudG9IYXZlTGVuZ3RoKGFjdGl2aXR5VGlsZXNCZWZvcmUpOwogICAgZXhwZWN0KHN0b3JlLmFjdGl2aXR5X2xvZ3MuZmlsdGVyKChsKSA9PiBsLnVzZXJfaWQgPT09IFVTRVJfQSkpLnRvSGF2ZUxlbmd0aChsb2dzQmVmb3JlKTsgLy8g44Ot44Kw5LqM6YeN5YyW44Gq44GXCiAgfSk7CgogIGl0KCJTNSDjg4bjg6zjg53jg7zjg4jpmLLlvqE6IOe1jOi3r+mVt+OBqCBkaXN0YW5jZSDjgYzlpKfjgY3jgY/kuZbpm6LjgZnjgovjg53jg6rjg6njgqTjg7Pjga/mi5LlkKbjgZXjgozjgIHku5bkurrjga7jgr/jgqTjg6vjgpLlparjgYjjgarjgYQiLCBhc3luYyAoKSA9PiB7CiAgICBjb25zdCB7IHN0b3JlLCBkZXBzLCB0aWxlT2YsIGNlbGxPZiB9ID0gY3JlYXRlSGFybmVzcygpOwogICAgLy8gQiDjgYzmraPlvZPjgavjg5vjg7zjg6Djgr/jgqTjg6vjgpLkv53mnIkKICAgIGV4cGVjdCgoYXdhaXQgcHJvY2Vzc0FjdGl2aXR5RXZlbnQoOTAwMiwgU1RSQVZBX0IsIGRlcHMpKS5vaykudG9CZSh0cnVlKTsKICAgIGNvbnN0IGJVbmlxdWUgPSBjZWxsT2YoUFRTLnJ1bkJbMV0pOwogICAgZXhwZWN0KHRpbGVPZihiVW5pcXVlKT8ub3duZXJfaWQpLnRvQmUoVVNFUl9CKTsKICAgIGNvbnN0IHRpbGVzQmVmb3JlID0gc3RvcmUudGlsZXMubGVuZ3RoOwoKICAgIC8vIOaUu+aSgzog5p2x5Lqs4oaS5aSn6Ziq4oaS5ZCN5Y+k5bGL44Go6Lez44G244Od44Oq44Op44Kk44OzICsgQiDjga7jgr/jgqTjg6vkuIrjga7ngrnvvIhkaXN0YW5jZSDjga8gNWttIOOBqOeUs+WRiu+8iQogICAgY29uc3QgciA9IGF3YWl0IHByb2Nlc3NBY3Rpdml0eUV2ZW50KDkwMDMsIFNUUkFWQV9BLCBkZXBzKTsKICAgIGV4cGVjdChyLm9rKS50b0JlKGZhbHNlKTsKICAgIGlmICghci5vaykgZXhwZWN0KHIucmVhc29uKS50b0NvbnRhaW4oImRpdmVyZ2VuY2UiKTsKCiAgICBjb25zdCBvc2FrYSA9IGNlbGxPZihQVFMudGVsZXBvcnRbMV0pOwogICAgY29uc3QgbmFnb3lhID0gY2VsbE9mKFBUUy50ZWxlcG9ydFsyXSk7CiAgICBleHBlY3QodGlsZU9mKG9zYWthKSkudG9CZVVuZGVmaW5lZCgpOyAvLyDlpKfpmKrjga7jgr/jgqTjg6vjga/nlJ/jgb7jgozjgarjgYQKICAgIGV4cGVjdCh0aWxlT2YobmFnb3lhKSkudG9CZVVuZGVmaW5lZCgpOyAvLyDlkI3lj6TlsYvjga7jgr/jgqTjg6vjgoLnlJ/jgb7jgozjgarjgYQKICAgIGV4cGVjdCh0aWxlT2YoYlVuaXF1ZSk/Lm93bmVyX2lkKS50b0JlKFVTRVJfQik7IC8vIEIg44Gu44K/44Kk44Or44Gv5aWq44KP44KM44Gq44GECiAgICBleHBlY3Qoc3RvcmUudGlsZXMpLnRvSGF2ZUxlbmd0aCh0aWxlc0JlZm9yZSk7CiAgICBleHBlY3Qoc3RvcmUudGlsZXMuZXZlcnkoKHQpID0+IHQub3duZXJfaWQgIT09IFVTRVJfQSkpLnRvQmUodHJ1ZSk7CiAgfSk7CgogIGl0KCJTNiDlgb3pgKDliYrpmaTpmLLlvqE6IOaJgOacieiAheOCkuWBveOBo+OBn+WJiumZpOOBp+S7luS6uuOBriBhY3Rpdml0eV90aWxlcyDjgYzmtojjgYjjgarjgYQiLCBhc3luYyAoKSA9PiB7CiAgICBjb25zdCB7IHN0b3JlLCBkZXBzLCBmYWtlU3VwYWJhc2UgfSA9IGNyZWF0ZUhhcm5lc3MoKTsKICAgIGV4cGVjdCgoYXdhaXQgcHJvY2Vzc0FjdGl2aXR5RXZlbnQoOTAwMiwgU1RSQVZBX0IsIGRlcHMpKS5vaykudG9CZSh0cnVlKTsKICAgIGNvbnN0IGJlZm9yZSA9IHN0b3JlLmFjdGl2aXR5X3RpbGVzLmZpbHRlcigodCkgPT4gTnVtYmVyKHQuYWN0aXZpdHlfaWQpID09PSA5MDAyKTsKICAgIGV4cGVjdChiZWZvcmUubGVuZ3RoKS50b0JlR3JlYXRlclRoYW4oMCk7CiAgICBjb25zdCB0aWxlc0JlZm9yZSA9IHN0b3JlLnRpbGVzLmxlbmd0aDsKCiAgICAvLyDmlLvmkoM6IEIg44GuIGFjdGl2aXR5X2lkIOOCkiBBIOOBriBvd25lcl9pZCDjgafliYrpmaQKICAgIGNvbnN0IHIgPSBhd2FpdCBwcm9jZXNzQWN0aXZpdHlEZWxldGUoOTAwMiwgU1RSQVZBX0EsIHsgc3VwYWJhc2U6IGZha2VTdXBhYmFzZSB9KTsKICAgIGV4cGVjdChyLm9rKS50b0JlKHRydWUpOyAvLyDlr77osaHjgarjgZfjga7lhqrnrYnjgaogbm8tb3Ag44Go44GX44Gm5a6M5LqG44GZ44KLCgogICAgY29uc3QgYWZ0ZXIgPSBzdG9yZS5hY3Rpdml0eV90aWxlcy5maWx0ZXIoKHQpID0+IE51bWJlcih0LmFjdGl2aXR5X2lkKSA9PT0gOTAwMik7CiAgICBleHBlY3QoYWZ0ZXIpLnRvSGF2ZUxlbmd0aChiZWZvcmUubGVuZ3RoKTsgLy8gQiDjga7oo4/ku5jjgZHjg6zjgrPjg7zjg4njga/mtojjgYjjgarjgYQKICAgIGV4cGVjdChhZnRlci5ldmVyeSgodCkgPT4gdC51c2VyX2lkID09PSBVU0VSX0IpKS50b0JlKHRydWUpOwogICAgZXhwZWN0KHN0b3JlLnRpbGVzKS50b0hhdmVMZW5ndGgodGlsZXNCZWZvcmUpOyAvLyBCIOOBruOCv+OCpOODq+OCguaui+OCiwogIH0pOwoKICBpdCgiUzYg5q2j5bi457O744Kz44Oz44OI44Ot44O844OrOiDmnKzkurrjgavjgojjgovmraPlvZPjgarliYrpmaTjga8gYWN0aXZpdHlfdGlsZXMg44KS5raI5Y6744Gn44GN44KL77yI6Ziy5b6h44Gu44KE44KK6YGO44GO44Gn44Gq44GE44GT44Go77yJIiwgYXN5bmMgKCkgPT4gewogICAgY29uc3QgeyBzdG9yZSwgZGVwcywgZmFrZVN1cGFiYXNlIH0gPSBjcmVhdGVIYXJuZXNzKCk7CiAgICBleHBlY3QoKGF3YWl0IHByb2Nlc3NBY3Rpdml0eUV2ZW50KDkwMDIsIFNUUkFWQV9CLCBkZXBzKSkub2spLnRvQmUodHJ1ZSk7CiAgICBleHBlY3Qoc3RvcmUuYWN0aXZpdHlfdGlsZXMuZmlsdGVyKCh0KSA9PiBOdW1iZXIodC5hY3Rpdml0eV9pZCkgPT09IDkwMDIpLmxlbmd0aCkudG9CZUdyZWF0ZXJUaGFuKDApOwogICAgY29uc3QgciA9IGF3YWl0IHByb2Nlc3NBY3Rpdml0eURlbGV0ZSg5MDAyLCBTVFJBVkFfQiwgeyBzdXBhYmFzZTogZmFrZVN1cGFiYXNlIH0pOwogICAgZXhwZWN0KHIub2spLnRvQmUodHJ1ZSk7CiAgICBleHBlY3Qoc3RvcmUuYWN0aXZpdHlfdGlsZXMuZmlsdGVyKCh0KSA9PiBOdW1iZXIodC5hY3Rpdml0eV9pZCkgPT09IDkwMDIpKS50b0hhdmVMZW5ndGgoMCk7CiAgfSk7CgogIGl0KCJhdGhsZXRlIOS4jeS4gOiHtOmYsuW+oTog44Kk44OZ44Oz44OI44GuIG93bmVyIOOBqOOCouOCr+ODhuOCo+ODk+ODhuOCo+OBriBhdGhsZXRlIOOBjOeVsOOBquOCi+WgtOWQiOOBr+aLkuWQpuOBleOCjOOCiyIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IHsgc3RvcmUsIGRlcHMgfSA9IGNyZWF0ZUhhcm5lc3MoKTsKICAgIC8vIGFjdGl2aXR5IDkwMDQg44GuIGF0aGxldGUg44GvIEIg44Gg44GM44CB44Kk44OZ44Oz44OIIG93bmVyIOOBryBBCiAgICBjb25zdCByID0gYXdhaXQgcHJvY2Vzc0FjdGl2aXR5RXZlbnQoOTAwNCwgU1RSQVZBX0EsIGRlcHMpOwogICAgZXhwZWN0KHIub2spLnRvQmUoZmFsc2UpOwogICAgaWYgKCFyLm9rKSBleHBlY3Qoci5yZWFzb24pLnRvQ29udGFpbigiYXRobGV0ZSBtaXNtYXRjaCIpOwogICAgZXhwZWN0KHN0b3JlLnRpbGVzKS50b0hhdmVMZW5ndGgoMCk7CiAgICBleHBlY3Qoc3RvcmUuYWN0aXZpdHlfdGlsZXMpLnRvSGF2ZUxlbmd0aCgwKTsKICAgIGV4cGVjdChzdG9yZS5hY3Rpdml0eV9sb2dzKS50b0hhdmVMZW5ndGgoMCk7CiAgfSk7CgogIGl0KCLpmLLlvqHjgYzml6LlrZjjgavjgYLjgovjgrHjg7zjgrk6IOODneODquODqeOCpOODs+OBquOBl+OCouOCr+ODhuOCo+ODk+ODhuOCo+OBr+OCv+OCpOODq+OCkueNsuW+l+OBp+OBjeOBquOBhCIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IHsgc3RvcmUsIGRlcHMgfSA9IGNyZWF0ZUhhcm5lc3MoKTsKICAgIGNvbnN0IGRlcHNOb01hcDogU3RyYXZhV2ViaG9va0RlcHMgPSB7CiAgICAgIC4uLmRlcHMsCiAgICAgIGZldGNoU3RyYXZhQWN0aXZpdHk6IGFzeW5jICgpID0+ICh7IG1hcDoge30gfSksCiAgICB9OwogICAgY29uc3QgciA9IGF3YWl0IHByb2Nlc3NBY3Rpdml0eUV2ZW50KDk5OTksIFNUUkFWQV9BLCBkZXBzTm9NYXApOwogICAgZXhwZWN0KHIub2spLnRvQmUoZmFsc2UpOwogICAgZXhwZWN0KHN0b3JlLnRpbGVzKS50b0hhdmVMZW5ndGgoMCk7CiAgfSwgMjAwMDApOwp9KTsK
+/**
+ * SECURITY REGRESSION tests (Phase 2 re-verification).
+ *
+ * 元の redteam.test.ts は「攻撃が成功すること」を期待する攻撃証明ハーネス
+ * だった。本ファイルはその攻撃シナリオ群（レッドチーム報告 C 班 S4〜S6 等）を
+ * 「攻撃が防御されること」を検証する回帰テストに書き換えたもの。
+ * 実物の processActivityEvent / processActivityDelete を、インメモリの
+ * Supabase フェイク + モック Strava ペイロードで駆動する（実 API は使わない）。
+ */
+import { describe, it, expect } from "vitest";
+import { createRequire } from "node:module";
+import {
+  processActivityEvent,
+  processActivityDelete,
+  type StravaWebhookDeps,
+  type StravaActivityResponse,
+} from "./services/strava-webhook.js";
+import { getH3IndexesFromPoints } from "./utils/h3-utils.js";
+
+const require = createRequire(import.meta.url);
+const polylineLib = require("@mapbox/polyline") as {
+  encode: (pts: [number, number][], precision?: number) => string;
+};
+
+const GROUP = "group-1";
+const USER_A = "user-a";
+const USER_B = "user-b";
+const STRAVA_A = 900001;
+const STRAVA_B = 900002;
+
+// ---------------------------------------------------------------------------
+// 状態を持つインメモリ Supabase フェイク
+// ---------------------------------------------------------------------------
+
+type Row = Record<string, unknown>;
+
+class QB {
+  private op: "select" | "insert" | "upsert" | "update" | "delete" = "select";
+  private filters: Array<[string, string, unknown]> = [];
+  private payload: unknown = null;
+  private conflict = "";
+  private orderSpec: { col: string; asc: boolean } | null = null;
+  private limitN: number | null = null;
+  private mode: "list" | "single" | "maybe" = "list";
+  constructor(
+    private store: Record<string, Row[]>,
+    private table: string
+  ) {}
+  select() { return this; }
+  eq(c: string, v: unknown) { this.filters.push([c, "eq", v]); return this; }
+  neq(c: string, v: unknown) { this.filters.push([c, "neq", v]); return this; }
+  in(c: string, v: unknown[]) { this.filters.push([c, "in", v]); return this; }
+  is(c: string, v: unknown) { this.filters.push([c, "is", v]); return this; }
+  order(c: string, o: { ascending: boolean }) { this.orderSpec = { col: c, asc: o.ascending }; return this; }
+  limit(n: number) { this.limitN = n; return this; }
+  insert(rows: Row | Row[]) { this.op = "insert"; this.payload = rows; return this; }
+  upsert(rows: Row | Row[], opts?: { onConflict?: string }) { this.op = "upsert"; this.payload = rows; this.conflict = opts?.onConflict ?? ""; return this; }
+  update(obj: Row) { this.op = "update"; this.payload = obj; return this; }
+  delete() { this.op = "delete"; return this; }
+  single() { this.mode = "single"; return this; }
+  maybeSingle() { this.mode = "maybe"; return this; }
+  private match(r: Row) {
+    return this.filters.every(([c, op, v]) => {
+      const rv = r[c];
+      if (op === "eq") return String(rv) === String(v);
+      if (op === "neq") return String(rv) !== String(v);
+      if (op === "in") return (v as unknown[]).map(String).includes(String(rv));
+      if (op === "is") return (rv ?? null) === v;
+      return true;
+    });
+  }
+  private exec(): { data: unknown; error: unknown } {
+    const rows = this.store[this.table] ?? (this.store[this.table] = []);
+    if (this.op === "select") {
+      let out = rows.filter((r) => this.match(r));
+      if (this.orderSpec) {
+        const { col, asc } = this.orderSpec;
+        out = [...out].sort((a, b) => (String(a[col] ?? "") < String(b[col] ?? "") ? -1 : 1) * (asc ? 1 : -1));
+      }
+      if (this.limitN != null) out = out.slice(0, this.limitN);
+      if (this.mode === "single")
+        return out.length === 1 ? { data: out[0], error: null } : { data: null, error: { message: "single: not exactly one row" } };
+      if (this.mode === "maybe")
+        return out.length <= 1 ? { data: out[0] ?? null, error: null } : { data: null, error: { message: "maybeSingle: multiple rows" } };
+      return { data: out, error: null };
+    }
+    if (this.op === "insert" || this.op === "upsert") {
+      const incoming = (Array.isArray(this.payload) ? this.payload : [this.payload]) as Row[];
+      const result: Row[] = [];
+      for (const inc of incoming) {
+        if (this.op === "upsert" && this.conflict) {
+          const cols = this.conflict.split(",");
+          const idx = rows.findIndex((r) => cols.every((c) => String(r[c]) === String(inc[c])));
+          if (idx >= 0) { rows[idx] = { ...rows[idx], ...inc }; result.push(rows[idx]); continue; }
+        }
+        const nr = { ...inc };
+        rows.push(nr);
+        result.push(nr);
+      }
+      if (this.mode === "single") return { data: result[0], error: null };
+      return { data: result, error: null };
+    }
+    if (this.op === "update") {
+      const out: Row[] = [];
+      for (const r of rows) if (this.match(r)) { Object.assign(r, this.payload as Row); out.push(r); }
+      return { data: out, error: null };
+    }
+    this.store[this.table] = rows.filter((r) => !this.match(r));
+    return { data: null, error: null };
+  }
+  then(resolve: (v: { data: unknown; error: unknown }) => void) { resolve(this.exec()); }
+}
+
+// ---------------------------------------------------------------------------
+// モック Strava アクティビティ
+// ---------------------------------------------------------------------------
+
+const PTS = {
+  runA: [[35.68, 139.7], [35.702, 139.7], [35.724, 139.7]] as [number, number][],
+  runB: [[35.702, 139.7], [35.702, 139.727]] as [number, number][],
+  teleport: [[35.6938, 139.7034], [34.6937, 135.5023], [35.1815, 136.9066], [35.702, 139.727]] as [number, number][],
+};
+
+/**
+ * アクティビティ定義。
+ * - 9001: A の正当な Run（2026-10-10、経路長 約4.9km / distance 4900m で整合）
+ * - 9002: B の正当な Run（2026-10-20、経路長 約2.4km / distance 2400m で整合）
+ * - 9003: A のテレポート偽装（経路長 500km 超に対し distance 5000m → 乖離大）
+ * - 9004: athlete が B なのに owner は A という不一致イベント
+ */
+const ACTIVITIES: Record<number, StravaActivityResponse> = {
+  9001: {
+    map: { summary_polyline: polylineLib.encode(PTS.runA) },
+    start_date: "2026-10-10T09:00:00Z",
+    athlete: { id: STRAVA_A },
+    sport_type: "Run",
+    manual: false,
+    trainer: false,
+    average_speed: 2.7,
+    max_speed: 5,
+    distance: 4900,
+    elapsed_time: 1800,
+  },
+  9002: {
+    map: { summary_polyline: polylineLib.encode(PTS.runB) },
+    start_date: "2026-10-20T09:00:00Z",
+    athlete: { id: STRAVA_B },
+    sport_type: "Run",
+    manual: false,
+    trainer: false,
+    average_speed: 2.7,
+    max_speed: 5,
+    distance: 2400,
+    elapsed_time: 900,
+  },
+  9003: {
+    map: { summary_polyline: polylineLib.encode(PTS.teleport) },
+    start_date: "2026-10-21T09:00:00Z",
+    athlete: { id: STRAVA_A },
+    sport_type: "Run",
+    manual: false,
+    trainer: false,
+    average_speed: 2.7,
+    max_speed: 5,
+    distance: 5000,
+    elapsed_time: 1800,
+  },
+  9004: {
+    map: { summary_polyline: polylineLib.encode(PTS.runA) },
+    start_date: "2026-10-22T09:00:00Z",
+    athlete: { id: STRAVA_B }, // owner (A) と不一致
+    sport_type: "Run",
+    manual: false,
+    trainer: false,
+    average_speed: 2.7,
+    max_speed: 5,
+    distance: 4900,
+    elapsed_time: 1800,
+  },
+};
+
+function createHarness() {
+  const store: Record<string, Row[]> = {
+    users: [
+      { id: USER_A, strava_id: STRAVA_A, display_name: "Runner A", strava_access_token: "tok-a" },
+      { id: USER_B, strava_id: STRAVA_B, display_name: "Runner B", strava_access_token: "tok-b" },
+    ],
+    group_members: [
+      { group_id: GROUP, user_id: USER_A },
+      { group_id: GROUP, user_id: USER_B },
+    ],
+    tiles: [],
+    activity_tiles: [],
+    activity_logs: [],
+  };
+  const fakeSupabase = { from: (t: string) => new QB(store, t) } as unknown as StravaWebhookDeps["supabase"];
+  const deps: StravaWebhookDeps = {
+    supabase: fakeSupabase,
+    fetchStravaActivity: async (id: number) => {
+      const a = ACTIVITIES[id];
+      if (!a) throw new Error("Strava API 404: Record Not Found");
+      return a;
+    },
+    getH3IndexesFromPoints,
+    decryptStravaToken: (enc: string) => enc,
+  };
+  const tileOf = (cell: string) => store.tiles.find((t) => t.h3_index === cell && t.group_id === GROUP);
+  const cellOf = (p: [number, number]) => getH3IndexesFromPoints([p])[0];
+  return { store, deps, fakeSupabase, tileOf, cellOf };
+}
+
+describe("SECURITY REGRESSION: 攻撃が防御されること", () => {
+  it("正常系コントロール: 正当な Run アクティビティは今まで通りタイルを獲得できる", async () => {
+    const { store, deps, tileOf, cellOf } = createHarness();
+    const r = await processActivityEvent(9001, STRAVA_A, deps);
+    expect(r.ok).toBe(true);
+    expect(store.tiles).toHaveLength(3);
+    expect(store.tiles.every((t) => t.owner_id === USER_A)).toBe(true);
+    expect(tileOf(cellOf(PTS.runA[0]))?.score).toBe(100);
+    expect(store.activity_tiles.filter((t) => Number(t.activity_id) === 9001)).toHaveLength(3);
+    expect(store.activity_logs.filter((l) => l.user_id === USER_A)).toHaveLength(1);
+  });
+
+  it("S4 リプレイ防御: A の古いイベントのリプレイで所有者・スコア・captured_at が巻き戻らず、ログが二重化しない", async () => {
+    const { store, deps, tileOf, cellOf } = createHarness();
+    // A が正当に獲得 → B が後から同じタイルを奪取
+    expect((await processActivityEvent(9001, STRAVA_A, deps)).ok).toBe(true);
+    expect((await processActivityEvent(9002, STRAVA_B, deps)).ok).toBe(true);
+    const shared = cellOf(PTS.runA[1]);
+    expect(tileOf(shared)?.owner_id).toBe(USER_B);
+    // B 保有中に減衰した状態を再現
+    tileOf(shared)!.score = 35;
+    const tilesBefore = store.tiles.length;
+    const logsBefore = store.activity_logs.filter((l) => l.user_id === USER_A).length;
+    const activityTilesBefore = store.activity_tiles.length;
+
+    // 攻撃: A の古いイベント（2026-10-10）をそのままリプレイ
+    const r = await processActivityEvent(9001, STRAVA_A, deps);
+    expect(r.ok).toBe(true); // 冪等な再処理として受理はされるが、状態は巻き戻らない
+
+    const after = tileOf(shared)!;
+    expect(after.owner_id).toBe(USER_B); // 巻き戻し奪取されない
+    expect(after.score).toBe(35); // 減衰がリセットされない
+    expect(after.captured_at).toBe("2026-10-20T09:00:00Z"); // B の日時のまま
+    expect(store.tiles).toHaveLength(tilesBefore);
+    expect(store.activity_tiles).toHaveLength(activityTilesBefore);
+    expect(store.activity_logs.filter((l) => l.user_id === USER_A)).toHaveLength(logsBefore); // ログ二重化なし
+  });
+
+  it("S5 テレポート防御: 経路長と distance が大きく乖離するポリラインは拒否され、他人のタイルを奪えない", async () => {
+    const { store, deps, tileOf, cellOf } = createHarness();
+    // B が正当にホームタイルを保有
+    expect((await processActivityEvent(9002, STRAVA_B, deps)).ok).toBe(true);
+    const bUnique = cellOf(PTS.runB[1]);
+    expect(tileOf(bUnique)?.owner_id).toBe(USER_B);
+    const tilesBefore = store.tiles.length;
+
+    // 攻撃: 東京→大阪→名古屋と跳ぶポリライン + B のタイル上の点（distance は 5km と申告）
+    const r = await processActivityEvent(9003, STRAVA_A, deps);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toContain("divergence");
+
+    const osaka = cellOf(PTS.teleport[1]);
+    const nagoya = cellOf(PTS.teleport[2]);
+    expect(tileOf(osaka)).toBeUndefined(); // 大阪のタイルは生まれない
+    expect(tileOf(nagoya)).toBeUndefined(); // 名古屋のタイルも生まれない
+    expect(tileOf(bUnique)?.owner_id).toBe(USER_B); // B のタイルは奪われない
+    expect(store.tiles).toHaveLength(tilesBefore);
+    expect(store.tiles.every((t) => t.owner_id !== USER_A)).toBe(true);
+  });
+
+  it("S6 偽造削除防御: 所有者を偽った削除で他人の activity_tiles が消えない", async () => {
+    const { store, deps, fakeSupabase } = createHarness();
+    expect((await processActivityEvent(9002, STRAVA_B, deps)).ok).toBe(true);
+    const before = store.activity_tiles.filter((t) => Number(t.activity_id) === 9002);
+    expect(before.length).toBeGreaterThan(0);
+    const tilesBefore = store.tiles.length;
+
+    // 攻撃: B の activity_id を A の owner_id で削除
+    const r = await processActivityDelete(9002, STRAVA_A, { supabase: fakeSupabase });
+    expect(r.ok).toBe(true); // 対象なしの冪等な no-op として完了する
+
+    const after = store.activity_tiles.filter((t) => Number(t.activity_id) === 9002);
+    expect(after).toHaveLength(before.length); // B の裏付けレコードは消えない
+    expect(after.every((t) => t.user_id === USER_B)).toBe(true);
+    expect(store.tiles).toHaveLength(tilesBefore); // B のタイルも残る
+  });
+
+  it("S6 正常系コントロール: 本人による正当な削除は activity_tiles を消去できる（防御のやり過ぎでないこと）", async () => {
+    const { store, deps, fakeSupabase } = createHarness();
+    expect((await processActivityEvent(9002, STRAVA_B, deps)).ok).toBe(true);
+    expect(store.activity_tiles.filter((t) => Number(t.activity_id) === 9002).length).toBeGreaterThan(0);
+    const r = await processActivityDelete(9002, STRAVA_B, { supabase: fakeSupabase });
+    expect(r.ok).toBe(true);
+    expect(store.activity_tiles.filter((t) => Number(t.activity_id) === 9002)).toHaveLength(0);
+  });
+
+  it("athlete 不一致防御: イベントの owner とアクティビティの athlete が異なる場合は拒否される", async () => {
+    const { store, deps } = createHarness();
+    // activity 9004 の athlete は B だが、イベント owner は A
+    const r = await processActivityEvent(9004, STRAVA_A, deps);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toContain("athlete mismatch");
+    expect(store.tiles).toHaveLength(0);
+    expect(store.activity_tiles).toHaveLength(0);
+    expect(store.activity_logs).toHaveLength(0);
+  });
+
+  it("防御が既存にあるケース: ポリラインなしアクティビティはタイルを獲得できない", async () => {
+    const { store, deps } = createHarness();
+    const depsNoMap: StravaWebhookDeps = {
+      ...deps,
+      fetchStravaActivity: async () => ({ map: {} }),
+    };
+    const r = await processActivityEvent(9999, STRAVA_A, depsNoMap);
+    expect(r.ok).toBe(false);
+    expect(store.tiles).toHaveLength(0);
+  }, 20000);
+});
