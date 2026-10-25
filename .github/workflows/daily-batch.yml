@@ -8,7 +8,10 @@ on:
     - cron: "0 15 * * *"
   workflow_dispatch:
 
-jobs:
+permissions:
+  contents: read
+  
+  jobs:
   daily-batch:
     runs-on: ubuntu-latest
     steps:
