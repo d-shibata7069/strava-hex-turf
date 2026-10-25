@@ -1,1 +1,96 @@
-aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgZ2V0U2Vzc2lvblVzZXJJZCB9IGZyb20gIkAvbGliL3Nlc3Npb24iOwppbXBvcnQgeyBnZXRTdXBhYmFzZVNlcnZlciB9IGZyb20gIkAvbGliL3N1cGFiYXNlIjsKCnR5cGUgUm91dGVQYXJhbXMgPSB7IHBhcmFtczogUHJvbWlzZTx7IGlkOiBzdHJpbmcgfT4gfTsKCi8qKgogKiBERUxFVEUgL2FwaS9ncm91cHMvW2lkXQogKiDjgrDjg6vjg7zjg5fjgpLliYrpmaTjgZnjgovjgIIKICogLSBncm91cHMuY3JlYXRlZF9ieSDjgYzoqK3lrprjgZXjgozjgabjgYTjgovjgrDjg6vjg7zjg5fjga/jgIHkvZzmiJDogIXmnKzkurrjga7jgb/liYrpmaTlj6/og73vvIhBLTjvvInjgIIKICogLSBjcmVhdGVkX2J5IOOBjCBOVUxMIOOBruODrOOCrOOCt+ODvOOCsOODq+ODvOODl++8iOOCq+ODqeODoOi/veWKoOWJjeOBq+S9nOOCieOCjOOBn+OCguOBru+8ieOBr+S9nOaIkOiAheOCkgogKiAgIOeJueWumuOBp+OBjeOBquOBhOOBn+OCgeOAgeW+k+adpemAmuOCiuODoeODs+ODkOODvOOBp+OBguOCjOOBsOWJiumZpOWPr+iDveOBqOOBmeOCi+OAggogKiDjgrDjg6vjg7zjg5fliYrpmaTjgavkvLTjgYQgZ3JvdXBfbWVtYmVycyAvIHRpbGVzIOOBryBDQVNDQURFIOOBp+WJiumZpOOBleOCjOOCi+OAggogKi8KZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIERFTEVURSgKICBfcmVxdWVzdDogTmV4dFJlcXVlc3QsCiAgeyBwYXJhbXMgfTogUm91dGVQYXJhbXMKKSB7CiAgY29uc3QgdXNlcklkID0gYXdhaXQgZ2V0U2Vzc2lvblVzZXJJZCgpOwogIGlmICghdXNlcklkKSB7CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oCiAgICAgIHsgZXJyb3I6ICJVbmF1dGhvcml6ZWQiLCBtZXNzYWdlOiAi44Ot44Kw44Kk44Oz44GM5b+F6KaB44Gn44GZIiB9LAogICAgICB7IHN0YXR1czogNDAxIH0KICAgICk7CiAgfQoKICBjb25zdCB7IGlkOiBncm91cElkIH0gPSBhd2FpdCBwYXJhbXM7CiAgaWYgKCFncm91cElkKSB7CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oCiAgICAgIHsgZXJyb3I6ICJCYWQgUmVxdWVzdCIsIG1lc3NhZ2U6ICLjgrDjg6vjg7zjg5cgSUQg44GM44GC44KK44G+44Gb44KTIiB9LAogICAgICB7IHN0YXR1czogNDAwIH0KICAgICk7CiAgfQoKICBjb25zdCBzdXBhYmFzZSA9IGdldFN1cGFiYXNlU2VydmVyKCk7CgogIGNvbnN0IHsgZGF0YTogbWVtYmVyLCBlcnJvcjogbWVtYmVyRXJyb3IgfSA9IGF3YWl0IHN1cGFiYXNlCiAgICAuZnJvbSgiZ3JvdXBfbWVtYmVycyIpCiAgICAuc2VsZWN0KCJncm91cF9pZCIpCiAgICAuZXEoImdyb3VwX2lkIiwgZ3JvdXBJZCkKICAgIC5lcSgidXNlcl9pZCIsIHVzZXJJZCkKICAgIC5tYXliZVNpbmdsZSgpOwoKICBpZiAobWVtYmVyRXJyb3IpIHsKICAgIGNvbnNvbGUuZXJyb3IoImdyb3VwX21lbWJlcnMgZmV0Y2ggZXJyb3I6IiwgbWVtYmVyRXJyb3IpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiSW50ZXJuYWwgU2VydmVyIEVycm9yIiwgbWVzc2FnZTogIueiuuiqjeOBq+WkseaVl+OBl+OBvuOBl+OBnyIgfSwKICAgICAgeyBzdGF0dXM6IDUwMCB9CiAgICApOwogIH0KCiAgaWYgKCFtZW1iZXIpIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgeyBlcnJvcjogIkZvcmJpZGRlbiIsIG1lc3NhZ2U6ICLjgZPjga7jgrDjg6vjg7zjg5fjga7jg6Hjg7Pjg5Djg7zjgafjga/jgarjgYTjgZ/jgoHliYrpmaTjgafjgY3jgb7jgZvjgpMiIH0sCiAgICAgIHsgc3RhdHVzOiA0MDMgfQogICAgKTsKICB9CgogIGNvbnN0IHsgZGF0YTogZ3JvdXAsIGVycm9yOiBncm91cEVycm9yIH0gPSBhd2FpdCBzdXBhYmFzZQogICAgLmZyb20oImdyb3VwcyIpCiAgICAuc2VsZWN0KCJjcmVhdGVkX2J5IikKICAgIC5lcSgiaWQiLCBncm91cElkKQogICAgLm1heWJlU2luZ2xlKCk7CgogIGlmIChncm91cEVycm9yKSB7CiAgICBjb25zb2xlLmVycm9yKCJncm91cHMgZmV0Y2ggZXJyb3I6IiwgZ3JvdXBFcnJvcik7CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oCiAgICAgIHsgZXJyb3I6ICJJbnRlcm5hbCBTZXJ2ZXIgRXJyb3IiLCBtZXNzYWdlOiAi56K66KqN44Gr5aSx5pWX44GX44G+44GX44GfIiB9LAogICAgICB7IHN0YXR1czogNTAwIH0KICAgICk7CiAgfQoKICAvLyBjcmVhdGVkX2J5IOOBjOioreWumuOBleOCjOOBpuOBhOOCi+WgtOWQiOOBr+S9nOaIkOiAheacrOS6uuOBruOBv+WJiumZpOWPr+OAggogIC8vIE5VTEwg44Gu44Os44Ks44K344O844Kw44Or44O844OX44Gv5L2c5oiQ6ICF44KS54m55a6a44Gn44GN44Gq44GE44Gf44KB44CB5b6T5p2l6YCa44KK44Oh44Oz44OQ44O85YmK6Zmk5Y+v44Go44GZ44KL44CCCiAgaWYgKGdyb3VwPy5jcmVhdGVkX2J5ICYmIGdyb3VwLmNyZWF0ZWRfYnkgIT09IHVzZXJJZCkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiRm9yYmlkZGVuIiwgbWVzc2FnZTogIuOCsOODq+ODvOODl+OCkuWJiumZpOOBp+OBjeOCi+OBruOBr+S9nOaIkOiAheOBruOBv+OBp+OBmSIgfSwKICAgICAgeyBzdGF0dXM6IDQwMyB9CiAgICApOwogIH0KCiAgY29uc3QgeyBlcnJvcjogZGVsZXRlRXJyb3IgfSA9IGF3YWl0IHN1cGFiYXNlCiAgICAuZnJvbSgiZ3JvdXBzIikKICAgIC5kZWxldGUoKQogICAgLmVxKCJpZCIsIGdyb3VwSWQpOwoKICBpZiAoZGVsZXRlRXJyb3IpIHsKICAgIGNvbnNvbGUuZXJyb3IoImdyb3VwcyBkZWxldGUgZXJyb3I6IiwgZGVsZXRlRXJyb3IpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICB7IGVycm9yOiAiSW50ZXJuYWwgU2VydmVyIEVycm9yIiwgbWVzc2FnZTogIuOCsOODq+ODvOODl+OBruWJiumZpOOBq+WkseaVl+OBl+OBvuOBl+OBnyIgfSwKICAgICAgeyBzdGF0dXM6IDUwMCB9CiAgICApOwogIH0KCiAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgb2s6IHRydWUgfSk7Cn0K
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionUserId } from "@/lib/session";
+import { getSupabaseServer } from "@/lib/supabase";
+
+type RouteParams = { params: Promise<{ id: string }> };
+
+/**
+ * DELETE /api/groups/[id]
+ * グループを削除する。
+ * - groups.created_by が設定されているグループは、作成者本人のみ削除可能（A-8）。
+ * - created_by が NULL のレガシーグループ（カラム追加前に作られたもの）は作成者を
+ *   特定できないため、従来通りメンバーであれば削除可能とする。
+ * グループ削除に伴い group_members / tiles は CASCADE で削除される。
+ */
+export async function DELETE(
+  _request: NextRequest,
+  { params }: RouteParams
+) {
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Unauthorized", message: "ログインが必要です" },
+      { status: 401 }
+    );
+  }
+
+  const { id: groupId } = await params;
+  if (!groupId) {
+    return NextResponse.json(
+      { error: "Bad Request", message: "グループ ID がありません" },
+      { status: 400 }
+    );
+  }
+
+  const supabase = getSupabaseServer();
+
+  const { data: member, error: memberError } = await supabase
+    .from("group_members")
+    .select("group_id")
+    .eq("group_id", groupId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (memberError) {
+    console.error("group_members fetch error:", memberError);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "確認に失敗しました" },
+      { status: 500 }
+    );
+  }
+
+  if (!member) {
+    return NextResponse.json(
+      { error: "Forbidden", message: "このグループのメンバーではないため削除できません" },
+      { status: 403 }
+    );
+  }
+
+  const { data: group, error: groupError } = await supabase
+    .from("groups")
+    .select("created_by")
+    .eq("id", groupId)
+    .maybeSingle();
+
+  if (groupError) {
+    console.error("groups fetch error:", groupError);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "確認に失敗しました" },
+      { status: 500 }
+    );
+  }
+
+  // created_by が設定されている場合は作成者本人のみ削除可。
+  // NULL のレガシーグループは作成者を特定できないため、従来通りメンバー削除可とする。
+  if (group?.created_by && group.created_by !== userId) {
+    return NextResponse.json(
+      { error: "Forbidden", message: "グループを削除できるのは作成者のみです" },
+      { status: 403 }
+    );
+  }
+
+  const { error: deleteError } = await supabase
+    .from("groups")
+    .delete()
+    .eq("id", groupId);
+
+  if (deleteError) {
+    console.error("groups delete error:", deleteError);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: "グループの削除に失敗しました" },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json({ ok: true });
+}
