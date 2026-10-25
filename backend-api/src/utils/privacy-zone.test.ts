@@ -1,1 +1,203 @@
-aW1wb3J0IHsgZGVzY3JpYmUsIGl0LCBleHBlY3QgfSBmcm9tICJ2aXRlc3QiOwppbXBvcnQgeyBsYXRMbmdUb0NlbGwgfSBmcm9tICJoMy1qcyI7CmltcG9ydCB7CiAgcGFyc2VQcml2YWN5Wm9uZSwKICBpc1BvaW50SW5SaW5nLAogIGlzUG9pbnRJblBvbHlnb24sCiAgaXNQb2ludEluUHJpdmFjeVpvbmUsCiAgZ2V0SDNDZWxsQ2VudGVyTG5nTGF0LAogIGZpbHRlckgzSW5kZXhlc091dHNpZGVQcml2YWN5Wm9uZSwKICB0eXBlIEdlb0pzb25Qb2x5Z29uLAogIHR5cGUgTG5nTGF0LAp9IGZyb20gIi4vcHJpdmFjeS16b25lLmpzIjsKCi8qKiDmnbHkuqzpp4XlkajovrrjgpLlm7LjgoDnn6nlvaLjgr7jg7zjg7PvvIhHZW9KU09OIOW9ouW8j+OAgeW6p+aomeOBryBbbG5nLCBsYXRdIOmghu+8iSAqLwpjb25zdCBUT0tZT19aT05FOiBHZW9Kc29uUG9seWdvbiA9IHsKICB0eXBlOiAiUG9seWdvbiIsCiAgY29vcmRpbmF0ZXM6IFsKICAgIFsKICAgICAgWzEzOS43NSwgMzUuNjddLAogICAgICBbMTM5Ljc4LCAzNS42N10sCiAgICAgIFsxMzkuNzgsIDM1LjddLAogICAgICBbMTM5Ljc1LCAzNS43XSwKICAgICAgWzEzOS43NSwgMzUuNjddLCAvLyBHZW9KU09OIOOBruODquODs+OCsOOBr+acgOWIneOBqOacgOW+jOOBjOWQjOS4gOeCueOBp+mWieOBmOOCiwogICAgXSwKICBdLAp9OwoKLyoqIOadseS6rOmnheOBruOCu+ODq++8iOOCvuODvOODs+WGhe+8ieOBqOWkp+mYqumnheOBruOCu+ODq++8iOOCvuODvOODs+Wklu+8iSAqLwpjb25zdCBUT0tZT19DRUxMID0gbGF0TG5nVG9DZWxsKDM1LjY4MTIsIDEzOS43NjcxLCA3KTsKY29uc3QgT1NBS0FfQ0VMTCA9IGxhdExuZ1RvQ2VsbCgzNC43MDI0LCAxMzUuNDk1OSwgNyk7CgpkZXNjcmliZSgiaXNQb2ludEluUmluZyIsICgpID0+IHsKICBjb25zdCByaW5nID0gVE9LWU9fWk9ORS5jb29yZGluYXRlc1swXTsKCiAgaXQoIuODquODs+OCsOWGheOBrueCueOBryB0cnVlIiwgKCkgPT4gewogICAgZXhwZWN0KGlzUG9pbnRJblJpbmcoWzEzOS43NjcxLCAzNS42ODEyXSwgcmluZykpLnRvQmUodHJ1ZSk7IC8vIOadseS6rOmnhSBbbG5nLCBsYXRdCiAgfSk7CgogIGl0KCLjg6rjg7PjgrDlpJbjga7ngrnjga8gZmFsc2UiLCAoKSA9PiB7CiAgICBleHBlY3QoaXNQb2ludEluUmluZyhbMTM1LjQ5NTksIDM0LjcwMjRdLCByaW5nKSkudG9CZShmYWxzZSk7IC8vIOWkp+mYqumnhQogICAgZXhwZWN0KGlzUG9pbnRJblJpbmcoWzEzOS43NjcxLCAzNS44XSwgcmluZykpLnRvQmUoZmFsc2UpOyAvLyDjgr7jg7zjg7Pjga7ljJflgbQKICAgIGV4cGVjdChpc1BvaW50SW5SaW5nKFsxMzkuOSwgMzUuNjgxMl0sIHJpbmcpKS50b0JlKGZhbHNlKTsgLy8g44K+44O844Oz44Gu5p2x5YG0CiAgfSk7CgogIGl0KCLplonjgZjjgabjgYTjgarjgYTjg6rjg7PjgrDjgafjgoLliKTlrprjgafjgY3jgosiLCAoKSA9PiB7CiAgICBjb25zdCBvcGVuUmluZzogTG5nTGF0W10gPSBbCiAgICAgIFsxMzkuNzUsIDM1LjY3XSwKICAgICAgWzEzOS43OCwgMzUuNjddLAogICAgICBbMTM5Ljc4LCAzNS43XSwKICAgICAgWzEzOS43NSwgMzUuN10sCiAgICBdOwogICAgZXhwZWN0KGlzUG9pbnRJblJpbmcoWzEzOS43NjcxLCAzNS42ODEyXSwgb3BlblJpbmcpKS50b0JlKHRydWUpOwogICAgZXhwZWN0KGlzUG9pbnRJblJpbmcoWzEzNS40OTU5LCAzNC43MDI0XSwgb3BlblJpbmcpKS50b0JlKGZhbHNlKTsKICB9KTsKfSk7CgpkZXNjcmliZSgiaXNQb2ludEluUG9seWdvbiIsICgpID0+IHsKICBpdCgi56m044Oq44Oz44Kw5YaF44Gu54K544GvIGZhbHNl77yI6Zmk5aSW44GV44KM44KL77yJIiwgKCkgPT4gewogICAgY29uc3QgcG9seWdvbldpdGhIb2xlOiBMbmdMYXRbXVtdID0gWwogICAgICBUT0tZT19aT05FLmNvb3JkaW5hdGVzWzBdLAogICAgICBbCiAgICAgICAgWzEzOS43NiwgMzUuNjhdLAogICAgICAgIFsxMzkuNzcsIDM1LjY4XSwKICAgICAgICBbMTM5Ljc3LCAzNS42OV0sCiAgICAgICAgWzEzOS43NiwgMzUuNjldLAogICAgICAgIFsxMzkuNzYsIDM1LjY4XSwKICAgICAgXSwKICAgIF07CiAgICBleHBlY3QoaXNQb2ludEluUG9seWdvbihbMTM5Ljc2NSwgMzUuNjg1XSwgcG9seWdvbldpdGhIb2xlKSkudG9CZShmYWxzZSk7IC8vIOeptOOBruS4rQogICAgZXhwZWN0KGlzUG9pbnRJblBvbHlnb24oWzEzOS43NTUsIDM1LjY3NV0sIHBvbHlnb25XaXRoSG9sZSkpLnRvQmUodHJ1ZSk7IC8vIOeptOOBruWkluODu+WkluWRqOOBruWGhQogIH0pOwp9KTsKCmRlc2NyaWJlKCJpc1BvaW50SW5Qcml2YWN5Wm9uZSIsICgpID0+IHsKICBpdCgiUG9seWdvbiDlhoXjga7ngrnjga8gdHJ1ZeOAgeWkluOBrueCueOBryBmYWxzZSIsICgpID0+IHsKICAgIGV4cGVjdChpc1BvaW50SW5Qcml2YWN5Wm9uZShbMTM5Ljc2NzEsIDM1LjY4MTJdLCBUT0tZT19aT05FKSkudG9CZSh0cnVlKTsKICAgIGV4cGVjdChpc1BvaW50SW5Qcml2YWN5Wm9uZShbMTM1LjQ5NTksIDM0LjcwMjRdLCBUT0tZT19aT05FKSkudG9CZShmYWxzZSk7CiAgfSk7CgogIGl0KCJNdWx0aVBvbHlnb24g44Gv44GE44Ga44KM44GL44Gu44Od44Oq44K044Oz5YaF44Gq44KJIHRydWUiLCAoKSA9PiB7CiAgICBjb25zdCBtdWx0aSA9IHsKICAgICAgdHlwZTogIk11bHRpUG9seWdvbiIgYXMgY29uc3QsCiAgICAgIGNvb3JkaW5hdGVzOiBbCiAgICAgICAgVE9LWU9fWk9ORS5jb29yZGluYXRlcywKICAgICAgICBbCiAgICAgICAgICBbCiAgICAgICAgICAgIFsxMzUuNDgsIDM0LjY5XSwKICAgICAgICAgICAgWzEzNS41MSwgMzQuNjldLAogICAgICAgICAgICBbMTM1LjUxLCAzNC43Ml0sCiAgICAgICAgICAgIFsxMzUuNDgsIDM0LjcyXSwKICAgICAgICAgICAgWzEzNS40OCwgMzQuNjldLAogICAgICAgICAgXSwKICAgICAgICBdLAogICAgICBdLAogICAgfTsKICAgIGV4cGVjdChpc1BvaW50SW5Qcml2YWN5Wm9uZShbMTM5Ljc2NzEsIDM1LjY4MTJdLCBtdWx0aSkpLnRvQmUodHJ1ZSk7CiAgICBleHBlY3QoaXNQb2ludEluUHJpdmFjeVpvbmUoWzEzNS40OTU5LCAzNC43MDI0XSwgbXVsdGkpKS50b0JlKHRydWUpOwogICAgZXhwZWN0KGlzUG9pbnRJblByaXZhY3lab25lKFsxNDAuMCwgMzYuMF0sIG11bHRpKSkudG9CZShmYWxzZSk7CiAgfSk7CgogIGl0KCLjgr7jg7zjg7PjgYwgbnVsbCAvIHVuZGVmaW5lZCDjga7loLTlkIjjga8gZmFsc2UiLCAoKSA9PiB7CiAgICBleHBlY3QoaXNQb2ludEluUHJpdmFjeVpvbmUoWzEzOS43NjcxLCAzNS42ODEyXSwgbnVsbCkpLnRvQmUoZmFsc2UpOwogICAgZXhwZWN0KGlzUG9pbnRJblByaXZhY3lab25lKFsxMzkuNzY3MSwgMzUuNjgxMl0sIHVuZGVmaW5lZCkpLnRvQmUoZmFsc2UpOwogIH0pOwp9KTsKCmRlc2NyaWJlKCJwYXJzZVByaXZhY3lab25lIiwgKCkgPT4gewogIGl0KCLlpqXlvZPjgaogUG9seWdvbiAvIE11bHRpUG9seWdvbiDjgpLop6Pph4jjgafjgY3jgosiLCAoKSA9PiB7CiAgICBleHBlY3QocGFyc2VQcml2YWN5Wm9uZShUT0tZT19aT05FKSkudG9FcXVhbChUT0tZT19aT05FKTsKICAgIGNvbnN0IG11bHRpID0geyB0eXBlOiAiTXVsdGlQb2x5Z29uIiwgY29vcmRpbmF0ZXM6IFtUT0tZT19aT05FLmNvb3JkaW5hdGVzXSB9OwogICAgZXhwZWN0KHBhcnNlUHJpdmFjeVpvbmUobXVsdGkpKS50b0VxdWFsKG11bHRpKTsKICB9KTsKCiAgaXQoIm51bGwg44KE5LiN5q2j44Gq5b2i5byP44GvIG51bGwg44KS6L+U44GZIiwgKCkgPT4gewogICAgZXhwZWN0KHBhcnNlUHJpdmFjeVpvbmUobnVsbCkpLnRvQmVOdWxsKCk7CiAgICBleHBlY3QocGFyc2VQcml2YWN5Wm9uZSh1bmRlZmluZWQpKS50b0JlTnVsbCgpOwogICAgZXhwZWN0KHBhcnNlUHJpdmFjeVpvbmUoInBvbHlnb24iKSkudG9CZU51bGwoKTsKICAgIGV4cGVjdChwYXJzZVByaXZhY3lab25lKHsgdHlwZTogIlBvaW50IiwgY29vcmRpbmF0ZXM6IFsxMzkuNywgMzUuNl0gfSkpLnRvQmVOdWxsKCk7CiAgICBleHBlY3QocGFyc2VQcml2YWN5Wm9uZSh7IHR5cGU6ICJQb2x5Z29uIiwgY29vcmRpbmF0ZXM6IFtdIH0pKS50b0JlTnVsbCgpOwogICAgZXhwZWN0KHBhcnNlUHJpdmFjeVpvbmUoeyB0eXBlOiAiUG9seWdvbiIsIGNvb3JkaW5hdGVzOiBbW1sxMzkuNywgMzUuNl1dXSB9KSkudG9CZU51bGwoKTsKICB9KTsKfSk7CgpkZXNjcmliZSgiZ2V0SDNDZWxsQ2VudGVyTG5nTGF0IiwgKCkgPT4gewogIGl0KCLjgrvjg6vjga7kuK3lv4PjgpIgW2xuZywgbGF0XSDpoIbjgafov5TjgZkiLCAoKSA9PiB7CiAgICBjb25zdCBjZW50ZXIgPSBnZXRIM0NlbGxDZW50ZXJMbmdMYXQoVE9LWU9fQ0VMTCk7CiAgICBleHBlY3QoY2VudGVyKS5ub3QudG9CZU51bGwoKTsKICAgIC8vIOadseS6rOmnheOBruOCu+ODq+OBquOBruOBp+e1jOW6piAxMzkueCAvIOe3r+W6piAzNS54IOOBrumghuOBq+OBquOBo+OBpuOBhOOCi+OBk+OBqAogICAgZXhwZWN0KGNlbnRlciFbMF0pLnRvQmVHcmVhdGVyVGhhbigxMzkpOwogICAgZXhwZWN0KGNlbnRlciFbMV0pLnRvQmVHcmVhdGVyVGhhbigzNSk7CiAgICBleHBlY3QoY2VudGVyIVsxXSkudG9CZUxlc3NUaGFuKDM2KTsKICB9KTsKCiAgaXQoIuS4jeato+OBquOCu+ODq+OBryBudWxsIOOCkui/lOOBmSIsICgpID0+IHsKICAgIGV4cGVjdChnZXRIM0NlbGxDZW50ZXJMbmdMYXQoIm5vdC1hLWNlbGwiKSkudG9CZU51bGwoKTsKICB9KTsKfSk7CgpkZXNjcmliZSgiZmlsdGVySDNJbmRleGVzT3V0c2lkZVByaXZhY3lab25lIiwgKCkgPT4gewogIGl0KCLjgr7jg7zjg7PlhoXjga7jgrvjg6vjgpLpmaTlpJbjgZfjgIHjgr7jg7zjg7PlpJbjga7jgrvjg6vjgaDjgZHjgYzmrovjgosiLCAoKSA9PiB7CiAgICBjb25zdCB7IGtlcHQsIGV4Y2x1ZGVkQ291bnQgfSA9IGZpbHRlckgzSW5kZXhlc091dHNpZGVQcml2YWN5Wm9uZSgKICAgICAgW1RPS1lPX0NFTEwsIE9TQUtBX0NFTExdLAogICAgICBUT0tZT19aT05FCiAgICApOwogICAgZXhwZWN0KGtlcHQpLnRvRXF1YWwoW09TQUtBX0NFTExdKTsKICAgIGV4cGVjdChleGNsdWRlZENvdW50KS50b0JlKDEpOwogIH0pOwoKICBpdCgi5YWo44K744Or44GM44K+44O844Oz5YaF44Gu5aC05ZCI44Gv5YWo5Lu26Zmk5aSW44GV44KM44KLIiwgKCkgPT4gewogICAgY29uc3QgeyBrZXB0LCBleGNsdWRlZENvdW50IH0gPSBmaWx0ZXJIM0luZGV4ZXNPdXRzaWRlUHJpdmFjeVpvbmUoCiAgICAgIFtUT0tZT19DRUxMXSwKICAgICAgVE9LWU9fWk9ORQogICAgKTsKICAgIGV4cGVjdChrZXB0KS50b0VxdWFsKFtdKTsKICAgIGV4cGVjdChleGNsdWRlZENvdW50KS50b0JlKDEpOwogIH0pOwoKICBpdCgi44K+44O844Oz5aSW44Gu44K744Or44Gg44GR44Gq44KJ5YWo5Lu25q6L44KLIiwgKCkgPT4gewogICAgY29uc3QgeyBrZXB0LCBleGNsdWRlZENvdW50IH0gPSBmaWx0ZXJIM0luZGV4ZXNPdXRzaWRlUHJpdmFjeVpvbmUoCiAgICAgIFtPU0FLQV9DRUxMXSwKICAgICAgVE9LWU9fWk9ORQogICAgKTsKICAgIGV4cGVjdChrZXB0KS50b0VxdWFsKFtPU0FLQV9DRUxMXSk7CiAgICBleHBlY3QoZXhjbHVkZWRDb3VudCkudG9CZSgwKTsKICB9KTsKCiAgaXQoIm51bGwg44K+44O844Oz44Gn44Gv5YWo5Lu25q6L44KL77yI5b6T5p2l6YCa44KK77yJIiwgKCkgPT4gewogICAgY29uc3QgY2VsbHMgPSBbVE9LWU9fQ0VMTCwgT1NBS0FfQ0VMTF07CiAgICBjb25zdCB7IGtlcHQsIGV4Y2x1ZGVkQ291bnQgfSA9IGZpbHRlckgzSW5kZXhlc091dHNpZGVQcml2YWN5Wm9uZShjZWxscywgbnVsbCk7CiAgICBleHBlY3Qoa2VwdCkudG9FcXVhbChjZWxscyk7CiAgICBleHBlY3QoZXhjbHVkZWRDb3VudCkudG9CZSgwKTsKICB9KTsKCiAgaXQoIuS4jeato+OBquW9ouW8j+OBruOCvuODvOODs+OBp+OBr+WFqOS7tuaui+OCiyIsICgpID0+IHsKICAgIGNvbnN0IGNlbGxzID0gW1RPS1lPX0NFTEwsIE9TQUtBX0NFTExdOwogICAgY29uc3QgeyBrZXB0LCBleGNsdWRlZENvdW50IH0gPSBmaWx0ZXJIM0luZGV4ZXNPdXRzaWRlUHJpdmFjeVpvbmUoY2VsbHMsIHsKICAgICAgdHlwZTogIlBvbHlnb24iLAogICAgICBjb29yZGluYXRlczogImludmFsaWQiLAogICAgfSk7CiAgICBleHBlY3Qoa2VwdCkudG9FcXVhbChjZWxscyk7CiAgICBleHBlY3QoZXhjbHVkZWRDb3VudCkudG9CZSgwKTsKICB9KTsKCiAgaXQoIk11bHRpUG9seWdvbiDjga7jgr7jg7zjg7PjgafjgoLpmaTlpJbjgafjgY3jgosiLCAoKSA9PiB7CiAgICBjb25zdCBtdWx0aSA9IHsKICAgICAgdHlwZTogIk11bHRpUG9seWdvbiIsCiAgICAgIGNvb3JkaW5hdGVzOiBbVE9LWU9fWk9ORS5jb29yZGluYXRlc10sCiAgICB9OwogICAgY29uc3QgeyBrZXB0LCBleGNsdWRlZENvdW50IH0gPSBmaWx0ZXJIM0luZGV4ZXNPdXRzaWRlUHJpdmFjeVpvbmUoCiAgICAgIFtUT0tZT19DRUxMLCBPU0FLQV9DRUxMXSwKICAgICAgbXVsdGkKICAgICk7CiAgICBleHBlY3Qoa2VwdCkudG9FcXVhbChbT1NBS0FfQ0VMTF0pOwogICAgZXhwZWN0KGV4Y2x1ZGVkQ291bnQpLnRvQmUoMSk7CiAgfSk7CgogIGl0KCLnqbrphY3liJfjga/nqbrjga7jgb7jgb7ov5TjgosiLCAoKSA9PiB7CiAgICBleHBlY3QoZmlsdGVySDNJbmRleGVzT3V0c2lkZVByaXZhY3lab25lKFtdLCBUT0tZT19aT05FKSkudG9FcXVhbCh7CiAgICAgIGtlcHQ6IFtdLAogICAgICBleGNsdWRlZENvdW50OiAwLAogICAgfSk7CiAgfSk7Cn0pOwo=
+import { describe, it, expect } from "vitest";
+import { latLngToCell } from "h3-js";
+import {
+  parsePrivacyZone,
+  isPointInRing,
+  isPointInPolygon,
+  isPointInPrivacyZone,
+  getH3CellCenterLngLat,
+  filterH3IndexesOutsidePrivacyZone,
+  type GeoJsonPolygon,
+  type LngLat,
+} from "./privacy-zone.js";
+
+/** 東京駅周辺を囲む矩形ゾーン（GeoJSON 形式、座標は [lng, lat] 順） */
+const TOKYO_ZONE: GeoJsonPolygon = {
+  type: "Polygon",
+  coordinates: [
+    [
+      [139.75, 35.67],
+      [139.78, 35.67],
+      [139.78, 35.7],
+      [139.75, 35.7],
+      [139.75, 35.67], // GeoJSON のリングは最初と最後が同一点で閉じる
+    ],
+  ],
+};
+
+/** 東京駅のセル（ゾーン内）と大阪駅のセル（ゾーン外） */
+const TOKYO_CELL = latLngToCell(35.6812, 139.7671, 7);
+const OSAKA_CELL = latLngToCell(34.7024, 135.4959, 7);
+
+describe("isPointInRing", () => {
+  const ring = TOKYO_ZONE.coordinates[0];
+
+  it("リング内の点は true", () => {
+    expect(isPointInRing([139.7671, 35.6812], ring)).toBe(true); // 東京駅 [lng, lat]
+  });
+
+  it("リング外の点は false", () => {
+    expect(isPointInRing([135.4959, 34.7024], ring)).toBe(false); // 大阪駅
+    expect(isPointInRing([139.7671, 35.8], ring)).toBe(false); // ゾーンの北側
+    expect(isPointInRing([139.9, 35.6812], ring)).toBe(false); // ゾーンの東側
+  });
+
+  it("閉じていないリングでも判定できる", () => {
+    const openRing: LngLat[] = [
+      [139.75, 35.67],
+      [139.78, 35.67],
+      [139.78, 35.7],
+      [139.75, 35.7],
+    ];
+    expect(isPointInRing([139.7671, 35.6812], openRing)).toBe(true);
+    expect(isPointInRing([135.4959, 34.7024], openRing)).toBe(false);
+  });
+});
+
+describe("isPointInPolygon", () => {
+  it("穴リング内の点は false（除外される）", () => {
+    const polygonWithHole: LngLat[][] = [
+      TOKYO_ZONE.coordinates[0],
+      [
+        [139.76, 35.68],
+        [139.77, 35.68],
+        [139.77, 35.69],
+        [139.76, 35.69],
+        [139.76, 35.68],
+      ],
+    ];
+    expect(isPointInPolygon([139.765, 35.685], polygonWithHole)).toBe(false); // 穴の中
+    expect(isPointInPolygon([139.755, 35.675], polygonWithHole)).toBe(true); // 穴の外・外周の内
+  });
+});
+
+describe("isPointInPrivacyZone", () => {
+  it("Polygon 内の点は true、外の点は false", () => {
+    expect(isPointInPrivacyZone([139.7671, 35.6812], TOKYO_ZONE)).toBe(true);
+    expect(isPointInPrivacyZone([135.4959, 34.7024], TOKYO_ZONE)).toBe(false);
+  });
+
+  it("MultiPolygon はいずれかのポリゴン内なら true", () => {
+    const multi = {
+      type: "MultiPolygon" as const,
+      coordinates: [
+        TOKYO_ZONE.coordinates,
+        [
+          [
+            [135.48, 34.69],
+            [135.51, 34.69],
+            [135.51, 34.72],
+            [135.48, 34.72],
+            [135.48, 34.69],
+          ],
+        ],
+      ],
+    };
+    expect(isPointInPrivacyZone([139.7671, 35.6812], multi)).toBe(true);
+    expect(isPointInPrivacyZone([135.4959, 34.7024], multi)).toBe(true);
+    expect(isPointInPrivacyZone([140.0, 36.0], multi)).toBe(false);
+  });
+
+  it("ゾーンが null / undefined の場合は false", () => {
+    expect(isPointInPrivacyZone([139.7671, 35.6812], null)).toBe(false);
+    expect(isPointInPrivacyZone([139.7671, 35.6812], undefined)).toBe(false);
+  });
+});
+
+describe("parsePrivacyZone", () => {
+  it("妥当な Polygon / MultiPolygon を解釈できる", () => {
+    expect(parsePrivacyZone(TOKYO_ZONE)).toEqual(TOKYO_ZONE);
+    const multi = { type: "MultiPolygon", coordinates: [TOKYO_ZONE.coordinates] };
+    expect(parsePrivacyZone(multi)).toEqual(multi);
+  });
+
+  it("null や不正な形式は null を返す", () => {
+    expect(parsePrivacyZone(null)).toBeNull();
+    expect(parsePrivacyZone(undefined)).toBeNull();
+    expect(parsePrivacyZone("polygon")).toBeNull();
+    expect(parsePrivacyZone({ type: "Point", coordinates: [139.7, 35.6] })).toBeNull();
+    expect(parsePrivacyZone({ type: "Polygon", coordinates: [] })).toBeNull();
+    expect(parsePrivacyZone({ type: "Polygon", coordinates: [[[139.7, 35.6]]] })).toBeNull();
+  });
+});
+
+describe("getH3CellCenterLngLat", () => {
+  it("セルの中心を [lng, lat] 順で返す", () => {
+    const center = getH3CellCenterLngLat(TOKYO_CELL);
+    expect(center).not.toBeNull();
+    // 東京駅のセルなので経度 139.x / 緯度 35.x の順になっていること
+    expect(center![0]).toBeGreaterThan(139);
+    expect(center![1]).toBeGreaterThan(35);
+    expect(center![1]).toBeLessThan(36);
+  });
+
+  it("不正なセルは null を返す", () => {
+    expect(getH3CellCenterLngLat("not-a-cell")).toBeNull();
+  });
+});
+
+describe("filterH3IndexesOutsidePrivacyZone", () => {
+  it("ゾーン内のセルを除外し、ゾーン外のセルだけが残る", () => {
+    const { kept, excludedCount } = filterH3IndexesOutsidePrivacyZone(
+      [TOKYO_CELL, OSAKA_CELL],
+      TOKYO_ZONE
+    );
+    expect(kept).toEqual([OSAKA_CELL]);
+    expect(excludedCount).toBe(1);
+  });
+
+  it("全セルがゾーン内の場合は全件除外される", () => {
+    const { kept, excludedCount } = filterH3IndexesOutsidePrivacyZone(
+      [TOKYO_CELL],
+      TOKYO_ZONE
+    );
+    expect(kept).toEqual([]);
+    expect(excludedCount).toBe(1);
+  });
+
+  it("ゾーン外のセルだけなら全件残る", () => {
+    const { kept, excludedCount } = filterH3IndexesOutsidePrivacyZone(
+      [OSAKA_CELL],
+      TOKYO_ZONE
+    );
+    expect(kept).toEqual([OSAKA_CELL]);
+    expect(excludedCount).toBe(0);
+  });
+
+  it("null ゾーンでは全件残る（従来通り）", () => {
+    const cells = [TOKYO_CELL, OSAKA_CELL];
+    const { kept, excludedCount } = filterH3IndexesOutsidePrivacyZone(cells, null);
+    expect(kept).toEqual(cells);
+    expect(excludedCount).toBe(0);
+  });
+
+  it("不正な形式のゾーンでは全件残る", () => {
+    const cells = [TOKYO_CELL, OSAKA_CELL];
+    const { kept, excludedCount } = filterH3IndexesOutsidePrivacyZone(cells, {
+      type: "Polygon",
+      coordinates: "invalid",
+    });
+    expect(kept).toEqual(cells);
+    expect(excludedCount).toBe(0);
+  });
+
+  it("MultiPolygon のゾーンでも除外できる", () => {
+    const multi = {
+      type: "MultiPolygon",
+      coordinates: [TOKYO_ZONE.coordinates],
+    };
+    const { kept, excludedCount } = filterH3IndexesOutsidePrivacyZone(
+      [TOKYO_CELL, OSAKA_CELL],
+      multi
+    );
+    expect(kept).toEqual([OSAKA_CELL]);
+    expect(excludedCount).toBe(1);
+  });
+
+  it("空配列は空のまま返る", () => {
+    expect(filterH3IndexesOutsidePrivacyZone([], TOKYO_ZONE)).toEqual({
+      kept: [],
+      excludedCount: 0,
+    });
+  });
+});
