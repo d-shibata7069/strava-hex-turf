@@ -1,1 +1,171 @@
-LyoqCiAqIOODl+ODqeOCpOODkOOCt+ODvOOCvuODvOODs++8iHVzZXJzLnByaXZhY3lfem9uZe+8ieOBq+OCiOOCi+mgmOWcsOWMlumZpOWkluODpuODvOODhuOCo+ODquODhuOCo++8iEEtNiAvIElzc3VlICM2Mu+8iQogKgogKiB1c2Vycy5wcml2YWN5X3pvbmUg44GvIEdFT01FVFJZKFBvbHlnb24sIDQzMjYpIOOBp+OAgVBvc3RnUkVTVCDntYznlLHjgafjga8KICogR2VvSlNPTiDlvaLlvI/vvIhQb2x5Z29uIC8gTXVsdGlQb2x5Z29u77yJ44Gn6L+U44KL5oOz5a6a44CCCiAqIEdlb0pTT04g44Gu5bqn5qiZ44GvIFtsbmcsIGxhdF0g6aCG44Gn44GC44KL44GT44Go44Gr5rOo5oSP77yISDMg44KEIFBvbHlsaW5lIOOBriBbbGF0LCBsbmddIOOBqOOBr+mAhu+8ieOAggogKgogKiDjgZPjgZPjgafjga/ntJTplqLmlbDjga7jgb/jgpLmj5DkvpvjgZnjgos6CiAqIC0g54K544GM44K+44O844Oz5YaF44GL44Gp44GG44GL77yI44Os44Kk44Kt44Oj44K544OG44Kj44Oz44Kw5rOV44Gr44KI44KLIHBvaW50LWluLXBvbHlnb24g5Yik5a6a77yJCiAqIC0gSDMg44K744Or44Gu5Lit5b+D5bqn5qiZ44GM44K+44O844Oz5YaF44Gr44GC44KL44K744Or44KS44CB6aCY5Zyw5YyW5a++6LGh44Gu44K744Or6ZuG5ZCI44GL44KJ6Zmk5aSW44GZ44KLCiAqLwppbXBvcnQgeyBjZWxsVG9MYXRMbmcsIGlzVmFsaWRDZWxsIH0gZnJvbSAiaDMtanMiOwoKLyoqIEdlb0pTT04g44Gu5bqn5qiZ44Oa44KiIFtsbmcsIGxhdF0gKi8KZXhwb3J0IHR5cGUgTG5nTGF0ID0gW251bWJlciwgbnVtYmVyXTsKCi8qKiBHZW9KU09OIFBvbHlnb27vvIhjb29yZGluYXRlc1swXSDjgYzlpJblkajjg6rjg7PjgrDjgIHku6XpmY3jga/nqbTjg6rjg7PjgrDvvIkgKi8KZXhwb3J0IGludGVyZmFjZSBHZW9Kc29uUG9seWdvbiB7CiAgdHlwZTogIlBvbHlnb24iOwogIGNvb3JkaW5hdGVzOiBMbmdMYXRbXVtdOwp9CgovKiogR2VvSlNPTiBNdWx0aVBvbHlnb24gKi8KZXhwb3J0IGludGVyZmFjZSBHZW9Kc29uTXVsdGlQb2x5Z29uIHsKICB0eXBlOiAiTXVsdGlQb2x5Z29uIjsKICBjb29yZGluYXRlczogTG5nTGF0W11bXVtdOwp9CgovKiogcHJpdmFjeV96b25lIOOBqOOBl+OBpuaJseOBhuOCuOOCquODoeODiOODqiAqLwpleHBvcnQgdHlwZSBQcml2YWN5Wm9uZUdlb21ldHJ5ID0gR2VvSnNvblBvbHlnb24gfCBHZW9Kc29uTXVsdGlQb2x5Z29uOwoKLyoqIOW6p+aomeODmuOCouOBqOOBl+OBpuWmpeW9k+OBi+OBqeOBhuOBiyAqLwpmdW5jdGlvbiBpc0xuZ0xhdCh2YWx1ZTogdW5rbm93bik6IHZhbHVlIGlzIExuZ0xhdCB7CiAgcmV0dXJuICgKICAgIEFycmF5LmlzQXJyYXkodmFsdWUpICYmCiAgICB2YWx1ZS5sZW5ndGggPj0gMiAmJgogICAgdHlwZW9mIHZhbHVlWzBdID09PSAibnVtYmVyIiAmJgogICAgdHlwZW9mIHZhbHVlWzFdID09PSAibnVtYmVyIiAmJgogICAgTnVtYmVyLmlzRmluaXRlKHZhbHVlWzBdKSAmJgogICAgTnVtYmVyLmlzRmluaXRlKHZhbHVlWzFdKQogICk7Cn0KCi8qKiDjg6rjg7PjgrDvvIjluqfmqJnjg5rjgqLjga7phY3liJfvvInjgajjgZfjgablpqXlvZPjgYvjganjgYbjgYvjgILmnIDkvY4gMyDngrnlv4XopoEgKi8KZnVuY3Rpb24gaXNSaW5nKHZhbHVlOiB1bmtub3duKTogdmFsdWUgaXMgTG5nTGF0W10gewogIHJldHVybiBBcnJheS5pc0FycmF5KHZhbHVlKSAmJiB2YWx1ZS5sZW5ndGggPj0gMyAmJiB2YWx1ZS5ldmVyeShpc0xuZ0xhdCk7Cn0KCi8qKiDjg53jg6rjgrTjg7PvvIjjg6rjg7PjgrDjga7phY3liJfvvInjgajjgZfjgablpqXlvZPjgYvjganjgYbjgYsgKi8KZnVuY3Rpb24gaXNQb2x5Z29uQ29vcmRpbmF0ZXModmFsdWU6IHVua25vd24pOiB2YWx1ZSBpcyBMbmdMYXRbXVtdIHsKICByZXR1cm4gQXJyYXkuaXNBcnJheSh2YWx1ZSkgJiYgdmFsdWUubGVuZ3RoID49IDEgJiYgdmFsdWUuZXZlcnkoaXNSaW5nKTsKfQoKLyoqCiAqIOS7u+aEj+OBruWApOOCkiBQcml2YWN5Wm9uZUdlb21ldHJ5IOOBqOOBl+OBpuino+mHiOOBmeOCi+OAggogKiBQb2x5Z29uIC8gTXVsdGlQb2x5Z29uIOS7peWkluOAgeOBvuOBn+OBr+ani+mAoOOBjOS4jeato+OBquWgtOWQiOOBryBudWxsIOOCkui/lOOBmQogKiDvvIg9IOOCvuODvOODs+OBquOBl+OBqOOBl+OBpuaJseOBhOOAgeW+k+adpeOBqeOBiuOCiuWFqOOCu+ODq+OCkumgmOWcsOWMluWvvuixoeOBq+OBmeOCi++8ieOAggogKi8KZXhwb3J0IGZ1bmN0aW9uIHBhcnNlUHJpdmFjeVpvbmUodmFsdWU6IHVua25vd24pOiBQcml2YWN5Wm9uZUdlb21ldHJ5IHwgbnVsbCB7CiAgaWYgKHR5cGVvZiB2YWx1ZSAhPT0gIm9iamVjdCIgfHwgdmFsdWUgPT09IG51bGwpIHJldHVybiBudWxsOwogIGNvbnN0IGdlb21ldHJ5ID0gdmFsdWUgYXMgeyB0eXBlPzogdW5rbm93bjsgY29vcmRpbmF0ZXM/OiB1bmtub3duIH07CiAgaWYgKGdlb21ldHJ5LnR5cGUgPT09ICJQb2x5Z29uIiAmJiBpc1BvbHlnb25Db29yZGluYXRlcyhnZW9tZXRyeS5jb29yZGluYXRlcykpIHsKICAgIHJldHVybiB7IHR5cGU6ICJQb2x5Z29uIiwgY29vcmRpbmF0ZXM6IGdlb21ldHJ5LmNvb3JkaW5hdGVzIH07CiAgfQogIGlmICgKICAgIGdlb21ldHJ5LnR5cGUgPT09ICJNdWx0aVBvbHlnb24iICYmCiAgICBBcnJheS5pc0FycmF5KGdlb21ldHJ5LmNvb3JkaW5hdGVzKSAmJgogICAgZ2VvbWV0cnkuY29vcmRpbmF0ZXMubGVuZ3RoID49IDEgJiYKICAgIGdlb21ldHJ5LmNvb3JkaW5hdGVzLmV2ZXJ5KGlzUG9seWdvbkNvb3JkaW5hdGVzKQogICkgewogICAgcmV0dXJuIHsgdHlwZTogIk11bHRpUG9seWdvbiIsIGNvb3JkaW5hdGVzOiBnZW9tZXRyeS5jb29yZGluYXRlcyBhcyBMbmdMYXRbXVtdW10gfTsKICB9CiAgcmV0dXJuIG51bGw7Cn0KCi8qKgogKiDngrnjgYzjg6rjg7PjgrDlhoXjgavjgYLjgovjgYvjgpLjg6zjgqTjgq3jg6Pjgrnjg4bjgqPjg7PjgrDms5XjgafliKTlrprjgZnjgovjgIIKICog54K544GL44KJICtsbmcg5pa55ZCR44Gr5Y2K55u057ea44KS5byV44GN44CB44Oq44Oz44Kw44Gu6L6644Go44Gu5Lqk5beu5Zue5pWw44Gu5YG25aWH44Gn5YaF5aSW44KS5Yik5a6a44GZ44KL44CCCiAqIOODquODs+OCsOOBruacgOWIneOBqOacgOW+jOOBjOWQjOS4gOeCueOBp+mWieOBmOOBpuOBhOOCi+WgtOWQiO+8iEdlb0pTT04g44Gu6YCa5bi45b2i5byP77yJ44KC44CBCiAqIOmWieOBmOOBpuOBhOOBquOBhOWgtOWQiOOCguaJseOBiOOCi+OAguWig+eVjOS4iuOBrueCueOBruWIpOWumuOBr+S4jeWumu+8iOWGheWkluOBqeOBoeOCieOBq+OCguOBquOCiuOBhuOCi++8ieOAggogKi8KZXhwb3J0IGZ1bmN0aW9uIGlzUG9pbnRJblJpbmcocG9pbnQ6IExuZ0xhdCwgcmluZzogUmVhZG9ubHlBcnJheTxMbmdMYXQ+KTogYm9vbGVhbiB7CiAgY29uc3QgW3gsIHldID0gcG9pbnQ7CiAgbGV0IGluc2lkZSA9IGZhbHNlOwogIC8vIOi+uiAoaiAtPiBpKSDjgpLotbDmn7vjgZnjgovjgILplonjgZjjgZ/jg6rjg7PjgrDjgafjga/mnIDlvozjga7ovrrjgYzoh6rli5XnmoTjgavjgrnjgq3jg4Pjg5fjgZXjgozjgosKICBmb3IgKGxldCBpID0gMCwgaiA9IHJpbmcubGVuZ3RoIC0gMTsgaSA8IHJpbmcubGVuZ3RoOyBqID0gaSsrKSB7CiAgICBjb25zdCBbeGksIHlpXSA9IHJpbmdbaV07CiAgICBjb25zdCBbeGosIHlqXSA9IHJpbmdbal07CiAgICAvLyDovrrjgYzngrnjga7nt6/luqbjgpLjgb7jgZ/jgY7jgIHjgYvjgaTkuqTngrnjgYzngrnjgojjgormnbHvvIgrbG5n77yJ44Gr44GC44KL5aC05ZCI44Gr5Lqk5beu44Go5pWw44GI44KLCiAgICBjb25zdCBjcm9zc2VzID0KICAgICAgeWkgPiB5ICE9PSB5aiA+IHkgJiYgeCA8ICgoeGogLSB4aSkgKiAoeSAtIHlpKSkgLyAoeWogLSB5aSkgKyB4aTsKICAgIGlmIChjcm9zc2VzKSBpbnNpZGUgPSAhaW5zaWRlOwogIH0KICByZXR1cm4gaW5zaWRlOwp9CgovKioKICog54K544GM44Od44Oq44K044Oz5YaF44Gr44GC44KL44GL44KS5Yik5a6a44GZ44KL44CCCiAqIOWkluWRqOODquODs+OCsOOBruWGheWBtOOBq+OBguOCiuOAgeeptOODquODs+OCsOOBruWGheWBtOOBq+OBr+OBquOBhOWgtOWQiOOBqyB0cnVl44CCCiAqLwpleHBvcnQgZnVuY3Rpb24gaXNQb2ludEluUG9seWdvbigKICBwb2ludDogTG5nTGF0LAogIHBvbHlnb246IFJlYWRvbmx5QXJyYXk8UmVhZG9ubHlBcnJheTxMbmdMYXQ+PgopOiBib29sZWFuIHsKICBpZiAocG9seWdvbi5sZW5ndGggPT09IDApIHJldHVybiBmYWxzZTsKICBpZiAoIWlzUG9pbnRJblJpbmcocG9pbnQsIHBvbHlnb25bMF0pKSByZXR1cm4gZmFsc2U7CiAgZm9yIChsZXQgayA9IDE7IGsgPCBwb2x5Z29uLmxlbmd0aDsgaysrKSB7CiAgICBpZiAoaXNQb2ludEluUmluZyhwb2ludCwgcG9seWdvbltrXSkpIHJldHVybiBmYWxzZTsKICB9CiAgcmV0dXJuIHRydWU7Cn0KCi8qKgogKiDngrkgW2xuZywgbGF0XSDjgYzjg5fjg6njgqTjg5Djgrfjg7zjgr7jg7zjg7PlhoXjgavjgYLjgovjgYvjgpLliKTlrprjgZnjgovjgIIKICog44K+44O844Oz44GMIG51bGwgLyDkuI3mraPjgarlvaLlvI/jga7loLTlkIjjga8gZmFsc2XvvIjjgr7jg7zjg7PjgarjgZfmibHjgYTvvInjgIIKICovCmV4cG9ydCBmdW5jdGlvbiBpc1BvaW50SW5Qcml2YWN5Wm9uZSgKICBwb2ludDogTG5nTGF0LAogIHpvbmU6IFByaXZhY3lab25lR2VvbWV0cnkgfCBudWxsIHwgdW5kZWZpbmVkCik6IGJvb2xlYW4gewogIGlmICghem9uZSkgcmV0dXJuIGZhbHNlOwogIGlmICh6b25lLnR5cGUgPT09ICJQb2x5Z29uIikgewogICAgcmV0dXJuIGlzUG9pbnRJblBvbHlnb24ocG9pbnQsIHpvbmUuY29vcmRpbmF0ZXMpOwogIH0KICByZXR1cm4gem9uZS5jb29yZGluYXRlcy5zb21lKChwb2x5Z29uKSA9PiBpc1BvaW50SW5Qb2x5Z29uKHBvaW50LCBwb2x5Z29uKSk7Cn0KCi8qKgogKiBIMyDjgrvjg6vjga7kuK3lv4PluqfmqJnjgpIgW2xuZywgbGF0XSDjgafov5TjgZnjgIIKICog44K744Or44Go44GX44Gm6Kej6YeI44Gn44GN44Gq44GE5aC05ZCI44GvIG51bGzjgIIKICovCmV4cG9ydCBmdW5jdGlvbiBnZXRIM0NlbGxDZW50ZXJMbmdMYXQoaDNJbmRleDogc3RyaW5nKTogTG5nTGF0IHwgbnVsbCB7CiAgLy8gY2VsbFRvTGF0TG5nIOOBr+S4jeato+OBquaWh+Wtl+WIl+OBp+OCguS+i+WkluOBq+OBquOCieOBquOBhOOBn+OCgeOAgeS6i+WJjeOBq+WmpeW9k+aAp+OCkuaknOiovOOBmeOCiwogIGlmICghaXNWYWxpZENlbGwoaDNJbmRleCkpIHJldHVybiBudWxsOwogIHRyeSB7CiAgICBjb25zdCBbbGF0LCBsbmddID0gY2VsbFRvTGF0TG5nKGgzSW5kZXgpOwogICAgaWYgKCFOdW1iZXIuaXNGaW5pdGUobGF0KSB8fCAhTnVtYmVyLmlzRmluaXRlKGxuZykpIHJldHVybiBudWxsOwogICAgcmV0dXJuIFtsbmcsIGxhdF07CiAgfSBjYXRjaCB7CiAgICByZXR1cm4gbnVsbDsKICB9Cn0KCi8qKgogKiDpoJjlnLDljJblr77osaHjga4gSDMg44K744Or6ZuG5ZCI44GL44KJ44CB44OX44Op44Kk44OQ44K344O844K+44O844Oz5YaF44Gu44K744Or44KS6Zmk5aSW44GZ44KL44CCCiAqIOWIpOWumuOBr+WQhOOCu+ODq+OBruS4reW/g+W6p+aomeOBjOOCvuODvOODs+WGheOBq+OBguOCi+OBi+OBqeOBhuOBi+OBp+ihjOOBhuOAggogKgogKiBAcGFyYW0gaDNJbmRleGVzIC0g6aCY5Zyw5YyW5YCZ6KOc44GuIEgzIOOCpOODs+ODh+ODg+OCr+OCuemFjeWIlwogKiBAcGFyYW0gem9uZSAtIHVzZXJzLnByaXZhY3lfem9uZe+8iEdlb0pTT07vvInjgIJudWxsIC8g5LiN5q2j44Gq5b2i5byP44Gq44KJ6Zmk5aSW44GX44Gq44GECiAqIEByZXR1cm5zIGtlcHQ6IOOCvuODvOODs+WkluOBruOCu+ODq++8iOWFg+OBrumghuW6j+OCkuS/neaMge+8iSwgZXhjbHVkZWRDb3VudDog6Zmk5aSW44GX44Gf5Lu25pWwCiAqLwpleHBvcnQgZnVuY3Rpb24gZmlsdGVySDNJbmRleGVzT3V0c2lkZVByaXZhY3lab25lKAogIGgzSW5kZXhlczogUmVhZG9ubHlBcnJheTxzdHJpbmc+LAogIHpvbmU6IHVua25vd24KKTogeyBrZXB0OiBzdHJpbmdbXTsgZXhjbHVkZWRDb3VudDogbnVtYmVyIH0gewogIGNvbnN0IHBhcnNlZCA9IHBhcnNlUHJpdmFjeVpvbmUoem9uZSk7CiAgaWYgKCFwYXJzZWQpIHsKICAgIHJldHVybiB7IGtlcHQ6IFsuLi5oM0luZGV4ZXNdLCBleGNsdWRlZENvdW50OiAwIH07CiAgfQogIGNvbnN0IGtlcHQ6IHN0cmluZ1tdID0gW107CiAgbGV0IGV4Y2x1ZGVkQ291bnQgPSAwOwogIGZvciAoY29uc3QgaDNJbmRleCBvZiBoM0luZGV4ZXMpIHsKICAgIGNvbnN0IGNlbnRlciA9IGdldEgzQ2VsbENlbnRlckxuZ0xhdChoM0luZGV4KTsKICAgIGlmIChjZW50ZXIgJiYgaXNQb2ludEluUHJpdmFjeVpvbmUoY2VudGVyLCBwYXJzZWQpKSB7CiAgICAgIGV4Y2x1ZGVkQ291bnQgKz0gMTsKICAgIH0gZWxzZSB7CiAgICAgIGtlcHQucHVzaChoM0luZGV4KTsKICAgIH0KICB9CiAgcmV0dXJuIHsga2VwdCwgZXhjbHVkZWRDb3VudCB9Owp9Cg==
+/**
+ * プライバシーゾーン（users.privacy_zone）による領地化除外ユーティリティ（A-6 / Issue #62）
+ *
+ * users.privacy_zone は GEOMETRY(Polygon, 4326) で、PostgREST 経由では
+ * GeoJSON 形式（Polygon / MultiPolygon）で返る想定。
+ * GeoJSON の座標は [lng, lat] 順であることに注意（H3 や Polyline の [lat, lng] とは逆）。
+ *
+ * ここでは純関数のみを提供する:
+ * - 点がゾーン内かどうか（レイキャスティング法による point-in-polygon 判定）
+ * - H3 セルの中心座標がゾーン内にあるセルを、領地化対象のセル集合から除外する
+ */
+import { cellToLatLng, isValidCell } from "h3-js";
+
+/** GeoJSON の座標ペア [lng, lat] */
+export type LngLat = [number, number];
+
+/** GeoJSON Polygon（coordinates[0] が外周リング、以降は穴リング） */
+export interface GeoJsonPolygon {
+  type: "Polygon";
+  coordinates: LngLat[][];
+}
+
+/** GeoJSON MultiPolygon */
+export interface GeoJsonMultiPolygon {
+  type: "MultiPolygon";
+  coordinates: LngLat[][][];
+}
+
+/** privacy_zone として扱うジオメトリ */
+export type PrivacyZoneGeometry = GeoJsonPolygon | GeoJsonMultiPolygon;
+
+/** 座標ペアとして妥当かどうか */
+function isLngLat(value: unknown): value is LngLat {
+  return (
+    Array.isArray(value) &&
+    value.length >= 2 &&
+    typeof value[0] === "number" &&
+    typeof value[1] === "number" &&
+    Number.isFinite(value[0]) &&
+    Number.isFinite(value[1])
+  );
+}
+
+/** リング（座標ペアの配列）として妥当かどうか。最低 3 点必要 */
+function isRing(value: unknown): value is LngLat[] {
+  return Array.isArray(value) && value.length >= 3 && value.every(isLngLat);
+}
+
+/** ポリゴン（リングの配列）として妥当かどうか */
+function isPolygonCoordinates(value: unknown): value is LngLat[][] {
+  return Array.isArray(value) && value.length >= 1 && value.every(isRing);
+}
+
+/**
+ * 任意の値を PrivacyZoneGeometry として解釈する。
+ * Polygon / MultiPolygon 以外、または構造が不正な場合は null を返す
+ * （= ゾーンなしとして扱い、従来どおり全セルを領地化対象にする）。
+ */
+export function parsePrivacyZone(value: unknown): PrivacyZoneGeometry | null {
+  if (typeof value !== "object" || value === null) return null;
+  const geometry = value as { type?: unknown; coordinates?: unknown };
+  if (geometry.type === "Polygon" && isPolygonCoordinates(geometry.coordinates)) {
+    return { type: "Polygon", coordinates: geometry.coordinates };
+  }
+  if (
+    geometry.type === "MultiPolygon" &&
+    Array.isArray(geometry.coordinates) &&
+    geometry.coordinates.length >= 1 &&
+    geometry.coordinates.every(isPolygonCoordinates)
+  ) {
+    return { type: "MultiPolygon", coordinates: geometry.coordinates as LngLat[][][] };
+  }
+  return null;
+}
+
+/**
+ * 点がリング内にあるかをレイキャスティング法で判定する。
+ * 点から +lng 方向に半直線を引き、リングの辺との交差回数の偶奇で内外を判定する。
+ * リングの最初と最後が同一点で閉じている場合（GeoJSON の通常形式）も、
+ * 閉じていない場合も扱える。境界上の点の判定は不定（内外どちらにもなりうる）。
+ */
+export function isPointInRing(point: LngLat, ring: ReadonlyArray<LngLat>): boolean {
+  const [x, y] = point;
+  let inside = false;
+  // 辺 (j -> i) を走査する。閉じたリングでは最後の辺が自動的にスキップされる
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    // 辺が点の緯度をまたぎ、かつ交点が点より東（+lng）にある場合に交差と数える
+    const crosses =
+      yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+    if (crosses) inside = !inside;
+  }
+  return inside;
+}
+
+/**
+ * 点がポリゴン内にあるかを判定する。
+ * 外周リングの内側にあり、穴リングの内側にはない場合に true。
+ */
+export function isPointInPolygon(
+  point: LngLat,
+  polygon: ReadonlyArray<ReadonlyArray<LngLat>>
+): boolean {
+  if (polygon.length === 0) return false;
+  if (!isPointInRing(point, polygon[0])) return false;
+  for (let k = 1; k < polygon.length; k++) {
+    if (isPointInRing(point, polygon[k])) return false;
+  }
+  return true;
+}
+
+/**
+ * 点 [lng, lat] がプライバシーゾーン内にあるかを判定する。
+ * ゾーンが null / 不正な形式の場合は false（ゾーンなし扱い）。
+ */
+export function isPointInPrivacyZone(
+  point: LngLat,
+  zone: PrivacyZoneGeometry | null | undefined
+): boolean {
+  if (!zone) return false;
+  if (zone.type === "Polygon") {
+    return isPointInPolygon(point, zone.coordinates);
+  }
+  return zone.coordinates.some((polygon) => isPointInPolygon(point, polygon));
+}
+
+/**
+ * H3 セルの中心座標を [lng, lat] で返す。
+ * セルとして解釈できない場合は null。
+ */
+export function getH3CellCenterLngLat(h3Index: string): LngLat | null {
+  // cellToLatLng は不正な文字列でも例外にならないため、事前に妥当性を検証する
+  if (!isValidCell(h3Index)) return null;
+  try {
+    const [lat, lng] = cellToLatLng(h3Index);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return [lng, lat];
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 領地化対象の H3 セル集合から、プライバシーゾーン内のセルを除外する。
+ * 判定は各セルの中心座標がゾーン内にあるかどうかで行う。
+ *
+ * @param h3Indexes - 領地化候補の H3 インデックス配列
+ * @param zone - users.privacy_zone（GeoJSON）。null / 不正な形式なら除外しない
+ * @returns kept: ゾーン外のセル（元の順序を保持）, excludedCount: 除外した件数
+ */
+export function filterH3IndexesOutsidePrivacyZone(
+  h3Indexes: ReadonlyArray<string>,
+  zone: unknown
+): { kept: string[]; excludedCount: number } {
+  const parsed = parsePrivacyZone(zone);
+  if (!parsed) {
+    return { kept: [...h3Indexes], excludedCount: 0 };
+  }
+  const kept: string[] = [];
+  let excludedCount = 0;
+  for (const h3Index of h3Indexes) {
+    const center = getH3CellCenterLngLat(h3Index);
+    if (center && isPointInPrivacyZone(center, parsed)) {
+      excludedCount += 1;
+    } else {
+      kept.push(h3Index);
+    }
+  }
+  return { kept, excludedCount };
+}
