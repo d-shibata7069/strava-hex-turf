@@ -1,1 +1,189 @@
-aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsKICBjcmVhdGVTZXNzaW9uVG9rZW4sCiAgZ2V0U2Vzc2lvbkNvb2tpZU9wdGlvbnMsCiAgU0VTU0lPTl9DT09LSUVfTkFNRSwKfSBmcm9tICJAL2xpYi9zZXNzaW9uIjsKaW1wb3J0IHsKICBnZXRTdHJhdmFBdXRoU3RhdGVEZXN0cm95T3B0aW9ucywKICBTVFJBVkFfQVVUSF9TVEFURV9DT09LSUVfTkFNRSwKfSBmcm9tICJAL2xpYi9zdHJhdmFBdXRoU3RhdGUiOwoKY29uc3QgU1RSQVZBX1RPS0VOX1VSTCA9ICJodHRwczovL3d3dy5zdHJhdmEuY29tL29hdXRoL3Rva2VuIjsKCmludGVyZmFjZSBTdHJhdmFUb2tlblJlc3BvbnNlIHsKICBhY2Nlc3NfdG9rZW46IHN0cmluZzsKICByZWZyZXNoX3Rva2VuOiBzdHJpbmc7CiAgZXhwaXJlc19hdDogbnVtYmVyOwogIGF0aGxldGU6IHsKICAgIGlkOiBudW1iZXI7CiAgICBmaXJzdG5hbWU6IHN0cmluZzsKICAgIGxhc3RuYW1lOiBzdHJpbmc7CiAgICBwcm9maWxlOiBzdHJpbmcgfCBudWxsOwogICAgcHJvZmlsZV9tZWRpdW0/OiBzdHJpbmcgfCBudWxsOwogIH07Cn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBHRVQocmVxdWVzdDogTmV4dFJlcXVlc3QpIHsKICBjb25zdCBjbGVhckF1dGhTdGF0ZSA9IChyZXNwb25zZTogTmV4dFJlc3BvbnNlKTogTmV4dFJlc3BvbnNlID0+IHsKICAgIHJlc3BvbnNlLmNvb2tpZXMuc2V0KAogICAgICBTVFJBVkFfQVVUSF9TVEFURV9DT09LSUVfTkFNRSwKICAgICAgIiIsCiAgICAgIGdldFN0cmF2YUF1dGhTdGF0ZURlc3Ryb3lPcHRpb25zKCksCiAgICApOwogICAgcmV0dXJuIHJlc3BvbnNlOwogIH07CgogIGNvbnN0IHNlYXJjaFBhcmFtcyA9IHJlcXVlc3QubmV4dFVybC5zZWFyY2hQYXJhbXM7CiAgY29uc3QgY29kZSA9IHNlYXJjaFBhcmFtcy5nZXQoImNvZGUiKTsKICBjb25zdCBlcnJvciA9IHNlYXJjaFBhcmFtcy5nZXQoImVycm9yIik7CiAgY29uc3QgcmVjZWl2ZWRTdGF0ZSA9IHNlYXJjaFBhcmFtcy5nZXQoInN0YXRlIik7CiAgY29uc3Qgc3RvcmVkU3RhdGUgPSByZXF1ZXN0LmNvb2tpZXMuZ2V0KFNUUkFWQV9BVVRIX1NUQVRFX0NPT0tJRV9OQU1FKT8udmFsdWU7CgogIGNvbnN0IGFwcFVybCA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgPz8gIiI7CiAgY29uc3QgYmFzZVJlZGlyZWN0ID0gYXBwVXJsLnJlcGxhY2UoL1wvJC8sICIiKSB8fCAiaHR0cDovL2xvY2FsaG9zdDozMDAwIjsKCiAgaWYgKGVycm9yID09PSAiYWNjZXNzX2RlbmllZCIpIHsKICAgIHJldHVybiBjbGVhckF1dGhTdGF0ZShOZXh0UmVzcG9uc2UucmVkaXJlY3QoYCR7YmFzZVJlZGlyZWN0fS9sb2dpbj9lcnJvcj1kZW5pZWRgKSk7CiAgfQoKICBpZiAoIXJlY2VpdmVkU3RhdGUgfHwgIXN0b3JlZFN0YXRlIHx8IHJlY2VpdmVkU3RhdGUgIT09IHN0b3JlZFN0YXRlKSB7CiAgICBjb25zb2xlLndhcm4oIlN0cmF2YSBPQXV0aCBzdGF0ZSB2YWxpZGF0aW9uIGZhaWxlZCIpOwogICAgcmV0dXJuIGNsZWFyQXV0aFN0YXRlKAogICAgICBOZXh0UmVzcG9uc2UucmVkaXJlY3QoYCR7YmFzZVJlZGlyZWN0fS9sb2dpbj9lcnJvcj1zdGF0ZV9taXNtYXRjaGApLAogICAgKTsKICB9CgogIGlmICghY29kZSkgewogICAgcmV0dXJuIGNsZWFyQXV0aFN0YXRlKE5leHRSZXNwb25zZS5yZWRpcmVjdChgJHtiYXNlUmVkaXJlY3R9L2xvZ2luP2Vycm9yPW5vX2NvZGVgKSk7CiAgfQoKICBjb25zdCBjbGllbnRJZCA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX1NUUkFWQV9DTElFTlRfSUQ7CiAgY29uc3QgY2xpZW50U2VjcmV0ID0gcHJvY2Vzcy5lbnYuU1RSQVZBX0NMSUVOVF9TRUNSRVQ7CiAgaWYgKCFjbGllbnRJZCB8fCAhY2xpZW50U2VjcmV0KSB7CiAgICByZXR1cm4gY2xlYXJBdXRoU3RhdGUoTmV4dFJlc3BvbnNlLnJlZGlyZWN0KGAke2Jhc2VSZWRpcmVjdH0vbG9naW4/ZXJyb3I9Y29uZmlnYCkpOwogIH0KCiAgY29uc3QgYm9keSA9IG5ldyBVUkxTZWFyY2hQYXJhbXMoewogICAgY2xpZW50X2lkOiBjbGllbnRJZCwKICAgIGNsaWVudF9zZWNyZXQ6IGNsaWVudFNlY3JldCwKICAgIGNvZGUsCiAgICBncmFudF90eXBlOiAiYXV0aG9yaXphdGlvbl9jb2RlIiwKICB9KTsKCiAgbGV0IHRva2VuRGF0YTogU3RyYXZhVG9rZW5SZXNwb25zZTsKICB0cnkgewogICAgY29uc3QgdG9rZW5SZXMgPSBhd2FpdCBmZXRjaChTVFJBVkFfVE9LRU5fVVJMLCB7CiAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICBoZWFkZXJzOiB7ICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkIiB9LAogICAgICBib2R5OiBib2R5LnRvU3RyaW5nKCksCiAgICB9KTsKCiAgICBpZiAoIXRva2VuUmVzLm9rKSB7CiAgICAgIGNvbnN0IHRleHQgPSBhd2FpdCB0b2tlblJlcy50ZXh0KCk7CiAgICAgIGNvbnNvbGUuZXJyb3IoIlN0cmF2YSB0b2tlbiBleGNoYW5nZSBmYWlsZWQ6IiwgdG9rZW5SZXMuc3RhdHVzLCB0ZXh0KTsKICAgICAgcmV0dXJuIGNsZWFyQXV0aFN0YXRlKAogICAgICAgIE5leHRSZXNwb25zZS5yZWRpcmVjdChgJHtiYXNlUmVkaXJlY3R9L2xvZ2luP2Vycm9yPXRva2VuX2V4Y2hhbmdlYCksCiAgICAgICk7CiAgICB9CgogICAgdG9rZW5EYXRhID0gKGF3YWl0IHRva2VuUmVzLmpzb24oKSkgYXMgU3RyYXZhVG9rZW5SZXNwb25zZTsKICB9IGNhdGNoIChlKSB7CiAgICBjb25zb2xlLmVycm9yKCJTdHJhdmEgdG9rZW4gcmVxdWVzdCBlcnJvcjoiLCBlKTsKICAgIHJldHVybiBjbGVhckF1dGhTdGF0ZSgKICAgICAgICBOZXh0UmVzcG9uc2UucmVkaXJlY3QoYCR7YmFzZVJlZGlyZWN0fS9sb2dpbj9lcnJvcj10b2tlbl9leGNoYW5nZWApLAogICAgICApOwogIH0KCiAgY29uc3QgYXRobGV0ZSA9IHRva2VuRGF0YS5hdGhsZXRlOwogIGlmICghYXRobGV0ZT8uaWQpIHsKICAgIHJldHVybiBjbGVhckF1dGhTdGF0ZShOZXh0UmVzcG9uc2UucmVkaXJlY3QoYCR7YmFzZVJlZGlyZWN0fS9sb2dpbj9lcnJvcj1ub19hdGhsZXRlYCkpOwogIH0KCiAgY29uc3QgZGlzcGxheU5hbWUgPSBbYXRobGV0ZS5maXJzdG5hbWUsIGF0aGxldGUubGFzdG5hbWVdLmZpbHRlcihCb29sZWFuKS5qb2luKCIgIikgfHwgYFVzZXIgJHthdGhsZXRlLmlkfWA7CiAgY29uc3QgaWNvblVybCA9IGF0aGxldGUucHJvZmlsZSA/PyBhdGhsZXRlLnByb2ZpbGVfbWVkaXVtID8/IG51bGw7CiAgY29uc3QgZXhwaXJlc0F0ID0gdG9rZW5EYXRhLmV4cGlyZXNfYXQgIT0gbnVsbCA/IG5ldyBEYXRlKHRva2VuRGF0YS5leHBpcmVzX2F0ICogMTAwMCkudG9JU09TdHJpbmcoKSA6IG51bGw7CgogIGNvbnN0IGJhY2tlbmRVcmwgPSBwcm9jZXNzLmVudi5CQUNLRU5EX0FQSV9VUkw/LnJlcGxhY2UoL1wvJC8sICIiKSA/PyAiIjsKICBpZiAoIWJhY2tlbmRVcmwpIHsKICAgIGNvbnNvbGUuZXJyb3IoIlVzZXIgc3luYyBmYWlsZWQ6IEJBQ0tFTkRfQVBJX1VSTCBpcyBub3QgY29uZmlndXJlZCIpOwogICAgcmV0dXJuIGNsZWFyQXV0aFN0YXRlKE5leHRSZXNwb25zZS5yZWRpcmVjdChgJHtiYXNlUmVkaXJlY3R9L2xvZ2luP2Vycm9yPWNvbmZpZ2ApKTsKICB9CgogIGNvbnN0IHN5bmNQYXlsb2FkID0gewogICAgc3RyYXZhX2lkOiBhdGhsZXRlLmlkLAogICAgYWNjZXNzX3Rva2VuOiB0b2tlbkRhdGEuYWNjZXNzX3Rva2VuLAogICAgcmVmcmVzaF90b2tlbjogdG9rZW5EYXRhLnJlZnJlc2hfdG9rZW4sCiAgICBkaXNwbGF5X25hbWU6IGRpc3BsYXlOYW1lLAogICAgcHJvZmlsZV9pbWFnZV91cmw6IGljb25VcmwsCiAgICBzdHJhdmFfdG9rZW5fZXhwaXJlc19hdDogZXhwaXJlc0F0LAogIH07CgogIGxldCBzeW5jUmVzOiBSZXNwb25zZTsKICB0cnkgewogICAgc3luY1JlcyA9IGF3YWl0IGZldGNoKGAke2JhY2tlbmRVcmx9L3VzZXJzL3N5bmNgLCB7CiAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICBoZWFkZXJzOiB7CiAgICAgICAgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9qc29uIiwKICAgICAgICAieC1pbnRlcm5hbC1hcGkta2V5IjogcHJvY2Vzcy5lbnYuSU5URVJOQUxfQVBJX0tFWSA/PyAiIiwKICAgICAgfSwKICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoc3luY1BheWxvYWQpLAogICAgfSk7CiAgfSBjYXRjaCAoZSkgewogICAgY29uc29sZS5lcnJvcigiVXNlciBzeW5jIHJlcXVlc3QgZmFpbGVkOiIsIGUpOwogICAgcmV0dXJuIGNsZWFyQXV0aFN0YXRlKE5leHRSZXNwb25zZS5yZWRpcmVjdChgJHtiYXNlUmVkaXJlY3R9L2xvZ2luP2Vycm9yPXVwc2VydGApKTsKICB9CgogIGlmICghc3luY1Jlcy5vaykgewogICAgY29uc3QgdGV4dCA9IGF3YWl0IHN5bmNSZXMudGV4dCgpOwogICAgY29uc29sZS5lcnJvcigiVXNlciBzeW5jIGZhaWxlZDoiLCBzeW5jUmVzLnN0YXR1cywgdGV4dCk7CiAgICByZXR1cm4gY2xlYXJBdXRoU3RhdGUoTmV4dFJlc3BvbnNlLnJlZGlyZWN0KGAke2Jhc2VSZWRpcmVjdH0vbG9naW4/ZXJyb3I9dXBzZXJ0YCkpOwogIH0KCiAgbGV0IHN5bmNEYXRhOiB7IGlkPzogc3RyaW5nOyBzaG91bGRfcnVuX2luaXRpYWxfYmFja2ZpbGw/OiBib29sZWFuIH07CiAgdHJ5IHsKICAgIHN5bmNEYXRhID0gKGF3YWl0IHN5bmNSZXMuanNvbigpKSBhcyB7IGlkPzogc3RyaW5nIH07CiAgfSBjYXRjaCB7CiAgICBjb25zb2xlLmVycm9yKCJVc2VyIHN5bmM6IGludmFsaWQgSlNPTiByZXNwb25zZSIpOwogICAgcmV0dXJuIGNsZWFyQXV0aFN0YXRlKE5leHRSZXNwb25zZS5yZWRpcmVjdChgJHtiYXNlUmVkaXJlY3R9L2xvZ2luP2Vycm9yPXVwc2VydGApKTsKICB9CgogIGlmICghc3luY0RhdGE/LmlkKSB7CiAgICBjb25zb2xlLmVycm9yKCJVc2VyIHN5bmM6IHJlc3BvbnNlIG1pc3NpbmcgaWQiKTsKICAgIHJldHVybiBjbGVhckF1dGhTdGF0ZShOZXh0UmVzcG9uc2UucmVkaXJlY3QoYCR7YmFzZVJlZGlyZWN0fS9sb2dpbj9lcnJvcj11cHNlcnRgKSk7CiAgfQoKICBpZiAoc3luY0RhdGEuc2hvdWxkX3J1bl9pbml0aWFsX2JhY2tmaWxsID09PSB0cnVlKSB7CiAgICBjb25zdCBpbnRlcm5hbEJhY2tmaWxsQXBpS2V5ID0gcHJvY2Vzcy5lbnYuSU5URVJOQUxfQkFDS0ZJTExfQVBJX0tFWSA/PyAiIjsKICAgIGlmICghaW50ZXJuYWxCYWNrZmlsbEFwaUtleSkgewogICAgICBjb25zb2xlLmVycm9yKCJJbml0aWFsIGJhY2tmaWxsIHJlcXVlc3QgZmFpbGVkOiBJTlRFUk5BTF9CQUNLRklMTF9BUElfS0VZIGlzIG5vdCBjb25maWd1cmVkIik7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UucmVkaXJlY3QoYCR7YmFzZVJlZGlyZWN0fS9sb2dpbj9lcnJvcj1jb25maWdgKTsKICAgIH0KCiAgICB0cnkgewogICAgICBjb25zdCBpbml0aWFsQmFja2ZpbGxSZXMgPSBhd2FpdCBmZXRjaChgJHtiYWNrZW5kVXJsfS91c2Vycy9pbml0aWFsLWJhY2tmaWxsYCwgewogICAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICAgIGhlYWRlcnM6IHsKICAgICAgICAgICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIsCiAgICAgICAgICAieC1pbnRlcm5hbC1iYWNrZmlsbC1rZXkiOiBpbnRlcm5hbEJhY2tmaWxsQXBpS2V5LAogICAgICAgICAgIngtaW50ZXJuYWwtYXBpLWtleSI6IHByb2Nlc3MuZW52LklOVEVSTkFMX0FQSV9LRVkgPz8gIiIsCiAgICAgICAgfSwKICAgICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7IHN0cmF2YV9pZDogYXRobGV0ZS5pZCB9KSwKICAgICAgfSk7CgogICAgICBpZiAoIWluaXRpYWxCYWNrZmlsbFJlcy5vaykgewogICAgICAgIGNvbnN0IHRleHQgPSBhd2FpdCBpbml0aWFsQmFja2ZpbGxSZXMudGV4dCgpOwogICAgICAgIGNvbnNvbGUuZXJyb3IoIkluaXRpYWwgYmFja2ZpbGwgcmVxdWVzdCBmYWlsZWQ6IiwgaW5pdGlhbEJhY2tmaWxsUmVzLnN0YXR1cywgdGV4dCk7CiAgICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5yZWRpcmVjdChgJHtiYXNlUmVkaXJlY3R9L2xvZ2luP2Vycm9yPWluaXRpYWxfYmFja2ZpbGxgKTsKICAgICAgfQogICAgfSBjYXRjaCAoZSkgewogICAgICBjb25zb2xlLmVycm9yKCJJbml0aWFsIGJhY2tmaWxsIHJlcXVlc3QgZmFpbGVkOiIsIGUpOwogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLnJlZGlyZWN0KGAke2Jhc2VSZWRpcmVjdH0vbG9naW4/ZXJyb3I9aW5pdGlhbF9iYWNrZmlsbGApOwogICAgfQogIH0KCiAgY29uc3QgdG9rZW4gPSBhd2FpdCBjcmVhdGVTZXNzaW9uVG9rZW4oc3luY0RhdGEuaWQpOwogIGNvbnN0IHJlc3BvbnNlID0gTmV4dFJlc3BvbnNlLnJlZGlyZWN0KGJhc2VSZWRpcmVjdCk7CiAgcmVzcG9uc2UuY29va2llcy5zZXQoU0VTU0lPTl9DT09LSUVfTkFNRSwgdG9rZW4sIGdldFNlc3Npb25Db29raWVPcHRpb25zKCkpOwogIHJldHVybiBjbGVhckF1dGhTdGF0ZShyZXNwb25zZSk7Cn0K
+import { NextRequest, NextResponse } from "next/server";
+import {
+  createSessionToken,
+  getSessionCookieOptions,
+  SESSION_COOKIE_NAME,
+} from "@/lib/session";
+import {
+  getStravaAuthStateDestroyOptions,
+  STRAVA_AUTH_STATE_COOKIE_NAME,
+} from "@/lib/stravaAuthState";
+
+const STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
+
+interface StravaTokenResponse {
+  access_token: string;
+  refresh_token: string;
+  expires_at: number;
+  athlete: {
+    id: number;
+    firstname: string;
+    lastname: string;
+    profile: string | null;
+    profile_medium?: string | null;
+  };
+}
+
+export async function GET(request: NextRequest) {
+  const clearAuthState = (response: NextResponse): NextResponse => {
+    response.cookies.set(
+      STRAVA_AUTH_STATE_COOKIE_NAME,
+      "",
+      getStravaAuthStateDestroyOptions(),
+    );
+    return response;
+  };
+
+  const searchParams = request.nextUrl.searchParams;
+  const code = searchParams.get("code");
+  const error = searchParams.get("error");
+  const receivedState = searchParams.get("state");
+  const storedState = request.cookies.get(STRAVA_AUTH_STATE_COOKIE_NAME)?.value;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
+  const baseRedirect = appUrl.replace(/\/$/, "") || "http://localhost:3000";
+
+  if (error === "access_denied") {
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=denied`));
+  }
+
+  if (!receivedState || !storedState || receivedState !== storedState) {
+    console.warn("Strava OAuth state validation failed");
+    return clearAuthState(
+      NextResponse.redirect(`${baseRedirect}/login?error=state_mismatch`),
+    );
+  }
+
+  if (!code) {
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=no_code`));
+  }
+
+  const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
+  const clientSecret = process.env.STRAVA_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=config`));
+  }
+
+  const body = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    code,
+    grant_type: "authorization_code",
+  });
+
+  let tokenData: StravaTokenResponse;
+  try {
+    const tokenRes = await fetch(STRAVA_TOKEN_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+    });
+
+    if (!tokenRes.ok) {
+      const text = await tokenRes.text();
+      console.error("Strava token exchange failed:", tokenRes.status, text);
+      return clearAuthState(
+        NextResponse.redirect(`${baseRedirect}/login?error=token_exchange`),
+      );
+    }
+
+    tokenData = (await tokenRes.json()) as StravaTokenResponse;
+  } catch (e) {
+    console.error("Strava token request error:", e);
+    return clearAuthState(
+        NextResponse.redirect(`${baseRedirect}/login?error=token_exchange`),
+      );
+  }
+
+  const athlete = tokenData.athlete;
+  if (!athlete?.id) {
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=no_athlete`));
+  }
+
+  const displayName = [athlete.firstname, athlete.lastname].filter(Boolean).join(" ") || `User ${athlete.id}`;
+  const iconUrl = athlete.profile ?? athlete.profile_medium ?? null;
+  const expiresAt = tokenData.expires_at != null ? new Date(tokenData.expires_at * 1000).toISOString() : null;
+
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
+  if (!backendUrl) {
+    console.error("User sync failed: BACKEND_API_URL is not configured");
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=config`));
+  }
+
+  const syncPayload = {
+    strava_id: athlete.id,
+    access_token: tokenData.access_token,
+    refresh_token: tokenData.refresh_token,
+    display_name: displayName,
+    profile_image_url: iconUrl,
+    strava_token_expires_at: expiresAt,
+  };
+
+  let syncRes: Response;
+  try {
+    syncRes = await fetch(`${backendUrl}/users/sync`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-api-key": process.env.INTERNAL_API_KEY ?? "",
+      },
+      body: JSON.stringify(syncPayload),
+    });
+  } catch (e) {
+    console.error("User sync request failed:", e);
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+  }
+
+  if (!syncRes.ok) {
+    const text = await syncRes.text();
+    console.error("User sync failed:", syncRes.status, text);
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+  }
+
+  let syncData: { id?: string; should_run_initial_backfill?: boolean };
+  try {
+    syncData = (await syncRes.json()) as { id?: string };
+  } catch {
+    console.error("User sync: invalid JSON response");
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+  }
+
+  if (!syncData?.id) {
+    console.error("User sync: response missing id");
+    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+  }
+
+  if (syncData.should_run_initial_backfill === true) {
+    const internalBackfillApiKey = process.env.INTERNAL_BACKFILL_API_KEY ?? "";
+    if (!internalBackfillApiKey) {
+      console.error("Initial backfill request failed: INTERNAL_BACKFILL_API_KEY is not configured");
+      return NextResponse.redirect(`${baseRedirect}/login?error=config`);
+    }
+
+    try {
+      const initialBackfillRes = await fetch(`${backendUrl}/users/initial-backfill`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-backfill-key": internalBackfillApiKey,
+          "x-internal-api-key": process.env.INTERNAL_API_KEY ?? "",
+        },
+        body: JSON.stringify({ strava_id: athlete.id }),
+      });
+
+      if (!initialBackfillRes.ok) {
+        const text = await initialBackfillRes.text();
+        console.error("Initial backfill request failed:", initialBackfillRes.status, text);
+        return NextResponse.redirect(`${baseRedirect}/login?error=initial_backfill`);
+      }
+    } catch (e) {
+      console.error("Initial backfill request failed:", e);
+      return NextResponse.redirect(`${baseRedirect}/login?error=initial_backfill`);
+    }
+  }
+
+  const token = await createSessionToken(syncData.id);
+  const response = NextResponse.redirect(baseRedirect);
+  response.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
+  return clearAuthState(response);
+}
