@@ -147,3 +147,6 @@ clientとbackendは同じSupabaseプロジェクトを参照する必要があ�
 `users.id` と `strava_id`、対象活動の `activity_tiles.user_id` を照合してください。
 トークン、認可コード、Cookieは調査ログに含めないでください。回帰テストの成功は
 既存データの正しさを証明しないため、本番の再現確認が完了するまで #84 は継続します。
+
+Vercelも `npm test && npm run build` を実行します。アカウント切替テストが失敗した
+デプロイは公開されません。GitHub Actionsではbackendの回帰テストも実行します。
