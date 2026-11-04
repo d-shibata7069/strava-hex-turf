@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   createSessionToken,
   getSessionCookieOptions,
+  getSessionDestroyOptions,
   SESSION_COOKIE_NAME,
 } from "@/lib/session";
 import {
   getStravaAuthStateDestroyOptions,
   STRAVA_AUTH_STATE_COOKIE_NAME,
 } from "@/lib/stravaAuthState";
+
+import { getSupabaseServer } from "@/lib/supabase";
 
 const STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
 
@@ -34,6 +37,15 @@ export async function GET(request: NextRequest) {
     return response;
   };
 
+  // A failed account switch must not leave the previous account authenticated.
+  const failLogin = (reason: string): NextResponse => {
+    const response = clearAuthState(
+      NextResponse.redirect(`${baseRedirect}/login?error=${reason}`),
+    );
+    response.cookies.set(SESSION_COOKIE_NAME, "", getSessionDestroyOptions());
+    return response;
+  };
+
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
   const error = searchParams.get("error");
@@ -44,24 +56,22 @@ export async function GET(request: NextRequest) {
   const baseRedirect = appUrl.replace(/\/$/, "") || "http://localhost:3000";
 
   if (error === "access_denied") {
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=denied`));
+    return failLogin("denied");
   }
 
   if (!receivedState || !storedState || receivedState !== storedState) {
     console.warn("Strava OAuth state validation failed");
-    return clearAuthState(
-      NextResponse.redirect(`${baseRedirect}/login?error=state_mismatch`),
-    );
+    return failLogin("state_mismatch");
   }
 
   if (!code) {
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=no_code`));
+    return failLogin("no_code");
   }
 
   const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
   const clientSecret = process.env.STRAVA_CLIENT_SECRET;
   if (!clientId || !clientSecret) {
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=config`));
+    return failLogin("config");
   }
 
   const body = new URLSearchParams({
@@ -82,22 +92,18 @@ export async function GET(request: NextRequest) {
     if (!tokenRes.ok) {
       const text = await tokenRes.text();
       console.error("Strava token exchange failed:", tokenRes.status, text);
-      return clearAuthState(
-        NextResponse.redirect(`${baseRedirect}/login?error=token_exchange`),
-      );
+      return failLogin("token_exchange");
     }
 
     tokenData = (await tokenRes.json()) as StravaTokenResponse;
   } catch (e) {
     console.error("Strava token request error:", e);
-    return clearAuthState(
-        NextResponse.redirect(`${baseRedirect}/login?error=token_exchange`),
-      );
+    return failLogin("token_exchange");
   }
 
   const athlete = tokenData.athlete;
-  if (!athlete?.id) {
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=no_athlete`));
+  if (!Number.isSafeInteger(athlete?.id) || athlete.id <= 0) {
+    return failLogin("no_athlete");
   }
 
   const displayName = [athlete.firstname, athlete.lastname].filter(Boolean).join(" ") || `User ${athlete.id}`;
@@ -107,7 +113,7 @@ export async function GET(request: NextRequest) {
   const backendUrl = process.env.BACKEND_API_URL?.replace(/\/$/, "") ?? "";
   if (!backendUrl) {
     console.error("User sync failed: BACKEND_API_URL is not configured");
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=config`));
+    return failLogin("config");
   }
 
   const syncPayload = {
@@ -131,13 +137,13 @@ export async function GET(request: NextRequest) {
     });
   } catch (e) {
     console.error("User sync request failed:", e);
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+    return failLogin("upsert");
   }
 
   if (!syncRes.ok) {
     const text = await syncRes.text();
     console.error("User sync failed:", syncRes.status, text);
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+    return failLogin("upsert");
   }
 
   let syncData: { id?: string; should_run_initial_backfill?: boolean };
@@ -145,19 +151,44 @@ export async function GET(request: NextRequest) {
     syncData = (await syncRes.json()) as { id?: string };
   } catch {
     console.error("User sync: invalid JSON response");
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+    return failLogin("upsert");
   }
 
-  if (!syncData?.id) {
+  if (typeof syncData?.id !== "string" || !syncData.id) {
     console.error("User sync: response missing id");
-    return clearAuthState(NextResponse.redirect(`${baseRedirect}/login?error=upsert`));
+    return failLogin("upsert");
+  }
+
+  // Verify the UUID against the same database used by the client APIs.
+  // This also works with backends that return only id, without a new API contract.
+  try {
+    const { data: syncedUser, error: identityError } = await getSupabaseServer()
+      .from("users")
+      .select("id, strava_id")
+      .eq("id", syncData.id)
+      .eq("strava_id", athlete.id)
+      .maybeSingle();
+    if (
+      identityError ||
+      syncedUser?.id !== syncData.id ||
+      String(syncedUser?.strava_id) !== String(athlete.id)
+    ) {
+      console.error("Strava identity verification failed", {
+        athlete_id: athlete.id,
+        synced_user_id: syncData.id,
+      });
+      return failLogin("upsert");
+    }
+  } catch {
+    console.error("Strava identity lookup failed");
+    return failLogin("upsert");
   }
 
   if (syncData.should_run_initial_backfill === true) {
     const internalBackfillApiKey = process.env.INTERNAL_BACKFILL_API_KEY ?? "";
     if (!internalBackfillApiKey) {
       console.error("Initial backfill request failed: INTERNAL_BACKFILL_API_KEY is not configured");
-      return NextResponse.redirect(`${baseRedirect}/login?error=config`);
+      return failLogin("config");
     }
 
     try {
@@ -174,15 +205,21 @@ export async function GET(request: NextRequest) {
       if (!initialBackfillRes.ok) {
         const text = await initialBackfillRes.text();
         console.error("Initial backfill request failed:", initialBackfillRes.status, text);
-        return NextResponse.redirect(`${baseRedirect}/login?error=initial_backfill`);
+        return failLogin("initial_backfill");
       }
     } catch (e) {
       console.error("Initial backfill request failed:", e);
-      return NextResponse.redirect(`${baseRedirect}/login?error=initial_backfill`);
+      return failLogin("initial_backfill");
     }
   }
 
-  const token = await createSessionToken(syncData.id);
+  let token: string;
+  try {
+    token = await createSessionToken(syncData.id);
+  } catch {
+    console.error("Strava session creation failed");
+    return failLogin("config");
+  }
   const response = NextResponse.redirect(baseRedirect);
   response.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
   return clearAuthState(response);
