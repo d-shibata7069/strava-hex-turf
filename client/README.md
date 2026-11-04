@@ -129,3 +129,21 @@ Strava は Webhook のコールバックに **公的な URL** を要求するた
 ## データベース
 
 Strava OAuth ログインでは `users` テーブルを使用するため、[supabase/README.md](../supabase/README.md) に従い、初期マイグレーションを適用した状態にしておく。
+
+## アカウント同定の回帰テスト
+
+`npm ci` の後に `npm test` を実行します。OAuth callback を通して、同名の別
+Strava athlete、旧セッションからの切替、同期先の不一致、DB障害、初回バックフィル
+失敗を検証します。`backend-api/` の `npm test` には同期とWebhookの同名ユーザー
+分離テストも含まれます。
+
+コールバックは `/users/sync` の返却UUIDと認可結果のathlete IDを、client側の
+`users` テーブルで照合してからセッションを発行します。既存backendの応答形式を
+維持しているため、backendの同時更新やDBマイグレーションは不要です。
+clientとbackendは同じSupabaseプロジェクトを参照する必要があります。不一致や
+認可途中の失敗ではログインを拒否し、以前のセッションCookieも破棄します。
+
+本番で #84 を確認する際は、client/backendの稼働SHAと接続プロジェクト、
+`users.id` と `strava_id`、対象活動の `activity_tiles.user_id` を照合してください。
+トークン、認可コード、Cookieは調査ログに含めないでください。回帰テストの成功は
+既存データの正しさを証明しないため、本番の再現確認が完了するまで #84 は継続します。

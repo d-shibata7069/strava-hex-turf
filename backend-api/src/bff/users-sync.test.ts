@@ -145,3 +145,39 @@ describe("runUsersSync", () => {
     expect(result).toEqual({ ok: true, id: "user-1", should_run_initial_backfill: false });
   });
 });
+
+it("同名の別athleteは別UUIDになり、再認可・改名でも相手を変更しない", async () => {
+  type Row = Record<string, unknown> & { id: string; strava_id: number };
+  const rows = new Map<number, Row>();
+  let nextId = 1;
+  const upsert = vi.fn((row: Record<string, unknown>, options: { onConflict: string }) => {
+    expect(options).toEqual({ onConflict: "strava_id" });
+    const stravaId = row.strava_id as number;
+    const saved = { ...rows.get(stravaId), ...row, strava_id: stravaId,
+      id: rows.get(stravaId)?.id ?? `user-${nextId++}` };
+    rows.set(stravaId, saved);
+    return { select: () => ({ single: async () => ({ data: saved, error: null }) }) };
+  });
+  const supabase = { from: (table: string) => {
+    expect(table).toBe("users");
+    return {
+      select: () => ({ eq: (key: string, id: number) => {
+        expect(key).toBe("strava_id");
+        return { maybeSingle: async () => ({ data: rows.get(id) ?? null, error: null }) };
+      } }), upsert,
+    };
+  } };
+  const encrypt = (s: string) => `enc:${s}`;
+  const a = { ...validBody, strava_id: 53694021, display_name: "Daiki Shibata", access_token: "a" };
+  const b = { ...validBody, strava_id: 206060517, display_name: "Daiki Shibata", access_token: "b" };
+  const first = await runUsersSync(supabase as never, a, encrypt);
+  const second = await runUsersSync(supabase as never, b, encrypt);
+  expect(first.ok && second.ok && first.id !== second.id).toBe(true);
+  expect(rows.size).toBe(2);
+  const bBefore = { ...rows.get(b.strava_id) };
+  const repeat = await runUsersSync(supabase as never, { ...a, display_name: "Renamed", access_token: "a-new" }, encrypt);
+  expect(repeat.ok && first.ok && repeat.id === first.id).toBe(true);
+  expect(rows.size).toBe(2);
+  expect(rows.get(b.strava_id)).toEqual(bBefore);
+  expect(rows.get(a.strava_id)?.strava_access_token).toBe("enc:a-new");
+});

@@ -182,8 +182,8 @@ const ACTIVITIES: Record<number, StravaActivityResponse> = {
 function createHarness() {
   const store: Record<string, Row[]> = {
     users: [
-      { id: USER_A, strava_id: STRAVA_A, display_name: "Runner A", strava_access_token: "tok-a" },
-      { id: USER_B, strava_id: STRAVA_B, display_name: "Runner B", strava_access_token: "tok-b" },
+      { id: USER_A, strava_id: STRAVA_A, display_name: "Same Name", strava_access_token: "tok-a" },
+      { id: USER_B, strava_id: STRAVA_B, display_name: "Same Name", strava_access_token: "tok-b" },
     ],
     group_members: [
       { group_id: GROUP, user_id: USER_A },
@@ -210,6 +210,20 @@ function createHarness() {
 }
 
 describe("SECURITY REGRESSION: 攻撃が防御されること", () => {
+  it("同名の2人の正常イベントが別UUIDに帰属する", async () => {
+    const { store, deps, tileOf, cellOf } = createHarness();
+    expect((await processActivityEvent(9001, STRAVA_A, deps)).ok).toBe(true);
+    expect((await processActivityEvent(9002, STRAVA_B, deps)).ok).toBe(true);
+    expect(tileOf(cellOf(PTS.runA[0]))?.owner_id).toBe(USER_A);
+    expect(tileOf(cellOf(PTS.runB[1]))?.owner_id).toBe(USER_B);
+    expect(store.activity_tiles.filter(r => r.activity_id === 9001).length).toBeGreaterThan(0);
+    expect(store.activity_tiles.filter(r => r.activity_id === 9002).length).toBeGreaterThan(0);
+    expect(store.activity_tiles.filter(r => r.activity_id === 9001).every(r => r.user_id === USER_A)).toBe(true);
+    expect(store.activity_tiles.filter(r => r.activity_id === 9002).every(r => r.user_id === USER_B)).toBe(true);
+    expect(store.activity_logs.map(r => r.user_id).sort()).toEqual([USER_A, USER_B]);
+    expect(new Set(store.tiles.map(r => r.owner_id))).toEqual(new Set([USER_A, USER_B]));
+  });
+
   it("正常系コントロール: 正当な Run アクティビティは今まで通りタイルを獲得できる", async () => {
     const { store, deps, tileOf, cellOf } = createHarness();
     const r = await processActivityEvent(9001, STRAVA_A, deps);
